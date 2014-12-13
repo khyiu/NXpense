@@ -5,11 +5,6 @@
 <web-app>
 	<display-name>NXpense - wallet application</display-name>
 
-	<!-- Listener to have H2 database started when application starts -->
-	<listener>
-		<listener-class>org.h2.server.web.DbStarter</listener-class>
-	</listener>
-
 	<context-param>
 		<param-name>db.url</param-name>
 		<param-value>jdbc:h2:file:c:/temp/test</param-value>
@@ -26,6 +21,11 @@
 		<param-name>db.tcpServer</param-name>
 		<param-value>-tcpAllowOthers</param-value>
 	</context-param>
+
+	<!-- Listener to have H2 database started when application starts -->
+	<listener>
+		<listener-class>org.h2.server.web.DbStarter</listener-class>
+	</listener>
 
 	<servlet>
 		<servlet-name>dispatcher</servlet-name>
