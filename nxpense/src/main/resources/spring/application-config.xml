@@ -12,6 +12,6 @@
 		<property name="driverClassName" value="org.h2.Driver"/>
 		<property name="username" value="sa"/>
 		<property name="password" value="sa"/>
-		<property name="url" value="jdbc:h2:file:c:/temp/test"/>
+		<property name="url" value="jdbc:h2:file:~/nxpense"/>
 	</bean>
 </beans>
