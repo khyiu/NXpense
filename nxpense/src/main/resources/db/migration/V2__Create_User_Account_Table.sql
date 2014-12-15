@@ -12,5 +12,7 @@ create table USER_ACCOUNT (
 	verifiedDate date not null, 
 	user_id integer not null unique, 
 	primary key (id),
-	foreign key (user_id) references usr(id)
+	foreign key (user_id) references USR(id)
 );
+
+create unique index fk_user_account_usr_idx on USER_ACCOUNT(user_id);
