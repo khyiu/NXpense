@@ -17,72 +17,72 @@ import javax.persistence.Table;
 @Table(name = "TAG")
 public class Tag {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@SequenceGenerator(name = "tag-seq", sequenceName = "tag_seq")
-	private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "tag-seq", sequenceName = "tag_seq")
+    private int id;
 
-	private String name;
+    private String name;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "parentTag")
-	private List<Tag> subTags;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "parentTag")
+    private List<Tag> subTags;
 
-	@ManyToOne
-	@JoinColumn(name = "PARENT_TAG_ID")
-	private Tag parentTag;
+    @ManyToOne
+    @JoinColumn(name = "PARENT_TAG_ID")
+    private Tag parentTag;
 
-	public String getName() {
-		return name;
+    public String getName() {
+	return name;
+    }
+
+    public void setName(String name) {
+	this.name = name;
+    }
+
+    public List<Tag> getSubTags() {
+	return subTags;
+    }
+
+    public void setSubTags(List<Tag> subTags) {
+	this.subTags = subTags;
+    }
+
+    public Tag getParentTag() {
+	return parentTag;
+    }
+
+    public void setParentTag(Tag parentTag) {
+	this.parentTag = parentTag;
+    }
+
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result + ((name == null) ? 0 : name.hashCode());
+	return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj) {
+	    return true;
 	}
-
-	public void setName(String name) {
-		this.name = name;
+	if (obj == null) {
+	    return false;
 	}
-
-	public List<Tag> getSubTags() {
-		return subTags;
+	if (!(obj instanceof Tag)) {
+	    return false;
 	}
-
-	public void setSubTags(List<Tag> subTags) {
-		this.subTags = subTags;
+	Tag other = (Tag) obj;
+	if (name == null) {
+	    if (other.name != null) {
+		return false;
+	    }
+	} else if (!name.equals(other.name)) {
+	    return false;
 	}
-
-	public Tag getParentTag() {
-		return parentTag;
-	}
-
-	public void setParentTag(Tag parentTag) {
-		this.parentTag = parentTag;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (!(obj instanceof Tag)) {
-			return false;
-		}
-		Tag other = (Tag) obj;
-		if (name == null) {
-			if (other.name != null) {
-				return false;
-			}
-		} else if (!name.equals(other.name)) {
-			return false;
-		}
-		return true;
-	}
+	return true;
+    }
 
 }

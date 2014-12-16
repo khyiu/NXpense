@@ -22,78 +22,84 @@ import javax.persistence.TemporalType;
 @Table(name = "USER_ACCOUNT")
 public class UserAccount {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@SequenceGenerator(name="account-seq", sequenceName="account_seq")
-	private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "account-seq", sequenceName = "account_seq")
+    private int id;
 
-	@Temporal(TemporalType.DATE)
-	private Date verifiedDate;
+    @Temporal(TemporalType.DATE)
+    private Date verifiedDate;
 
-	@Column(name = "VERIFIED_CAPITAL")
-	private BigDecimal verifiedCapital;
+    @Column(name = "VERIFIED_CAPITAL")
+    private BigDecimal verifiedCapital;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "USER_ACCOUNT_ID")
-	private List<Tag> tags;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "USER_ACCOUNT_ID")
+    private List<Tag> tags;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-	@JoinColumn(name = "USER_ACCOUNT_ID")
-	private List<CreditCard> creditCards;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "USER_ACCOUNT_ID")
+    private List<CreditCard> creditCards;
 
-	public Date getVerifiedDate() {
-		return verifiedDate;
+    public Date getVerifiedDate() {
+	return verifiedDate;
+    }
+
+    public void setVerifiedDate(Date verifiedDate) {
+	this.verifiedDate = verifiedDate;
+    }
+
+    public BigDecimal getVerifiedCapital() {
+	return verifiedCapital;
+    }
+
+    public void setVerifiedCapital(BigDecimal verifiedCapital) {
+	this.verifiedCapital = verifiedCapital;
+    }
+
+    public List<Tag> getTags() {
+	return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+	this.tags = tags;
+    }
+
+    public List<CreditCard> getCreditCards() {
+	return creditCards;
+    }
+
+    public void setCreditCards(List<CreditCard> creditCards) {
+	this.creditCards = creditCards;
+    }
+
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result + (int) (id ^ (id >>> 32));
+	return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj) {
+	    return true;
 	}
 
-	public void setVerifiedDate(Date verifiedDate) {
-		this.verifiedDate = verifiedDate;
+	if (obj == null) {
+	    return false;
 	}
 
-	public BigDecimal getVerifiedCapital() {
-		return verifiedCapital;
+	if (getClass() != obj.getClass()) {
+	    return false;
 	}
 
-	public void setVerifiedCapital(BigDecimal verifiedCapital) {
-		this.verifiedCapital = verifiedCapital;
+	UserAccount other = (UserAccount) obj;
+	if (id != other.id) {
+	    return false;
 	}
 
-	public List<Tag> getTags() {
-		return tags;
-	}
-
-	public void setTags(List<Tag> tags) {
-		this.tags = tags;
-	}
-
-	public List<CreditCard> getCreditCards() {
-		return creditCards;
-	}
-
-	public void setCreditCards(List<CreditCard> creditCards) {
-		this.creditCards = creditCards;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		UserAccount other = (UserAccount) obj;
-		if (id != other.id)
-			return false;
-		return true;
-	}
-
-
+	return true;
+    }
 }
