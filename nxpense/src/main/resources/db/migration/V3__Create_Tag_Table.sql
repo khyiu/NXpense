@@ -16,5 +16,5 @@ create table TAG (
 	foreign key (user_account_id) references USER_ACCOUNT(id)
 );
 
-create unique index fk_tag_user_account_idx on TAG(user_account_id);
+create index fk_tag_user_account_idx on TAG(user_account_id);
 create index tag_name_idx on TAG(name);

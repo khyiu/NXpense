@@ -14,5 +14,5 @@ create table CREDIT_CARD (
 	foreign key (user_account_id) references USER_ACCOUNT(id)
 );
 
-create unique index fk_card_user_account_idx on CREDIT_CARD(user_account_id);
+create index fk_card_user_account_idx on CREDIT_CARD(user_account_id);
 create index card_name_idx on CREDIT_CARD(name);

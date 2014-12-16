@@ -9,16 +9,16 @@ import javax.persistence.ManyToOne;
 @DiscriminatorValue("CREDIT")
 public class CreditExpense extends Expense {
 
-	private boolean verified;
+    private boolean verified;
 
-	@ManyToOne(optional = false, fetch = FetchType.EAGER)
-	private CreditCard card;
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private CreditCard card;
 
-	public boolean isVerified() {
-		return verified;
-	}
+    public boolean isVerified() {
+	return verified;
+    }
 
-	public void setVerified(boolean verified) {
-		this.verified = verified;
-	}
+    public void setVerified(boolean verified) {
+	this.verified = verified;
+    }
 }

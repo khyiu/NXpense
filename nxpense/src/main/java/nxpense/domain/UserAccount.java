@@ -34,12 +34,16 @@ public class UserAccount {
     private BigDecimal verifiedCapital;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "USER_ACCOUNT_ID")
+    @JoinColumn(name = "USER_ACCOUNT_ID", referencedColumnName = "ID")
     private List<Tag> tags;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "USER_ACCOUNT_ID")
+    @JoinColumn(name = "USER_ACCOUNT_ID", referencedColumnName = "ID")
     private List<CreditCard> creditCards;
+    
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "USER_ACCOUNT_ID", referencedColumnName = "ID")
+    private List<Expense> expenses;
 
     public Date getVerifiedDate() {
 	return verifiedDate;
