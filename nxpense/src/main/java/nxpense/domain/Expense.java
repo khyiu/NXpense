@@ -2,14 +2,20 @@ package nxpense.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -32,6 +38,17 @@ public abstract class Expense {
     private BigDecimal amount;
 
     private String description;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+	    name = "EXPENSE_TAG", 
+	    joinColumns = { 
+		    @JoinColumn(name = "EXPENSE_ID", nullable = false, updatable = false) 
+	    }, 
+	    inverseJoinColumns = { 
+		    @JoinColumn(name = "TAG_ID", nullable = false, updatable = false) 
+	    })
+    private Set<Tag> tags;
 
     public Date getDate() {
 	return date;
