@@ -38,6 +38,7 @@ public class UserAccount {
 	private List<Tag> tags;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	@JoinColumn(name = "USER_ACCOUNT_ID")
 	private List<CreditCard> creditCards;
 
 	public Date getVerifiedDate() {
