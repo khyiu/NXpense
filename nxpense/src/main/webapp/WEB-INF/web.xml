@@ -44,6 +44,7 @@
 	<servlet>
 		<servlet-name>dispatcher</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!-- Init param to override default filename and location of Spring configuration file -->
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
 		<param-value>classpath:/spring/application-config.xml</param-value>
