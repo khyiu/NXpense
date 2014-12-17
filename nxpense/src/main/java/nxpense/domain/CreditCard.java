@@ -9,12 +9,12 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "CREDIT_CARD")
+@SequenceGenerator(name = "CARD_SEQ", sequenceName = "card_seq")
 public class CreditCard {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "card-seq", sequenceName = "card_seq")
-    private long id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CARD_SEQ")
+    private int id;
 
     private String name;
 

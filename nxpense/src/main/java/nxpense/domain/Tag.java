@@ -18,11 +18,11 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "TAG")
+@SequenceGenerator(name = "TAG_SEQ", sequenceName = "tag_seq")
 public class Tag {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "tag-seq", sequenceName = "tag_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TAG_SEQ")
     private int id;
 
     private String name;

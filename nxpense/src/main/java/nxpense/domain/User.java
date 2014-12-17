@@ -1,6 +1,7 @@
 package nxpense.domain;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,11 +14,11 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "USR")
+@SequenceGenerator(name = "USER_SEQ", sequenceName = "user_seq")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "user-seq", sequenceName = "user_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="USER_SEQ")
     private int id;
 
     private String username;
@@ -26,12 +27,13 @@ public class User {
 
     private char[] password;
 
+    @Column(name = "REMAINING_LOGON_ATTEMPT")
     private Integer remainingLogonAttempt;
 
     private char[] temporaryPassword;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "USER_ID", referencedColumnName = "ID")
+    @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
     private UserAccount userAccounts;
 
     public String getUsername() {

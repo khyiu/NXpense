@@ -25,11 +25,11 @@ import javax.persistence.TemporalType;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "EXPENSE_TYPE")
 @Table(name = "EXPENSE")
+@SequenceGenerator(name = "EXPENSE_SEQ", sequenceName = "expense_seq")
 public abstract class Expense {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "expense-seq", sequenceName = "expense_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EXPENSE_SEQ")
     private int id;
 
     @Temporal(TemporalType.DATE)

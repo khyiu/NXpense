@@ -20,11 +20,11 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "USER_ACCOUNT")
+@SequenceGenerator(name = "ACCOUNT_SEQ", sequenceName = "account_seq")
 public class UserAccount {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "account-seq", sequenceName = "account_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ACCOUNT_SEQ")
     private int id;
 
     @Temporal(TemporalType.DATE)
