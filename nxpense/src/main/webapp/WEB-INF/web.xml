@@ -21,6 +21,15 @@
 		<param-name>db.tcpServer</param-name>
 		<param-value>-tcpAllowOthers</param-value>
 	</context-param>
+ 	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			classpath:/spring/application-config.xml
+		</param-value>
+		<description>
+			Override  the default behavior of ContextLoaderListener: defines filename and location to load instead of default /WEB-INF/applicationContext.xml
+		</description>
+	</context-param>
 
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
@@ -36,9 +45,13 @@
 	<listener>
 		<listener-class>org.h2.server.web.DbStarter</listener-class>
 	</listener>
-	<!-- Listener to configure which Spring configuration to load + allows multiple configuration files -->
+	<!-- 
+		Listener to configure which Spring configuration to load + allows multiple configuration files 
+		+ seems to be necessary when Spring security is activated -> would get an exception with message:
+		java.lang.IllegalStateException: No WebApplicationContext found: no ContextLoaderListener registered?
+	-->
 	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class> 
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 
 	<servlet>
@@ -47,7 +60,7 @@
 		<!-- Init param to override default filename and location of Spring configuration file -->
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:/spring/application-config.xml</param-value>
+			<param-value>classpath:/spring/application-config.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
