@@ -5,6 +5,7 @@
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<http pattern="/welcome.html" security="none"/>
+	<http pattern="/resources/**" security="none"/>
 	
 	<!-- 
 		The disable-url-rewriting attribute set to TRUE prevents the JSESSIONID from being concatenated 
