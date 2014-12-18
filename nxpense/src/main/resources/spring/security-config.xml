@@ -4,9 +4,15 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<http auto-config="false" use-expressions="true">
+	<http pattern="/welcome.html" security="none"/>
+	
+	<!-- 
+		The disable-url-rewriting attribute set to TRUE prevents the JSESSIONID from being concatenated 
+		to the URL the user is redirected to
+	 -->
+	<http auto-config="false" use-expressions="true" disable-url-rewriting="true">
 		<intercept-url pattern="/**" access="isAuthenticated()" />
-		<form-login login-page="/welcome.html" />
+		<form-login login-page="/welcome.html" />		
 	</http>
 
 	<authentication-manager>
