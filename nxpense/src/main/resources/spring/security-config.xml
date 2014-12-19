@@ -6,7 +6,8 @@
 
 	<!-- Security must not be applied on the welcome login page. Otherwise, we'll end up in a redirection loop -->
 	<http pattern="/welcome.html" security="none"/>
-	<http pattern="/resources/**" security="none"/>
+	<http pattern="/css/**" security="none"/>
+	<http pattern="/js/**" security="none"/>
 	
 	<!-- 
 		The disable-url-rewriting attribute set to TRUE prevents the JSESSIONID from being concatenated 
