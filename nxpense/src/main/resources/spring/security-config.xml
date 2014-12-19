@@ -8,6 +8,7 @@
 	<http pattern="/welcome.html" security="none"/>
 	<http pattern="/css/**" security="none"/>
 	<http pattern="/js/**" security="none"/>
+	<http pattern="/images/**" security="none"/>
 	
 	<!-- 
 		The disable-url-rewriting attribute set to TRUE prevents the JSESSIONID from being concatenated 
