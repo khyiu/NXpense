@@ -4,6 +4,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+	<!-- Security must not be applied on the welcome login page. Otherwise, we'll end up in a redirection loop -->
 	<http pattern="/welcome.html" security="none"/>
 	<http pattern="/resources/**" security="none"/>
 	
