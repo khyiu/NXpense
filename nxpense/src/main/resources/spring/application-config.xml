@@ -9,5 +9,5 @@
 	
 	<import resource="classpath:/spring/datasource-config.xml"/>
 	<import resource="classpath:/spring/security-config.xml"/>
-	<import resource="classpath:/spring/web-resources.xml" />
+	<import resource="classpath:/spring/view-config.xml" />
 </beans>
