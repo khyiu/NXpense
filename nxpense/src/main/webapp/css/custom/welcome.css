@@ -1,0 +1,11 @@
+#full-logo {
+	/* Getting the logo horizontally centered  */
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	
+	margin-top: 10px;
+	
+	/* Resizing the logo */
+	width: 60%;
+}
