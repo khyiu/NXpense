@@ -36,12 +36,15 @@
 <!-- END TODO section -->
 
 <body>
-    <div>
+    <div ng-app="loginApp">
         <div class="row shadow">
         	<div>
   				<img id="full-logo" alt="Nxpense welcome page logo" src="images/nxpense-full-logo.png">
 			</div>        
-            <div id="flippable-container" class="col-md-4 col-md-offset-4" onclick="toggleFlipClass()">
+			<!-- todo clean after test with angular controller -->
+            <!-- <div id="flippable-container" class="col-md-4 col-md-offset-4" onclick="toggleFlipClass()"> -->
+            <div id="flippable-container" class="col-md-4 col-md-offset-4" ng-controller="loginController">
+            == {{visiblePanel}} == 
             	<!-- login panel -->
                 <div class="login-panel panel panel-default flippable front">
                     <div class="panel-heading">
