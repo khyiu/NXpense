@@ -9,3 +9,26 @@
 	/* Resizing the logo */
 	width: 60%;
 }
+
+/* Flip animation for login/registration panel */
+#flippable-container {
+    transform-style: preserve-3d;
+    transition: all 0.75s linear;
+}
+
+.flipped {
+  transform: rotateY(180deg);
+}
+
+.flippable {
+  position: absolute;
+  backface-visibility: hidden;
+
+  /* With absolute positioning, the box width set by boostrap is broken -> set it to 100% to fix this issue */
+  width: 100%;
+}
+
+.panel.back {
+  display: block;
+  transform: rotateY(180deg);
+}
