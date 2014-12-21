@@ -24,29 +24,16 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-
-<!-- TODO: remove after test -->
-<script type="text/javascript">
-    var toggleFlipClass = function() {
-        $('#flippable-container').toggleClass('flipped');
-        $('.panel.front').toggleClass('front').togleClass('back');
-        $('.panel.back').toggleClass('front').togleClass('back');        
-    };
-</script>
-<!-- END TODO section -->
-
 <body>
     <div ng-app="loginApp">
-        <div class="row shadow">
+        <div class="row shadow" ng-controller="loginController">
         	<div>
   				<img id="full-logo" alt="Nxpense welcome page logo" src="images/nxpense-full-logo.png">
 			</div>        
-			<!-- todo clean after test with angular controller -->
-            <!-- <div id="flippable-container" class="col-md-4 col-md-offset-4" onclick="toggleFlipClass()"> -->
-            <div id="flippable-container" class="col-md-4 col-md-offset-4" ng-controller="loginController">
-            == {{visiblePanel}} == 
+			<div id="flippable-container" class="col-md-4 col-md-offset-4" ng-class="{'flipped': visiblePanel !== 'login'}">
             	<!-- login panel -->
-                <div class="login-panel panel panel-default flippable front">
+             <!--    <div id="panel-front" class="login-panel panel panel-default flippable" ng-class="{'flipped': visiblePanel !== 'login'}"> -->
+                <div id="panel-front" class="login-panel panel panel-default flippable">
                     <div class="panel-heading">
                         <h3 class="panel-title">Please sign in</h3>
                     </div>
@@ -70,13 +57,14 @@
                         </form>
                     </div>
                    	<div class="panel-footer">
-                   		<a href="#">
+                   		<a ng-click="goToRegistration()">
                    			Not yet registered? Create an account
                    		</a>                   	
                    	</div>
                 </div>
                 <!-- registration panel -->
-                <div class="login-panel panel panel-default flippable back">
+                <!-- <div id="panel-back" class="login-panel panel panel-default flippable" ng-class="{'flipped': visiblePanel !== 'registration'}"> -->
+                <div id="panel-back" class="login-panel panel panel-default flippable">
                     <div class="panel-heading">
                         <h3 class="panel-title">Please register</h3>
                     </div>
@@ -99,7 +87,7 @@
                         </form>
                     </div>
                    	<div class="panel-footer">
-                   		<a href="#">
+                   		<a ng-click="goToLogin()">
                    			Already registered? Log in
                    		</a>                   	
                    	</div>
