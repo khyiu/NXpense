@@ -31,11 +31,24 @@ a {
 	transform: rotateY(180deg);
 }
 
-.flippable {
+.flippable  {
 	backface-visibility: hidden;
+	/* 
+		Absolute positioning to get both front and back panel overlapping at
+		the same location
+	 */
+	position: absolute;
+	/*
+		With absolute position, panel width set by bootstrap is broken...
+	*/
+	width: 100%;
 }
 
 #panel-front {
+	/* 
+		Setting a 0° rotation to define the front panel initial face. Without this workaround, 
+		even when the panel's flipped, the back face is still displayed
+	*/
 	transform: rotateY(0deg);
 }
 
