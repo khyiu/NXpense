@@ -87,7 +87,7 @@
 				<directory>src/main/resources/db/migration</directory>
 				<filtering>false</filtering>
 				<targetPath>/db/migration</targetPath>
-			</resource>
+			</resource>		
 		</resources>
 
 		<!-- Enables filtering of web.xml file -->
@@ -101,4 +101,38 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	<!-- 
+		Workaround to fix resource filtering of deployment descriptor (web.xml) when it is not located 
+		in 'main/java/resources'. See http://stackoverflow.com/questions/20436518 for more detailed 
+		explanation.
+		
+		To overcome this issue, instead of moving the web.xml file, we could explicitly add it to the 
+		collection of resources to filter (and then, to copy into the output directory).
+		This additional configuration in wrapped in a specific profile so that we can build a standard 
+		formatted WAR when omitting this profile. 
+		
+		FYI, building the WAR with the 'eclipseTomcat' activated, the web.xml will be correctly filtered 
+		twice and also copied twice, which kinda pollutes the generated artifact.		
+	 -->
+	<profiles>
+		<profile>
+			<id>eclipseTomcat</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+
+			<build>
+				<resources>
+					<resource>
+						<directory>src/main/webapp/</directory>
+						<includes>
+							<include>**/*.xml</include>
+						</includes>
+						<filtering>true</filtering>
+					</resource>
+				</resources>
+			</build>
+		</profile>
+	</profiles>
 </project>
