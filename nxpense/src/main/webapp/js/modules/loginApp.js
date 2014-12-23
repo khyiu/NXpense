@@ -3,7 +3,7 @@
 	
 	var loginAppModule = angular.module('loginApp', []);
 
-	loginAppModule.controller('loginController', ['$scope', function($scope) {
+	loginAppModule.controller('welcomeController', ['$scope', function($scope) {
 		$scope.visiblePanel = 'login';
 		
 		$scope.goToRegistration = function() {
@@ -15,4 +15,14 @@
 		}
 		
 	}]);
+	
+	loginAppModule.controller('registrationController', ['$scope', function($scope) {
+		$scope.email;
+		$scope.password;
+		$scope.passwordRepeat;
+		
+		$scope.createAccount = function () {
+			console.log('>>> create account with ' + this.email);
+		}
+	}])
 })(window.angular);
