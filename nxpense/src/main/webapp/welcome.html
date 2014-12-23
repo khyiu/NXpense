@@ -81,8 +81,9 @@
                                 	<label ng-show="registrationForm.password.$error.pattern && registrationForm.password.$dirty" class="control-label" for="registrationPassword">Password must have: 1 lowercase letter, 1 uppercase letter, 1 digit and at least 6 characters</label>
                                     <input id="registrationPassword" class="form-control" placeholder="Password" name="password" type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" ng-model="password">
                                 </div>
-								<div class="form-group registration-form-group">
-									<input class="form-control" placeholder="Repeat password" name="passwordRepeat" type="password" required ng-model="passwordRepeat">
+								<div class="form-group registration-form-group" ng-class="{'has-error': registrationForm.passwordRepeat.$invalid && registrationForm.passwordRepeat.$dirty}">
+									<label ng-show="registrationForm.passwordRepeat.$error.confirmationCheck && registrationForm.passwordRepeat.$dirty" class="control-label" for="registrationPasswordRepeat">Passwords don't match</label>
+									<input id="registrationPasswordRepeat" class="form-control" placeholder="Repeat password" name="passwordRepeat" type="password" required ng-model="passwordRepeat">
 								</div>
 								<a class="btn btn-lg btn-success btn-block" ng-click="createAccount()" ng-if="registrationForm.$valid">Create new account</a>								
                                 <a class="btn btn-lg btn-success btn-block" disabled ng-if="!registrationForm.$valid">Create new account</a>
