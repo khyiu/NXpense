@@ -84,7 +84,8 @@
 								<div class="form-group registration-form-group">
 									<input class="form-control" placeholder="Repeat password" name="passwordRepeat" type="password" required ng-model="passwordRepeat">
 								</div>
-                                <a class="btn btn-lg btn-success btn-block" ng-click="createAccount()">Create new account</a>
+								<a class="btn btn-lg btn-success btn-block" ng-click="createAccount()" ng-if="registrationForm.$valid">Create new account</a>								
+                                <a class="btn btn-lg btn-success btn-block" disabled ng-if="!registrationForm.$valid">Create new account</a>
                             </fieldset>
                         </form>
                     </div>
