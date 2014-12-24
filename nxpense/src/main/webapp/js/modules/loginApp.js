@@ -21,7 +21,7 @@
 		$scope.password;
 		$scope.passwordRepeat;
 
-		$scope.createAccount = function () {
+		$scope.createAccount = function ($http) {
 		}
 		
 		// First argument could be either a function returning the value to watch, or the value's name	
