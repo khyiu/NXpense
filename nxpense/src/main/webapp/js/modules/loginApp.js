@@ -21,15 +21,15 @@
 		$scope.password;
 		$scope.passwordRepeat;
 		
-		$scope.createAccount = function ($scope, $http) {
+		$scope.createAccount = function () {
 			console.log('>>> createAccount');
 			
 			var request = {
 				method: 'POST',
-				url: 'localhost:8080/nxpense/account/new',
+				url: '/nxpense/account/new',
 				params: {
 					email: this.email,
-					password: this.email,
+					password: this.password,
 					passwordRepeat: this.passwordRepeat
 				}	
 			};
