@@ -15,13 +15,14 @@
 		to the URL the user is redirected to
 	 -->
 	<http auto-config="false" use-expressions="true" disable-url-rewriting="true">
+		<intercept-url pattern="/account/new" access="isAnonymous()"/>
 		<intercept-url pattern="/**" access="isAuthenticated()" />
 		<!-- 
 			The 'login-processing-url' attribute overrides the default value '/j_spring_security_check
 		 -->
 		<form-login login-page="/welcome.html" login-processing-url="/login"/>		
 	</http>
-
+		
 	<authentication-manager>
 		<authentication-provider user-service-ref="customUserDetailsService">
 		
