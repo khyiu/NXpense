@@ -16,12 +16,27 @@
 
 	}]);
 
-	loginAppModule.controller('registrationController', ['$scope', function($scope) {
+	loginAppModule.controller('registrationController', ['$scope', '$http', function($scope, $http) {
 		$scope.email;
 		$scope.password;
 		$scope.passwordRepeat;
-
-		$scope.createAccount = function ($http) {
+		
+		$scope.createAccount = function ($scope, $http) {
+			console.log('>>> createAccount');
+			
+			var request = {
+				method: 'POST',
+				url: 'localhost:8080/nxpense/account/new',
+				params: {
+					email: this.email,
+					password: this.email,
+					passwordRepeat: this.passwordRepeat
+				}	
+			};
+			
+			$http(request).success(function(){
+				console.log('>>> request sent with success');
+			});
 		}
 		
 		// First argument could be either a function returning the value to watch, or the value's name	
