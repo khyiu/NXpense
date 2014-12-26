@@ -32,7 +32,7 @@ public class User {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
-    private UserAccount userAccounts;
+    private UserAccount userAccount;
 
     public String getEmail() {
 	return email;
@@ -66,12 +66,12 @@ public class User {
 	this.temporaryPassword = temporaryPassword;
     }
 
-    public UserAccount getUserAccounts() {
-	return userAccounts;
+    public UserAccount getUserAccount() {
+	return userAccount;
     }
 
-    public void setUserAccounts(UserAccount userAccounts) {
-	this.userAccounts = userAccounts;
+    public void setUserAccount(UserAccount userAccount) {
+	this.userAccount = userAccount;
     }
 
     @Override
