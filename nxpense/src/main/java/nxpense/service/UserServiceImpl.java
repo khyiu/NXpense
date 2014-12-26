@@ -1,13 +1,17 @@
 package nxpense.service;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
+import nxpense.domain.User;
+import nxpense.domain.UserAccount;
+import nxpense.repository.UserRepository;
+import nxpense.service.api.UserService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import nxpense.domain.User;
-import nxpense.repository.UserRepository;
-import nxpense.service.api.UserService;
 
 @Service("userService")
 public class UserServiceImpl implements UserService{
@@ -18,12 +22,18 @@ public class UserServiceImpl implements UserService{
 	private UserRepository userRepository;
 	
 	public void createUser(String email, char[] password, char[] passwordRepeat) {
+		LOGGER.info("Creating new user with email={}", email);
 		
 		User user = new User();
 		user.setEmail(email);
 		user.setPassword(password);
-		userRepository.save(user);
-		System.out.println(">>> creating new user");
+		
+		UserAccount userAccount = new UserAccount();
+		userAccount.setVerifiedCapital(BigDecimal.ZERO);
+		userAccount.setVerifiedDate(new Date());
+		user.setUserAccount(userAccount);
+		
+		userRepository.save(user);		
 	}
 
 }
