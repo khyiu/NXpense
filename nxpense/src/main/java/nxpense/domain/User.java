@@ -21,8 +21,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="USER_SEQ")
     private Integer id;
 
-    private String username;
-
     private String email;
 
     private char[] password;
@@ -35,14 +33,6 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
     private UserAccount userAccounts;
-
-    public String getUsername() {
-	return username;
-    }
-
-    public void setUsername(String username) {
-	this.username = username;
-    }
 
     public String getEmail() {
 	return email;
@@ -89,7 +79,6 @@ public class User {
 	final int prime = 31;
 	int result = 1;
 	result = prime * result + ((email == null) ? 0 : email.hashCode());
-	result = prime * result + ((username == null) ? 0 : username.hashCode());
 	return result;
     }
 
@@ -111,17 +100,9 @@ public class User {
 
 	if (email == null) {
 	    if (other.email != null) {
-		return false;
+	    	return false;
 	    }
 	} else if (!email.equals(other.email)) {
-	    return false;
-	}
-
-	if (username == null) {
-	    if (other.username != null) {
-		return false;
-	    }
-	} else if (!username.equals(other.username)) {
 	    return false;
 	}
 
