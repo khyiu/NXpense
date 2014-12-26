@@ -13,6 +13,7 @@
 			</PatternLayout>
 			<Policies>
 				<SizeBasedTriggeringPolicy size="10 MB" />
+				<!-- In filepattern, the most fined-grained unit = dd, so, will rolled every day -->
 				<TimeBasedTriggeringPolicy interval="1" modulate="true"/>
 			</Policies>
 			<!-- Maximum number of indexed rollover files -->
