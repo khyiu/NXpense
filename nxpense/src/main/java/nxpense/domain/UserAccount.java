@@ -25,7 +25,7 @@ public class UserAccount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ACCOUNT_SEQ")
-    private int id;
+    private Integer id;
 
     @Temporal(TemporalType.DATE)
     private Date verifiedDate;

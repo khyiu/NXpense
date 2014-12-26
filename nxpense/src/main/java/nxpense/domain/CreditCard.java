@@ -14,7 +14,7 @@ public class CreditCard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CARD_SEQ")
-    private int id;
+    private Integer id;
 
     private String name;
 

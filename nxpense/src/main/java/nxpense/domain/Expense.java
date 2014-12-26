@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -30,7 +29,7 @@ public abstract class Expense {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EXPENSE_SEQ")
-    private int id;
+    private Integer id;
 
     @Temporal(TemporalType.DATE)
     private Date date;

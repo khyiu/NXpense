@@ -23,7 +23,7 @@ public class Tag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TAG_SEQ")
-    private int id;
+    private Integer id;
 
     private String name;
 
