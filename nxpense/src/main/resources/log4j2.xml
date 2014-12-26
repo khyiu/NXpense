@@ -4,29 +4,35 @@
 		<Console name="CONSOLE" target="SYSTEM_OUT">
 			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
 		</Console>
-		
+
 		<RollingFile name="ROLLING_FILE" append="true"
 			immediateFlush="true" fileName="${sys:user.home}\nxpense\logs\nxpense.log"
 			filePattern="${sys:user.home}\nxpense\logs\nxpense-%d{yyyy-MM-dd}-%i.log">
 			<PatternLayout>
-				<pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</pattern>
+				<pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+				</pattern>
 			</PatternLayout>
 			<Policies>
 				<SizeBasedTriggeringPolicy size="10 MB" />
-				<!-- In filepattern, the most fined-grained unit = dd, so, will rolled every day -->
-				<TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+				<!-- In filepattern, the most fined-grained unit = dd, so, will rolled 
+					every day -->
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
 			</Policies>
 			<!-- Maximum number of indexed rollover files -->
 			<DefaultRolloverStrategy max="5" />
 		</RollingFile>
 	</Appenders>
 	<Loggers>
-	    <Root level="error">
-     		<AppenderRef ref="CONSOLE"/>
-     		<AppenderRef ref="ROLLING_FILE"/>
-    	</Root>
+		<Root level="error">
+			<AppenderRef ref="CONSOLE" />
+			<AppenderRef ref="ROLLING_FILE" />
+		</Root>
 		<logger name="nxpense.controller" level="INFO" additivity="false">
 			<AppenderRef ref="ROLLING_FILE" />
 		</logger>
-	</Loggers>	
+		<logger name="nxpense.service" level="DEBUG" additivity="false">
+			<AppenderRef ref="ROLLING_FILE" />
+		</logger>
+	</Loggers>
 </Configuration>
