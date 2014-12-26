@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="ERROR" name="Nxpense">
+	<Appenders>
+		<Console name="CONSOLE" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+		
+		<RollingFile name="ROLLING_FILE" append="true"
+			immediateFlush="true" fileName="${sys:user.home}\nxpense\logs\nxpense.log"
+			filePattern="${sys:user.home}\nxpense\logs\nxpense-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout>
+				<pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</pattern>
+			</PatternLayout>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="10 MB" />
+				<TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+			</Policies>
+			<!-- Maximum number of indexed rollover files -->
+			<DefaultRolloverStrategy max="5" />
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+	    <Root level="error">
+     		<AppenderRef ref="CONSOLE"/>
+     		<AppenderRef ref="ROLLING_FILE"/>
+    	</Root>
+		<logger name="nxpense.controller" level="INFO" additivity="false">
+			<AppenderRef ref="ROLLING_FILE" />
+		</logger>
+	</Loggers>	
+</Configuration>

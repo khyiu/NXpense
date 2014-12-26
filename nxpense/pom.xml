@@ -5,7 +5,7 @@
 	<artifactId>nxpense</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>NXpense wallet application</name>
+	<name>Nxpense wallet application</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
@@ -16,6 +16,8 @@
 		<spring.version>4.1.3.RELEASE</spring.version>
 		<spring.security.version>3.2.5.RELEASE</spring.security.version>
 		<hibernate.version>4.3.7.Final</hibernate.version>
+		<slf4j.version>1.7.9</slf4j.version>
+		<log4j.version>2.1</log4j.version>
 	</properties>
 
 	<dependencies>
@@ -88,6 +90,46 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
+		
+		<!-- Logging dependencies -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>${log4j.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${log4j.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>${log4j.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+  		<dependency>
+    		<groupId>org.apache.logging.log4j</groupId>
+    		<artifactId>log4j-web</artifactId>
+    		<version>${log4j.version}</version>
+		</dependency>  		
 	</dependencies>
 
 	<build>
@@ -102,6 +144,13 @@
 				<directory>src/main/resources/db/migration</directory>
 				<filtering>false</filtering>
 				<targetPath>/db/migration</targetPath>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+				<includes>
+					<include>log4j2.xml</include>
+				</includes>
 			</resource>		
 		</resources>
 
