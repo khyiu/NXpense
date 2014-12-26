@@ -25,7 +25,7 @@ public class User {
 
     private char[] password;
 
-    @Column(name = "REMAINING_LOGON_ATTEMPT")
+    @Column(name = "REMAINING_LOGON_ATTEMPT", insertable = false, updatable = false)
     private Integer remainingLogonAttempt;
 
     private char[] temporaryPassword;
