@@ -31,7 +31,7 @@
 			<version>${spring.version}</version>
 		</dependency>
 
-		<!-- SPRING SECURITY dependencieds -->
+		<!-- SPRING SECURITY dependencies -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
@@ -41,6 +41,14 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
 			<version>${spring.security.version}</version>
+		</dependency>
+		
+		<!-- Servlet dependencies -->
+		<dependency>
+    		<groupId>org.apache.tomcat</groupId>
+    		<artifactId>servlet-api</artifactId>
+    		<version>6.0.43</version>
+    		<scope>provided</scope>
 		</dependency>
 
 		<!-- HIBERNATE dependencies -->
