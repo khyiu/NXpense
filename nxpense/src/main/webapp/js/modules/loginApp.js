@@ -22,8 +22,6 @@
 		$scope.passwordRepeat;
 		
 		$scope.createAccount = function () {
-			console.log('>>> createAccount');
-			
 			var request = {
 				method: 'POST',
 				url: '/nxpense/account/new',
@@ -36,6 +34,8 @@
 			
 			$http(request).success(function(){
 				console.log('>>> request sent with success');
+			}).error(function(){
+				alert('>>> request failed');
 			});
 		}
 		

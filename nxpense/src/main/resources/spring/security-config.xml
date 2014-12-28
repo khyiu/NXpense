@@ -20,12 +20,14 @@
 		<!-- 
 			The 'login-processing-url' attribute overrides the default value '/j_spring_security_check
 		 -->
-		<form-login login-page="/welcome.html" login-processing-url="/login"/>		
+		<form-login login-page="/welcome.html" login-processing-url="/login" default-target-url="/html/home.html" always-use-default-target="true"/>		
 	</http>
 		
 	<authentication-manager>
 		<authentication-provider user-service-ref="customUserDetailsService">
-		
+		<password-encoder ref="bcryptEncoder"/>
 		</authentication-provider>
 	</authentication-manager>
+	
+	<beans:bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 </beans:beans>
