@@ -17,6 +17,7 @@
 	}]);
 
 	loginAppModule.controller('registrationController', ['$scope', '$http', function($scope, $http) {
+		var emailTakenRule = 'emailTaken';
 		$scope.email;
 		$scope.password;
 		$scope.passwordRepeat;
@@ -32,14 +33,22 @@
 				}	
 			};
 			
-			$http(request).success(function(){
-				console.log('>>> request sent with success');
-			}).error(function(){
-				alert('>>> request failed');
+			var response = $http(request);
+			
+			response.success(function(){
+				console.log('>>> account creation request with success');
+			});
+
+			response.error(function(data, status) {
+				if(status === 409) {
+					// TODO trigger error on form
+					console.log($scope.email);
+					$scope.registrationForm.email.$setValidity(emailTakenRule, false);
+				}	
 			});
 		}
 		
-		// First argument could be either a function returning the value to watch, or the value's name	
+		// When passwordRepeat field changes, check if it matches password
 		$scope.$watch('passwordRepeat', function(newValue, oldValue, scope){
 			var validationRule = 'confirmationCheck';
 			
@@ -51,5 +60,14 @@
 				scope.registrationForm.passwordRepeat.$setValidity(validationRule, true);
 			}		
 		});
-	}])
+		
+		// When email field changes, if there is a previous "email taken" message, cleanse it
+		$scope.$watch('email', function(newValue, oldValue, scope){
+			var isEmailTaken = scope.registrationForm.email.$error[emailTakenRule];
+			
+			if(isEmailTaken) {
+				scope.registrationForm.email.$setValidity(emailTakenRule, true);
+			}
+		});
+	}]);
 })(window.angular);

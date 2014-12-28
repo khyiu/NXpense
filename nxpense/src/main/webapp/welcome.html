@@ -74,6 +74,7 @@
                                 <div class="form-group registration-form-group" ng-class="{'has-error': registrationForm.email.$invalid && registrationForm.email.$dirty}">
                                 	<label ng-show="registrationForm.email.$error.required && registrationForm.email.$dirty" class="control-label" for="registrationEmail">Email is a mandatory field</label>
                                 	<label ng-show="registrationForm.email.$error.email && registrationForm.email.$dirty" class="control-label" for="registrationEmail">Provided email has an invalid format</label>
+                                	<label ng-show="registrationForm.email.$error.emailTaken && registrationForm.email.$dirty" class="control-label" for="registrationEmail">This email is already taken</label>
                                     <input id="registrationEmail" class="form-control" placeholder="E-mail" name="email" type="email" required autofocus ng-model="email">
                                 </div>
                                 <div class="form-group registration-form-group" ng-class="{'has-error': registrationForm.password.$invalid && registrationForm.password.$dirty}">
