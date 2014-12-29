@@ -41,7 +41,7 @@
 				var redirectUrl = protocol + '://' + host + ':' + port + data;
 				
 				if(data) {
-					window.location.replace(redirectUrl);
+					window.location.assign(redirectUrl);
 				}
 			});
 		};
