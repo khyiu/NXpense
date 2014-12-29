@@ -51,8 +51,7 @@
                                         <input name="remember" type="checkbox" value="Remember Me">Remember Me
                                     </label>
                                 </div>
-                                <!-- Change this to a button or input when using this as a form -->
-                                <a href="index.html" class="btn btn-lg btn-success btn-block">Login</a>
+                                <button type="button" class="btn btn-success btn-lg btn-block">Login</button>
                             </fieldset>
                         </form>
                     </div>
@@ -86,8 +85,8 @@
 									<label ng-show="registrationForm.passwordRepeat.$error.confirmationCheck && registrationForm.passwordRepeat.$dirty" class="control-label" for="registrationPasswordRepeat">Passwords don't match</label>
 									<input id="registrationPasswordRepeat" class="form-control" placeholder="Repeat password" name="passwordRepeat" type="password" required ng-model="passwordRepeat">
 								</div>
-								<a class="btn btn-lg btn-success btn-block" ng-click="createAccount()" ng-if="registrationForm.$valid">Create new account</a>								
-                                <a class="btn btn-lg btn-success btn-block" disabled ng-if="!registrationForm.$valid">Create new account</a>
+                                <button type="button" class="btn btn-success btn-lg btn-block" ng-click="createAccount()" ng-if="registrationForm.$valid">Create new account</button>
+                                <button type="button" class="btn btn-success btn-lg btn-block" disabled ng-if="!registrationForm.$valid">Create new account</button>
                             </fieldset>
                         </form>
                     </div>
