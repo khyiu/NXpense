@@ -3,6 +3,7 @@
 
 	var loginAppModule = angular.module('loginApp', []);
 
+	// Controller to manage flippable containers
 	loginAppModule.controller('welcomeController', ['$scope', function($scope) {
 		$scope.visiblePanel = 'login';
 
@@ -15,7 +16,18 @@
 		}
 
 	}]);
+	
+	loginAppModule.controller('loginController', ['$scope', '$http', function($scope, http) {
+		$scope.email;
+		$scope.password;
+		$scope.rememberMe;
+		
+		$scope.login = function () {
+			console.log('>>> send request to login');
+		};
+	}]);
 
+	// Controller to manage registration process
 	loginAppModule.controller('registrationController', ['$scope', '$http', function($scope, $http) {
 		var emailTakenRule = 'emailTaken';
 		$scope.email;
