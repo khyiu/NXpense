@@ -40,7 +40,13 @@
 				var port = $location.port();
 				var redirectUrl = protocol + '://' + host + ':' + port + data;
 				
-				if(data) {
+				// custom header sent by server to notify the client of a login failure
+				var loginErrorMessage = headers('nxpense-login-error');
+				
+				if(loginErrorMessage) {
+					$scope.loginForm.email.$setValidity('credentials', false);
+				} else if(data) {
+					// successful login -> redirect to URL sent by server
 					window.location.assign(redirectUrl);
 				}
 			});
