@@ -17,13 +17,34 @@
 
 	}]);
 	
-	loginAppModule.controller('loginController', ['$scope', '$http', function($scope, http) {
+	loginAppModule.controller('loginController', ['$scope', '$http', function($scope, $http) {
 		$scope.email;
 		$scope.password;
 		$scope.rememberMe;
 		
 		$scope.login = function () {
-			console.log('>>> send request to login');
+			var rememberMe = this.rememberMe || false;
+			var request = {
+					method: 'POST',
+					url: '/nxpense/login',
+					params: {
+						email: this.email,
+						password: this.password,
+						remember_me: rememberMe 
+					}
+			};
+			
+			// Angular does not implicitly follow redirection sent by the server 
+			// --> user $location service to handle it client-side
+			var followRedirection = function() {
+				alert('>>> follow redirection');
+			};
+			var response = $http(request);
+			
+			// TODO handle login response
+			response.success(function(data, status, headers, config) {
+				console.log('>>> handle login callback');
+			});
 		};
 	}]);
 
@@ -53,7 +74,6 @@
 
 			response.error(function(data, status) {
 				if(status === 409) {
-					// TODO trigger error on form
 					console.log($scope.email);
 					$scope.registrationForm.email.$setValidity(emailTakenRule, false);
 				}	

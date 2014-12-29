@@ -17,10 +17,17 @@
 	<http auto-config="false" use-expressions="true" disable-url-rewriting="true">
 		<intercept-url pattern="/account/new" access="isAnonymous()"/>
 		<intercept-url pattern="/**" access="isAuthenticated()" />
+		<intercept-url pattern="/view/**" access="isAuthenticated()"/>
 		<!-- 
-			The 'login-processing-url' attribute overrides the default value '/j_spring_security_check
+			The 'login-processing-url' attribute overrides the default value '/j_spring_security_check.
+			The 'username-parameter' attribute overrides the name of the request parameter that holds the username value.
+			The 'password-parameter' attribute ovverrides the name of the request parameter that holds the password value.
 		 -->
-		<form-login login-page="/welcome.html" login-processing-url="/login" default-target-url="/html/home.html" always-use-default-target="true"/>		
+		<form-login login-page="/welcome.html" login-processing-url="/login" default-target-url="/view/home.html" 
+			always-use-default-target="true" username-parameter="email" password-parameter="password" />
+		
+		<!-- Remember me duration = 5 days -->	
+		<remember-me remember-me-parameter="remember_me" token-validity-seconds="432000"/>					
 	</http>
 		
 	<authentication-manager>
