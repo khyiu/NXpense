@@ -38,28 +38,25 @@
                         <h3 class="panel-title">Please sign in</h3>
                     </div>
                     <div class="panel-body">
-                        <form role="form">
+                        <form role="form" name="loginForm" ng-controller="loginController">
                             <fieldset>
                                 <div class="form-group">
-                                    <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus>
+                                    <input class="form-control" placeholder="E-mail" name="email" type="email" ng-model="email" autofocus>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control" placeholder="Password" name="password" type="password" value="">
+                                    <input class="form-control" placeholder="Password" name="password" type="password" ng-model="password">
                                 </div>
                                 <div class="checkbox">
                                     <label>
-                                        <input name="remember" type="checkbox" value="Remember Me">Remember Me
+                                        <input name="remember" type="checkbox" value="Remember Me" ng-model="rememberMe">Remember Me
                                     </label>
                                 </div>
-                                <!-- Change this to a button or input when using this as a form -->
-                                <a href="index.html" class="btn btn-lg btn-success btn-block">Login</a>
+                                <button type="button" class="btn btn-success btn-lg btn-block" ng-click="login()">Login</button>
                             </fieldset>
                         </form>
                     </div>
                    	<div class="panel-footer">
-                   		<a ng-click="goToRegistration()">
-                   			Not yet registered? Create an account
-                   		</a>                   	
+                   		<button type="button" class="btn btn-outline btn-link" ng-click="goToRegistration()">Not yet registered? Create an account</button>
                    	</div>
                 </div>
                 <!-- registration panel -->
@@ -86,15 +83,13 @@
 									<label ng-show="registrationForm.passwordRepeat.$error.confirmationCheck && registrationForm.passwordRepeat.$dirty" class="control-label" for="registrationPasswordRepeat">Passwords don't match</label>
 									<input id="registrationPasswordRepeat" class="form-control" placeholder="Repeat password" name="passwordRepeat" type="password" required ng-model="passwordRepeat">
 								</div>
-								<a class="btn btn-lg btn-success btn-block" ng-click="createAccount()" ng-if="registrationForm.$valid">Create new account</a>								
-                                <a class="btn btn-lg btn-success btn-block" disabled ng-if="!registrationForm.$valid">Create new account</a>
+                                <button type="button" class="btn btn-success btn-lg btn-block" ng-click="createAccount()" ng-if="registrationForm.$valid">Create new account</button>
+                                <button type="button" class="btn btn-success btn-lg btn-block" disabled ng-if="!registrationForm.$valid">Create new account</button>
                             </fieldset>
                         </form>
                     </div>
                    	<div class="panel-footer">
-                   		<a ng-click="goToLogin()">
-                   			Already registered? Log in
-                   		</a>                   	
+                   		<button type="button" class="btn btn-outline btn-link" ng-click="goToLogin()">Already registered? Log in</button> 	
                    	</div>
                 </div>    
             </div>
