@@ -1,11 +1,11 @@
-<web-app version="2.5" 
-	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee  http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 	<display-name>Nxpense - wallet application</display-name>
 
 	<context-param>
 		<param-name>db.url</param-name>
-			<param-value>${database.url}</param-value>
+		<param-value>${database.url}</param-value>
 	</context-param>
 	<context-param>
 		<param-name>db.user</param-name>
@@ -19,20 +19,20 @@
 		<param-name>db.tcpServer</param-name>
 		<param-value>-tcpAllowOthers</param-value>
 	</context-param>
- 	<context-param>
+	<context-param>
+		<description>
+			Override  the default behavior of ContextLoaderListener: defines filename and location to load instead of default /WEB-INF/applicationContext.xml
+		</description>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
 			classpath:/spring/application-config.xml
 		</param-value>
-		<description>
-			Override  the default behavior of ContextLoaderListener: defines filename and location to load instead of default /WEB-INF/applicationContext.xml
-		</description>
 	</context-param>
 
 	<filter>
-        <filter-name>log4jServletFilter</filter-name>
-        <filter-class>org.apache.logging.log4j.web.Log4jServletFilter</filter-class>
-    </filter>
+		<filter-name>log4jServletFilter</filter-name>
+		<filter-class>org.apache.logging.log4j.web.Log4jServletFilter</filter-class>
+	</filter>
 
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
@@ -40,13 +40,13 @@
 	</filter>
 
 	<filter-mapping>
-        <filter-name>log4jServletFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-        <dispatcher>INCLUDE</dispatcher>
-        <dispatcher>ERROR</dispatcher>
-    </filter-mapping>
+		<filter-name>log4jServletFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+		<dispatcher>ERROR</dispatcher>
+	</filter-mapping>
 
 	<filter-mapping>
 		<filter-name>springSecurityFilterChain</filter-name>
@@ -55,18 +55,18 @@
 
 	<!-- LOG4J2 Listener -->
 	<listener>
-        <listener-class>org.apache.logging.log4j.web.Log4jServletContextListener</listener-class>
-    </listener>
-    
+		<listener-class>org.apache.logging.log4j.web.Log4jServletContextListener</listener-class>
+	</listener>
+
 	<!-- Listener to have H2 database started when application starts -->
 	<listener>
 		<listener-class>org.h2.server.web.DbStarter</listener-class>
 	</listener>
-	
+
 	<!-- 
 		Listener to configure which Spring configuration to load + allows multiple configuration files 
-		+ seems to be necessary when Spring security is activated -> would get an exception with message:
-		java.lang.IllegalStateException: No WebApplicationContext found: no ContextLoaderListener registered?
+		+ seems to be necessary when Spring security is activated -> would get an exception with message: 
+		java.lang.IllegalStateException: No WebApplicationContext found: no ContextLoaderListener registered? 
 	-->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
@@ -75,7 +75,8 @@
 	<servlet>
 		<servlet-name>SpringDispatcher</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<!-- Init param to override default filename and location of Spring configuration file -->
+		<!-- Init param to override default filename and location of Spring configuration 
+			file -->
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
 			<param-value>classpath:/spring/application-config.xml</param-value>
@@ -85,6 +86,6 @@
 
 	<servlet-mapping>
 		<servlet-name>SpringDispatcher</servlet-name>
-		<url-pattern>/*</url-pattern>		
+		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 </web-app>
