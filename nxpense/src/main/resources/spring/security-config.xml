@@ -30,7 +30,8 @@
 		 -->
 		<form-login login-page="/welcome.html" login-processing-url="/login"  
 			always-use-default-target="true" username-parameter="email" password-parameter="password" 
-			authentication-success-handler-ref="authenticationSuccessHandler"/>
+			authentication-success-handler-ref="authenticationSuccessHandler"
+			authentication-failure-handler-ref="authenticationFailureHandler"/>
 		
 		<!-- Remember me duration = 5 days -->	
 		<remember-me remember-me-parameter="remember_me" token-validity-seconds="432000"/>					
@@ -44,5 +45,8 @@
 	
 	<beans:bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 	
+	<!-- LOGIN request handlers -->
 	<beans:bean id="authenticationSuccessHandler" class="nxpense.security.CustomAuthenticationSuccessHandler" />
+	<beans:bean id="authenticationFailureHandler" class="nxpense.security.CustomAuthenticationFailureHandler" />
+	
 </beans:beans>
