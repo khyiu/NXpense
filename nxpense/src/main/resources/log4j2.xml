@@ -26,7 +26,6 @@
 	<Loggers>
 		<Root level="error">
 			<AppenderRef ref="CONSOLE" />
-			<AppenderRef ref="ROLLING_FILE" />
 		</Root>
 		<logger name="nxpense.controller" level="INFO" additivity="false">
 			<AppenderRef ref="ROLLING_FILE" />
