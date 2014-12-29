@@ -17,7 +17,7 @@
 
 	}]);
 	
-	loginAppModule.controller('loginController', ['$scope', '$http', function($scope, $http) {
+	loginAppModule.controller('loginController', ['$scope', '$http', '$location', function($scope, $http, $location) {
 		$scope.email;
 		$scope.password;
 		$scope.rememberMe;
@@ -34,16 +34,15 @@
 					}
 			};
 			
-			// Angular does not implicitly follow redirection sent by the server 
-			// --> user $location service to handle it client-side
-			var followRedirection = function() {
-				alert('>>> follow redirection');
-			};
-			var response = $http(request);
-			
-			// TODO handle login response
-			response.success(function(data, status, headers, config) {
-				console.log('>>> handle login callback');
+			$http(request).success(function(data, status, headers, config) {
+				var protocol = $location.protocol(); 
+				var host = $location.host();
+				var port = $location.port();
+				var redirectUrl = protocol + '://' + host + ':' + port + data;
+				
+				if(data) {
+					window.location.replace(redirectUrl);
+				}
 			});
 		};
 	}]);
