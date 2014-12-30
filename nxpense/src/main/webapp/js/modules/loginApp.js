@@ -51,6 +51,15 @@
 				}
 			});
 		};
+		
+		// When any of credentials changes, reset previous error
+		$scope.$watch('email', function(newValue, oldValue, scope){
+			$scope.loginForm.email.$setValidity('credentials', true);
+		});
+		
+		$scope.$watch('password', function(newValue, oldValue, scope){
+			$scope.loginForm.email.$setValidity('credentials', true);
+		});
 	}]);
 
 	// Controller to manage registration process
