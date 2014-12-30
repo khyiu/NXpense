@@ -9,7 +9,6 @@ import nxpense.domain.User;
 import nxpense.domain.UserAccount;
 import nxpense.exeption.RequestCannotCompleteException;
 import nxpense.repository.UserRepository;
-import nxpense.security.CustomUserDetailsService;
 import nxpense.service.api.UserService;
 
 import org.slf4j.Logger;
@@ -21,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService{
 	private UserRepository userRepository;
 	
 	@Autowired
-	private CustomUserDetailsService userDetailsService;
+	private UserDetailsService userDetailsService;
 
 	public void createUser(String email, char[] password, char[] passwordRepeat) {
 		LOGGER.info("Creating new user with email={}", email);
