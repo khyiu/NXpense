@@ -49,9 +49,21 @@
 		</logger>
 		<logger name="nxpense.service" level="DEBUG" additivity="false">
 			<AppenderRef ref="ROLLING_FILE" />
+			<AppenderRef ref="CONSOLE" />
 		</logger>
 		<logger name="nxpense.security" level="INFO" additivity="false">
 			<AppenderRef ref="ROLLING_FILE_SECURITY" />
+		</logger>
+		
+		<!-- Development loggers -->
+		<logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+			<AppenderRef ref="CONSOLE" />
+		</logger>
+		<logger name="org.hibernate.transaction" level="DEBUG" additivity="false">
+			<AppenderRef ref="CONSOLE"/>
+		</logger>
+		<logger name="org.springframework.transaction" level="TRACE" additivity="false">
+			<AppenderRef ref="CONSOLE"/>
 		</logger>
 	</Loggers>
 </Configuration>
