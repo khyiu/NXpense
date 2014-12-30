@@ -69,6 +69,7 @@ public class UserServiceImpl implements UserService{
 	private void checkPasswordsMatch(char [] password, char [] passwordRepeat) {
 		if(!Arrays.equals(password, passwordRepeat)) {
 			LOGGER.error("Password confirmation does not match password!");
+			throw new RequestCannotCompleteException("Password and password confirmation don't match");
 		}
 	}
 
