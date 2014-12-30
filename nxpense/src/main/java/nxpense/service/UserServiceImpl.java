@@ -2,12 +2,14 @@ package nxpense.service;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 
 import nxpense.domain.User;
 import nxpense.domain.UserAccount;
 import nxpense.exeption.RequestCannotCompleteException;
 import nxpense.repository.UserRepository;
+import nxpense.security.CustomUserDetailsService;
 import nxpense.service.api.UserService;
 
 import org.slf4j.Logger;
@@ -16,7 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,9 +32,12 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	@Qualifier("bcryptEncoder")
 	private PasswordEncoder passwordEncoder;
-
+	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private CustomUserDetailsService userDetailsService;
 
 	public void createUser(String email, char[] password, char[] passwordRepeat) {
 		LOGGER.info("Creating new user with email={}", email);
@@ -41,8 +48,12 @@ public class UserServiceImpl implements UserService{
 		User newUser = initializeNewUserWithAccount(email, password);
 		userRepository.save(newUser);
 
-		// TODO programmatically authenticate the user
-		Authentication authentication = new UsernamePasswordAuthenticationToken(email, password);
+		// Programmatically authenticate the user that just registered so that he/she does not have to 
+		// go through the login process all over again.
+		// NOTE: it is important to use the constructor with a List<GrantedAuthority> as it marks 
+		// the Authentication object as authenticated.
+		UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+		Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, password, Collections.<GrantedAuthority>emptyList());
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 
