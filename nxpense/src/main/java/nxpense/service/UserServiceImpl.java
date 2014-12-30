@@ -23,54 +23,54 @@ import org.springframework.stereotype.Service;
 @Service("userService")
 public class UserServiceImpl implements UserService{
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    @Autowired
-    @Qualifier("bcryptEncoder")
-    private PasswordEncoder passwordEncoder;
-    
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	@Qualifier("bcryptEncoder")
+	private PasswordEncoder passwordEncoder;
 
-    public void createUser(String email, char[] password, char[] passwordRepeat) {
-	LOGGER.info("Creating new user with email={}", email);
+	@Autowired
+	private UserRepository userRepository;
 
-	checkPasswordsMatch(password, passwordRepeat);
-	checkEmailAlreadyTaken(email);
-	
-	User newUser = initializeNewUserWithAccount(email, password);
-	userRepository.save(newUser);
-	
-	// TODO programmatically authenticate the user
-	Authentication authentication = new UsernamePasswordAuthenticationToken(email, password);
-	SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
+	public void createUser(String email, char[] password, char[] passwordRepeat) {
+		LOGGER.info("Creating new user with email={}", email);
 
-    private void checkEmailAlreadyTaken(String email) {
-	User existingUser = userRepository.findByEmail(email);
+		checkPasswordsMatch(password, passwordRepeat);
+		checkEmailAlreadyTaken(email);
 
-	if(existingUser != null) {
-	    LOGGER.error("The provided email ({}) is already taken!", email);
-	    throw new RequestCannotCompleteException("This email is already taken");
+		User newUser = initializeNewUserWithAccount(email, password);
+		userRepository.save(newUser);
+
+		// TODO programmatically authenticate the user
+		Authentication authentication = new UsernamePasswordAuthenticationToken(email, password);
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
-    }
 
-    private void checkPasswordsMatch(char [] password, char [] passwordRepeat) {
-	if(!Arrays.equals(password, passwordRepeat)) {
-	    LOGGER.error("Password confirmation does not match password!");
+	private void checkEmailAlreadyTaken(String email) {
+		User existingUser = userRepository.findByEmail(email);
+
+		if(existingUser != null) {
+			LOGGER.error("The provided email ({}) is already taken!", email);
+			throw new RequestCannotCompleteException("This email is already taken");
+		}
 	}
-    }
 
-    private User initializeNewUserWithAccount(String email, char [] password) {
-	char [] encodedPassword = passwordEncoder.encode(java.nio.CharBuffer.wrap(password)).toCharArray();
-	User user = new User();
-	user.setEmail(email);
-	user.setPassword(encodedPassword);
+	private void checkPasswordsMatch(char [] password, char [] passwordRepeat) {
+		if(!Arrays.equals(password, passwordRepeat)) {
+			LOGGER.error("Password confirmation does not match password!");
+		}
+	}
 
-	UserAccount userAccount = new UserAccount();
-	userAccount.setVerifiedCapital(BigDecimal.ZERO);
-	userAccount.setVerifiedDate(new Date());
-	user.setUserAccount(userAccount);
-	return user;
-    }
+	private User initializeNewUserWithAccount(String email, char [] password) {
+		char [] encodedPassword = passwordEncoder.encode(java.nio.CharBuffer.wrap(password)).toCharArray();
+		User user = new User();
+		user.setEmail(email);
+		user.setPassword(encodedPassword);
+
+		UserAccount userAccount = new UserAccount();
+		userAccount.setVerifiedCapital(BigDecimal.ZERO);
+		userAccount.setVerifiedDate(new Date());
+		user.setUserAccount(userAccount);
+		return user;
+	}
 }
