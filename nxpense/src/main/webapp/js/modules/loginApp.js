@@ -68,18 +68,22 @@
 					email: this.email,
 					password: this.password,
 					passwordRepeat: this.passwordRepeat
-				}	
+				}, 
+				
+				cache: false
 			};
 			
 			var response = $http(request);
 			
-			response.success(function(){
-				console.log('>>> account creation request with success');
+			response.success(function(data, status, headers, config){
+				// programmatic login -> redirect to URL sent by server
+				window.location.assign(data);
 			});
 
 			response.error(function(data, status) {
 				if(status === 409) {
 					console.log($scope.email);
+					console.log('>>> email already taken');
 					$scope.registrationForm.email.$setValidity(emailTakenRule, false);
 				}	
 			});
