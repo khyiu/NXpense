@@ -16,16 +16,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/account")
 public class AccountController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AccountController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AccountController.class);
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
-    @RequestMapping(value = "/new", method = RequestMethod.POST)
-    public ResponseEntity<Void> createNewAccount(@RequestParam String email, @RequestParam char[] password, @RequestParam char[] passwordRepeat) {
-	// TODO add Spring validation
-	userService.createUser(email, password, passwordRepeat);
-	return new ResponseEntity<Void>(HttpStatus.OK);
-    }
+	@RequestMapping(value = "/new", method = RequestMethod.POST)
+	public ResponseEntity<Void> createNewAccount(@RequestParam String email, @RequestParam char[] password, @RequestParam char[] passwordRepeat) {
+		// TODO add Spring validation
+		userService.createUser(email, password, passwordRepeat);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
 
 }
