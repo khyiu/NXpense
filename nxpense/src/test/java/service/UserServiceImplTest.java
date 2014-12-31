@@ -2,6 +2,7 @@ package service;
 
 import static org.mockito.BDDMockito.*;
 import nxpense.domain.User;
+import nxpense.exeption.RequestCannotCompleteException;
 import nxpense.repository.UserRepository;
 import nxpense.service.UserServiceImpl;
 
@@ -17,30 +18,44 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceImplTest {
 
-	private static final String EMAIL_NEW = "new@test.com";
-	private static final String PASSWORD = "gue$$it";
+    private static final String EMAIL_NEW = "new@test.com";
+    private static final String EMAIL_EXISTING = "existing@test.com";
+    private static final String PASSWORD = "gue$$it";
 
-	@InjectMocks
-	private UserServiceImpl userService;
+    @InjectMocks
+    private UserServiceImpl userService;
 
-	@Mock
-	private UserRepository userRepository;
+    @Mock
+    private UserRepository userRepository;
 
-	@Mock
-	private UserDetailsService userDetailsService;
+    @Mock
+    private UserDetailsService userDetailsService;
 
-	@Mock
-	private PasswordEncoder passwordEncoder;
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
+    @Before
+    public void configureMocks() {
+	given(userRepository.findByEmail(EMAIL_NEW)).willReturn(null);
+	given(userRepository.findByEmail(EMAIL_EXISTING)).willReturn(new User());
 	
-	@Before
-	public void configureMocks() {
-		given(passwordEncoder.encode(any(CharSequence.class))).willReturn(PASSWORD);
-	}
+	given(passwordEncoder.encode(any(CharSequence.class))).willReturn(PASSWORD);
+    }
 
 
-	@Test
-	public void testCreateUser() {	 
-		userService.createUser(EMAIL_NEW, PASSWORD.toCharArray(), PASSWORD.toCharArray());
-		verify(userRepository, times(1)).save(any(User.class));
-	}
+    @Test
+    public void testCreateUser() {	 
+	userService.createUser(EMAIL_NEW, PASSWORD.toCharArray(), PASSWORD.toCharArray());
+	verify(userRepository, times(1)).save(any(User.class));
+    }
+
+    @Test(expected = RequestCannotCompleteException.class)
+    public void testCreateUser_ExistingUser() {
+	userService.createUser(EMAIL_EXISTING, PASSWORD.toCharArray(), PASSWORD.toCharArray());
+    }
+    
+    @Test(expected = RequestCannotCompleteException.class)
+    public void testCreateUser_WrongConfirmation() {
+	userService.createUser(EMAIL_NEW, PASSWORD.toCharArray(), "wrong confirmation".toCharArray());
+    }
 }
