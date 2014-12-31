@@ -14,22 +14,22 @@ import org.springframework.stereotype.Service;
 
 @Service("customUserDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(CustomUserDetailsService.class);
-	
-	@Autowired
-	private UserRepository userRepository;
-	
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userRepository.findByEmail(username);
-		
-		if(user == null) {
-			LOGGER.warn("No user found in DB with email={}", username);
-			throw new BadCredentialsException("No user found with provided email");
-		}
-		
-		CustomUserDetails userDetails = new CustomUserDetails(user.getEmail(), new String(user.getPassword()));
-		return userDetails;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomUserDetailsService.class);
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	User user = userRepository.findByEmail(username);
+
+	if(user == null) {
+	    LOGGER.warn("No user found in DB with email={}", username);
+	    throw new BadCredentialsException("No user found with provided email");
 	}
+
+	CustomUserDetails userDetails = new CustomUserDetails(user.getEmail(), new String(user.getPassword()));
+	return userDetails;
+    }
 
 }
