@@ -7,7 +7,7 @@ import java.util.Date;
 
 import nxpense.domain.User;
 import nxpense.domain.UserAccount;
-import nxpense.exeption.RequestCannotCompleteException;
+import nxpense.exception.RequestCannotCompleteException;
 import nxpense.repository.UserRepository;
 import nxpense.service.api.UserService;
 

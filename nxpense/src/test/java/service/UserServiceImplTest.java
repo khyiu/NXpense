@@ -2,7 +2,7 @@ package service;
 
 import static org.mockito.BDDMockito.*;
 import nxpense.domain.User;
-import nxpense.exeption.RequestCannotCompleteException;
+import nxpense.exception.RequestCannotCompleteException;
 import nxpense.repository.UserRepository;
 import nxpense.service.UserServiceImpl;
 

@@ -1,7 +1,7 @@
 package nxpense.security;
 
 import nxpense.domain.User;
-import nxpense.exeption.BadCredentialsException;
+import nxpense.exception.BadCredentialsException;
 import nxpense.repository.UserRepository;
 
 import org.slf4j.Logger;
