@@ -22,7 +22,7 @@
 		<!-- 
 			The 'login-processing-url' attribute overrides the default value '/j_spring_security_check.
 			The 'username-parameter' attribute overrides the name of the request parameter that holds the username value.
-			The 'password-parameter' attribute ovverrides the name of the request parameter that holds the password value.
+			The 'password-parameter' attribute overrides the name of the request parameter that holds the password value.
 			
 			Note: as AngularJS does not implicitly follow redirection, instead of specifying the URL to which the client is 
 			      redirected when he/she logs in successfully, I've defined an AuthenticationSuccessHandler to return the 
