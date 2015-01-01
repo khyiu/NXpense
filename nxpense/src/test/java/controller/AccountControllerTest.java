@@ -1,15 +1,14 @@
 package controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.assertj.core.api.Assertions.*;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -20,35 +19,59 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import org.xml.sax.SAXException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:/spring/application-test-config.xml")
 @WebAppConfiguration
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AccountControllerTest {
 
     @Autowired
-    protected WebApplicationContext wac;
+    private WebApplicationContext wac;
 
-    protected DefaultMockMvcBuilder mockMvcBuilder;
+    private DefaultMockMvcBuilder mockMvcBuilder;
 
-    protected MockMvc mockMvc;
-
-    @Before
-    public void setup() throws ParserConfigurationException, SAXException {
-	mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
-	mockMvcBuilder.alwaysExpect(status().isOk());
-	mockMvc = mockMvcBuilder.build();
-    }
+    private MockMvc mockMvc;
 
     @Test
     public void testCreateNewAccount() throws Exception {
+	mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+	mockMvcBuilder.alwaysExpect(status().isOk());
+	mockMvc = mockMvcBuilder.build();
+	
 	RequestBuilder requestBuilder = post("/account/new")
 						.param("email", "new@test.com")
 						.param("password", "pwd1234")
 						.param("passwordRepeat", "pwd1234");
 	MvcResult result = mockMvc.perform(requestBuilder).andDo(print()).andReturn();
 	String responseContent = result.getResponse().getContentAsString();
-	assertThat(responseContent).isEqualTo("/view/home.html");
+	assertThat(responseContent).contains("/view/home.html");
+    }
+    
+    @Test
+    public void testCreateNewAccount_ExistingUser() throws Exception {
+	mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+	mockMvcBuilder.alwaysExpect(status().isConflict());
+	mockMvc = mockMvcBuilder.build();
+	
+	RequestBuilder requestBuilder = post("/account/new")
+						.param("email", "new@test.com")
+						.param("password", "pwd1234")
+						.param("passwordRepeat", "pwd1234");
+	MvcResult result = mockMvc.perform(requestBuilder).andDo(print()).andReturn();
+	result.getResponse().getContentAsString();
+    }
+    
+    @Test
+    public void testCreateNewAccount_PasswordMismatch() throws Exception {
+	mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+	mockMvcBuilder.alwaysExpect(status().isConflict());
+	mockMvc = mockMvcBuilder.build();
+	
+	RequestBuilder requestBuilder = post("/account/new")
+						.param("email", "new@test.com")
+						.param("password", "pwd1234")
+						.param("passwordRepeat", "pwd4321");
+	mockMvc.perform(requestBuilder).andDo(print()).andReturn();
     }
 }
