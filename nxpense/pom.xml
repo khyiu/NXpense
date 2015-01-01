@@ -55,10 +55,10 @@
 		
 		<!-- Servlet dependencies -->
 		<dependency>
-    		<groupId>org.apache.tomcat</groupId>
-    		<artifactId>servlet-api</artifactId>
-    		<version>6.0.43</version>
-    		<scope>provided</scope>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-servlet-api</artifactId>
+			<version>7.0.57</version>
+			<scope>test</scope>
 		</dependency>
 		
 		<!-- Message conversion dependencies -->
