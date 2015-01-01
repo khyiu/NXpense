@@ -58,7 +58,7 @@
 			<groupId>org.apache.tomcat</groupId>
 			<artifactId>tomcat-servlet-api</artifactId>
 			<version>7.0.57</version>
-			<scope>test</scope>
+			<scope>provided</scope>
 		</dependency>
 		
 		<!-- Message conversion dependencies -->
@@ -122,6 +122,12 @@
 			<version>4.0.9.RELEASE</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>1.7.0</version>
+			<scope>test</scope>
+		</dependency>
 		
 		<!-- Logging dependencies -->
 		<dependency>
@@ -183,7 +189,7 @@
 				<includes>
 					<include>log4j2.xml</include>
 				</includes>
-			</resource>		
+			</resource>
 		</resources>
 
 		<!-- Enables filtering of web.xml file -->
