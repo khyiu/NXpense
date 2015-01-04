@@ -23,7 +23,7 @@
     <![endif]-->
 </head>
 <body>
-    <div id="wrapper">
+    <div id="wrapper" ng-app="homeApp">
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
@@ -36,7 +36,7 @@
                 <a class="navbar-brand" href="index.html">Nxpense Wallet Manager</a>
             </div>
             <!-- /.navbar-header -->
-            <ul class="nav navbar-top-links navbar-right">
+            <ul class="nav navbar-top-links navbar-right" ng-controller="userController">
                 <!-- /.dropdown -->
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -48,7 +48,7 @@
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        <li><a href="#" ng-click="logout()"><i class="fa fa-sign-out fa-fw"></i>Logout</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -103,5 +103,7 @@
     <script src="../js/sb-admin-2.js"></script>
     <!-- Angular -->
     <script src="../js/angular.js"></script>
+    <!-- Custom Angular module -->
+    <script src="../js/modules/homeApp.js"></script>
 </body>
 </html>
