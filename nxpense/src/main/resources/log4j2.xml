@@ -53,6 +53,7 @@
 		</logger>
 		<logger name="nxpense.security" level="INFO" additivity="false">
 			<AppenderRef ref="ROLLING_FILE_SECURITY" />
+			<AppenderRef ref="CONSOLE"/>
 		</logger>
 		
 		<!-- Development loggers -->
