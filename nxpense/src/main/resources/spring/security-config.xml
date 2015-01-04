@@ -34,7 +34,9 @@
 			authentication-failure-handler-ref="authenticationFailureHandler"/>
 		
 		<!-- Remember me duration = 5 days -->	
-		<remember-me remember-me-parameter="remember_me" token-validity-seconds="432000"/>					
+		<remember-me remember-me-parameter="remember_me" token-validity-seconds="432000"/>	
+		
+		<logout logout-url="/logout" logout-success-url="/welcome.html" invalidate-session="true"/>				
 	</http>
 		
 	<authentication-manager>
