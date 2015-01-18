@@ -6,3 +6,28 @@
 #expense-table {
 	overflow-x: hidden;
 }
+
+/* Expense table header */
+.col-position {
+	width: 30px;
+	text-align: center;
+}
+
+.col-date {
+	width: 80px;
+	text-align: center;
+}
+
+.col-amount {
+	width: 100px;
+	text-align: left;
+}
+
+.col-description {
+	margin-left: 210px;
+}
+
+/* Pagination elements */
+.pagination-control {
+	float: right;
+}
