@@ -17,6 +17,8 @@
 <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
 <!-- Custom stylesheets -->
 <link href="../css/custom/nxpense.css" rel="stylesheet" type="text/css">
+<!-- Chosen plugin CSS -->
+<link href="../css/plugins/chosen/chosen.css" rel="stylesheet" type="text/css">
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -24,6 +26,29 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
+
+<!-- jQuery -->
+<script src="../js/jquery.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="../js/bootstrap.min.js"></script>
+<!-- Metis Menu Plugin JavaScript -->
+<script src="../js/plugins/metisMenu/metisMenu.min.js"></script>
+<!-- Custom Theme JavaScript -->
+<script src="../js/sb-admin-2.js"></script>
+<!-- Angular -->
+<script src="../js/angular.js"></script>
+<!-- Custom Angular module -->
+<script src="../js/modules/homeApp.js"></script>
+<!-- Chosen plugin -->
+<script src="../js/plugins/chosen/chosen.jquery.js"></script>
+<script>
+	$(document).ready(function() {
+		$('select').chosen({
+			single_backstroke_delete : false
+		});
+	});
+</script>
+
 <body>
 	<div id="wrapper" ng-app="homeApp">
 		<!-- Navigation -->
@@ -118,21 +143,42 @@
 										<td>01/01/2015</td>
 										<td>€25.62</td>
 										<td>Facture intermédiaire Essent</td>
-										<td>Here come the tags</td>
+										<td>
+											 <select data-placeholder="Expense category(ies)" multiple style="width:350px;" class="chosen-select" tabindex="0">
+												<option>Facture</option>
+												<option>Frais bancaires</option>
+												<option>Cashback carte de crédit</option>
+												<option>Salaire</option>
+											</select>
+										</td>
 									</tr>
 									<tr class="gradeA odd">
 										<td>00002</td>
 										<td>16/01/2015</td>
 										<td>€16.00</td>
 										<td>Concert Zoot Woman @ Trix Antwerpen</td>
-										<td>Here come the tags</td>
+										<td>
+											<select data-placeholder="Expense category(ies)" multiple style="width:350px;" class="chosen-select" tabindex="0">
+												<option>Facture</option>
+												<option>Frais bancaires</option>
+												<option>Cashback carte de crédit</option>
+												<option>Salaire</option>
+											</select>
+										</td>
 									</tr>			
 									<tr class="gradeA odd">
 										<td>00003</td>
 										<td>20/01/2015</td>
 										<td>€1478.96</td>
 										<td>Billets avion Acapulco</td>
-										<td>Here come the tags</td>
+										<td>
+											<select data-placeholder="Expense category(ies)" multiple style="width:350px;" class="chosen-select" tabindex="0">
+												<option>Facture</option>
+												<option>Frais bancaires</option>
+												<option>Cashback carte de crédit</option>
+												<option>Salaire</option>
+											</select>
+										</td>
 									</tr>								
 								</tbody>
 							</table>
@@ -175,26 +221,12 @@
 						</div>
 					</div>
 					<!-- /.table-responsive -->
-
 				</div>
 				<!-- /.panel-body -->
 			</div>
 		</div>
 		<!-- /#page-wrapper -->
-
 	</div>
 	<!-- /#wrapper -->
-	<!-- jQuery -->
-	<script src="../js/jquery.js"></script>
-	<!-- Bootstrap Core JavaScript -->
-	<script src="../js/bootstrap.min.js"></script>
-	<!-- Metis Menu Plugin JavaScript -->
-	<script src="../js/plugins/metisMenu/metisMenu.min.js"></script>
-	<!-- Custom Theme JavaScript -->
-	<script src="../js/sb-admin-2.js"></script>
-	<!-- Angular -->
-	<script src="../js/angular.js"></script>
-	<!-- Custom Angular module -->
-	<script src="../js/modules/homeApp.js"></script>
 </body>
 </html>
