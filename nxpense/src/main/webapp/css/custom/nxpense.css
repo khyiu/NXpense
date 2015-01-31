@@ -27,7 +27,16 @@
 	margin-left: 210px;
 }
 
+/* Table interaction elements */
+#table-control {
+	float: left;	
+}
+
 /* Pagination elements */
 .pagination-control {
 	float: right;
+}
+
+#pagination-control > ul {
+	margin: 0;
 }

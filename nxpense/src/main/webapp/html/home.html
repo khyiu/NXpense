@@ -188,7 +188,18 @@
 										1 to 10 of 57 entries</div>
 								</div>
 								<div class="col-sm-12">
-									<div class="dataTables_paginate paging_simple_numbers pagination-control">
+									<div id="table-control">
+										<button type="button" class="btn btn-primary" title="Add an expense">
+											<i class="fa fa-plus-circle"></i>
+										</button>
+										<button type="button" class="btn btn-danger" title="Delete selected expense">
+											<i class="fa fa-trash-o"></i>
+										</button>
+										<button type="button" class="btn btn-success" title="Mark selected expense (and all before it) as validated">
+											<i class="fa fa-check-circle"></i>
+										</button>
+									</div>								
+									<div id="pagination-control" class="dataTables_paginate paging_simple_numbers pagination-control">
 										<ul class="pagination">
 											<li class="paginate_button previous disabled"
 												aria-controls="dataTables-example" tabindex="0"
