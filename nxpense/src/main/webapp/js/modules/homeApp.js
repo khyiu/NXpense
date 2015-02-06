@@ -12,7 +12,7 @@
   homeAppModule.controller('expenseController', ['$scope', '$modal', function($scope, $modal) {
     $scope.openNewExpenseModal = function() {
       var modalInstance = $modal.open({
-        templateUrl: 'myModalContent.html',
+        templateUrl: 'modal/new-expense-modal.html',
         controller: 'modalController'
       });
     }
