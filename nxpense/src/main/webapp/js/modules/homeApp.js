@@ -13,7 +13,8 @@
     $scope.openNewExpenseModal = function() {
       var modalInstance = $modal.open({
         templateUrl: 'modal/new-expense-modal.html',
-        controller: 'modalController'
+        controller: 'modalController',
+        size: 'lg'
       });
     }
   }]);
