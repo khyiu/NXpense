@@ -40,3 +40,7 @@
 #pagination-control > ul {
 	margin: 0;
 }
+
+.modal-backdrop {
+    bottom: 0px;
+}

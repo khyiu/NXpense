@@ -37,6 +37,8 @@
 <script src="../js/sb-admin-2.js"></script>
 <!-- Angular -->
 <script src="../js/angular.js"></script>
+<!-- Angular-UI Bootstrap -->
+<script src="../js/plugins/ui-bootstrap/ui-bootstrap-0.12.0.js"></script>
 <!-- Custom Angular module -->
 <script src="../js/modules/homeApp.js"></script>
 <!-- Chosen plugin -->
@@ -90,7 +92,8 @@
 							<ul class="nav nav-second-level">
 								<li><a class="active" href="blank.html">Blank Page</a></li>
 								<li><a href="login.html">Login Page</a></li>
-							</ul> <!-- /.nav-second-level --></li>
+							</ul>
+                        </li>
 					</ul>
 				</div>
 				<!-- /.sidebar-collapse -->
@@ -108,12 +111,16 @@
 							<div class="row">
 								<div class="col-sm-6">
 									<div class="dataTables_length" id="dataTables-example_length">
-										<label><select name="dataTables-example_length"
-											aria-controls="dataTables-example"
-											class="form-control input-sm"><option value="10">10</option>
-												<option value="25">25</option>
-												<option value="50">50</option>
-												<option value="100">100</option></select>Records per page</label>
+										<label>
+                                            <select name="dataTables-example_length"
+                                                    aria-controls="dataTables-example"
+                                                    class="form-control input-sm">
+                                                <option value="10">10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>Records per page
+                                        </label>
 									</div>
 								</div>
 								<div class="col-sm-6">
@@ -165,7 +172,7 @@
 												<option>Salaire</option>
 											</select>
 										</td>
-									</tr>			
+									</tr>
 									<tr class="gradeA odd">
 										<td>00003</td>
 										<td>20/01/2015</td>
@@ -179,7 +186,7 @@
 												<option>Salaire</option>
 											</select>
 										</td>
-									</tr>								
+									</tr>
 								</tbody>
 							</table>
 							<div class="row">
@@ -188,8 +195,26 @@
 										1 to 10 of 57 entries</div>
 								</div>
 								<div class="col-sm-12">
-									<div id="table-control">
-										<button type="button" class="btn btn-primary" title="Add an expense">
+                                    <!-- TODO KAR HOO: clean script element after test -->
+                                    <script type="text/ng-template" id="myModalContent.html">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title">I'm a modal!</h3>
+                                        </div>
+                                        <div class="modal-body">
+                                            <ul>
+                                                <li ng-repeat="item in items">
+                                                    <a ng-click="selected.item = item">{{ item }}</a>
+                                                </li>
+                                            </ul>
+                                            Selected: <b>{{ selected.item }}</b>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-primary" ng-click="ok()">OK</button>
+                                            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+                                        </div>
+                                    </script>
+									<div id="table-control" ng-controller="expenseController">
+										<button type="button" class="btn btn-primary" title="Add an expense" ng-click="openNewExpenseModal()">
 											<i class="fa fa-plus-circle"></i>
 										</button>
 										<button type="button" class="btn btn-danger" title="Delete selected expense">
@@ -198,7 +223,7 @@
 										<button type="button" class="btn btn-success" title="Mark selected expense (and all before it) as validated">
 											<i class="fa fa-check-circle"></i>
 										</button>
-									</div>								
+									</div>
 									<div id="pagination-control" class="dataTables_paginate paging_simple_numbers pagination-control">
 										<ul class="pagination">
 											<li class="paginate_button previous disabled"
