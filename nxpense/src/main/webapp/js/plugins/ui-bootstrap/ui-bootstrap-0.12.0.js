@@ -1170,7 +1170,7 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.dateparser', 'ui.bootst
   return {
     restrict: 'EA',
     replace: true,
-    templateUrl: 'template/datepicker/datepicker.html',
+    templateUrl: 'datepicker/datepicker.html',
     scope: {
       datepickerMode: '=?',
       dateDisabled: '&'
@@ -1191,7 +1191,7 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.dateparser', 'ui.bootst
   return {
     restrict: 'EA',
     replace: true,
-    templateUrl: 'template/datepicker/day.html',
+    templateUrl: 'datepicker/day.html',
     require: '^datepicker',
     link: function(scope, element, attrs, ctrl) {
       scope.showWeeks = ctrl.showWeeks;
@@ -1299,7 +1299,7 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.dateparser', 'ui.bootst
   return {
     restrict: 'EA',
     replace: true,
-    templateUrl: 'template/datepicker/month.html',
+    templateUrl: 'datepicker/month.html',
     require: '^datepicker',
     link: function(scope, element, attrs, ctrl) {
       ctrl.step = { years: 1 };
@@ -1354,7 +1354,7 @@ angular.module('ui.bootstrap.datepicker', ['ui.bootstrap.dateparser', 'ui.bootst
   return {
     restrict: 'EA',
     replace: true,
-    templateUrl: 'template/datepicker/year.html',
+    templateUrl: 'datepicker/year.html',
     require: '^datepicker',
     link: function(scope, element, attrs, ctrl) {
       var range = ctrl.yearRange;
@@ -1617,7 +1617,7 @@ function ($compile, $parse, $document, $position, dateFilter, dateParser, datepi
     restrict:'EA',
     replace: true,
     transclude: true,
-    templateUrl: 'template/datepicker/popup.html',
+    templateUrl: 'datepicker/popup.html',
     link:function (scope, element, attrs) {
       element.bind('click', function(event) {
         event.preventDefault();
