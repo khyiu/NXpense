@@ -20,13 +20,25 @@
   }]);
 
   homeAppModule.controller('modalController', ['$scope', '$modalInstance', function($scope, $modalInstance){
+    $scope.opened = false;
+
     $scope.ok = function() {
+      console.log('>>> clicked on modal OK');
       $modalInstance.close();
     };
 
     $scope.cancel = function() {
+      console.log('>>> clicked on modal CANCEL');
       $modalInstance.dismiss('cancel');
-    }
+    };
+
+    $scope.openCal = function($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+      console.log('>>> open cal');
+
+      $scope.opened = true;
+    };
   }]);
 
 })(window.angular);
