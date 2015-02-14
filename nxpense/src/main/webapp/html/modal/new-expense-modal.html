@@ -4,19 +4,19 @@
 <div class="modal-body">
     <div class="row">
         <div class="col-md-3">
-            <p class="input-group">
-                <input type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="dt" is-open="opened"
-                       min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions"
-                       date-disabled="disabled(date, mode)" ng-required="true" close-text="Close"/>
-              <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="openCal($event)"><i
-                        class="glyphicon glyphicon-calendar"></i></button>
+            <p class="input-group" ng-keydown="processKey($event)">
+                <input tabindex="0" type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="dt" is-open="opened" datepicker-options="dateOptions"
+                       date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" firstTab/>
+             	<span class="input-group-btn">
+                <button tabindex="0" type="button" class="btn btn-default" ng-click="openCal($event)">
+                	<i class="glyphicon glyphicon-calendar"></i>
+                </button>
               </span>
             </p>
         </div>
     </div>
 </div>
-<div class="modal-footer">
-    <button class="btn btn-primary" ng-click="ok()">OK</button>
-    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+<div class="modal-footer" ng-keydown=processKey($event)>
+    <button tabindex="0" class="btn btn-primary" ng-click="ok()">OK</button>
+    <button tabindex="0" class="btn btn-warning" ng-click="cancel()" lastTab>Cancel</button>
 </div>
