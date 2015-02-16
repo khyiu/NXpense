@@ -45,11 +45,6 @@
     bottom: 0px;
 }
 
-/* New expense modal form */
-#new-expense-form {
-	height: 150px;	
-}
-
 #date {
 	width: 25%;
 	float: left;
