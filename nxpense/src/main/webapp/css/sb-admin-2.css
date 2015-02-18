@@ -127,6 +127,10 @@ body {
     padding-left: 52px;
 }
 
+.sidebar .nav-fourth-level li a {
+    padding-left: 67px;
+}
+
 @media(min-width:768px) {
     .sidebar {
         z-index: 1;
