@@ -41,6 +41,7 @@
 	margin: 0;
 }
 
+/* New expense modal */
 .modal-backdrop {
     bottom: 0px;
 }
@@ -58,3 +59,14 @@
 #description > textarea {
 	resize: none;
 }
+
+/* Tags */
+.tag {
+    border: solid;
+    border-width: 1px;
+    border-color: red;
+    float: right;
+    padding: 3px;
+    border-radius: 3px
+}
+
