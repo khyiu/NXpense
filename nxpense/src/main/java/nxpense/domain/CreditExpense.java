@@ -15,10 +15,10 @@ public class CreditExpense extends Expense {
     private CreditCard card;
 
     public boolean isVerified() {
-	return verified;
+        return verified;
     }
 
     public void setVerified(boolean verified) {
-	this.verified = verified;
+        this.verified = verified;
     }
 }
