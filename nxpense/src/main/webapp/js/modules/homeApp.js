@@ -22,11 +22,11 @@
 		$scope.opened = false;
 
 		$scope.ok = function() {
-			$modalInstance.close();
+            alert('>>> todo: persist expense data');
 		};
 
 		$scope.cancel = function() {
-			console.log('>>> clicked on modal CANCEL');
+            $modalInstance.close();
 		};
 
 		$scope.openCal = function($event) {
