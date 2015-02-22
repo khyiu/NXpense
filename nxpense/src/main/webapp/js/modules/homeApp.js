@@ -1,7 +1,7 @@
 (function(angular) {
 	'use strict';
 
-	var homeAppModule = angular.module('homeApp', ['ui.bootstrap']);
+	var homeAppModule = angular.module('homeApp', ['ui.bootstrap', 'restangular']);
 
 	homeAppModule.controller('userController', ['$scope', function($scope) {
 		$scope.logout = function() {
@@ -11,18 +11,20 @@
 
 	homeAppModule.controller('expenseController', ['$scope', '$modal', function($scope, $modal) {
 		$scope.openNewExpenseModal = function() {
-			var modalInstance = $modal.open({
+            $modal.open({
 				templateUrl: 'modal/new-expense-modal.html',
 				controller: 'modalController'				
 			});
 		}
 	}]);
 
-	homeAppModule.controller('modalController', ['$scope', '$modalInstance', function($scope, $modalInstance){
-		$scope.opened = false;
+	homeAppModule.controller('modalController', ['$scope', '$modalInstance', 'Restangular', function($scope, $modalInstance, Restangular){
+        // todo make root route 'nxpense' somehow global --> using Factory?
+        var expenseDAO = Restangular.one('nxpense');
 
 		$scope.ok = function() {
             alert('>>> todo: persist expense data');
+            expenseDAO.post('account', {});
 		};
 
 		$scope.cancel = function() {
@@ -33,7 +35,7 @@
 			$event.preventDefault();
 			$event.stopPropagation();
 
-			$scope.opened = true;
+			$scope.calOpened = true;
 		};
 
 		$scope.processKey = function($event) {

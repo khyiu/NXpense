@@ -5,7 +5,7 @@
     <div id="new-expense-form">
         <div id="date">
             <p class="input-group" ng-keydown="processKey($event)">
-                <input tabindex="0" type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="dt" is-open="opened" datepicker-options="dateOptions"
+                <input tabindex="0" type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="dt" is-open="calOpened" datepicker-options="dateOptions"
                        date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" placeholder="Date" pattern="(\d{2})\/(\d{2})\/(\d{4})" firstTab/>
              	<span class="input-group-btn">
                 <button tabindex="0" type="button" class="btn btn-default" ng-click="openCal($event)">
