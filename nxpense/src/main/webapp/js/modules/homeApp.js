@@ -18,13 +18,20 @@
     }
   }]);
 
-  homeAppModule.controller('modalController', ['$scope', '$modalInstance', 'Restangular', function($scope, $modalInstance, Restangular) {
+  homeAppModule.controller('modalController', ['$scope', '$modalInstance', 'Restangular', '$filter', function($scope, $modalInstance, Restangular, $filter) {
     // todo make root route 'nxpense' somehow global --> using Factory?
     var expenseDAO = Restangular.one('nxpense');
 
     $scope.ok = function() {
-      alert('>>> todo: persist expense data');
-      expenseDAO.post('account', {});
+      // NOTE: 'date' filter is applied on the input date with a format that will strip down the time part.
+      //       As a result, we don't need to worry about timezone side-effects
+      var newExpense = {
+        date: $filter('date')($scope.date, 'dd/MM/yyyy'),
+        amount: $scope.amount,
+        description: $scope.description
+      };
+
+      expenseDAO.post('expense/new', newExpense);
     };
 
     $scope.cancel = function() {
