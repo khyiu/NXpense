@@ -1,5 +1,9 @@
 package nxpense.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -10,6 +14,12 @@ import java.util.Set;
 @DiscriminatorColumn(name = "EXPENSE_TYPE")
 @Table(name = "EXPENSE")
 @SequenceGenerator(name = "EXPENSE_SEQ", sequenceName = "expense_seq")
+
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "source", visible = true)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = DebitExpense.class, name = "DEBIT_CARD"),
+        @JsonSubTypes.Type(value = CreditExpense.class, name = "CREDIT_CARD"),
+})
 public abstract class Expense {
 
     @Id
@@ -17,6 +27,7 @@ public abstract class Expense {
     private Integer id;
 
     @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date date;
 
     private BigDecimal amount;

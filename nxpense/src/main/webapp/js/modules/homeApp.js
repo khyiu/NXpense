@@ -26,6 +26,8 @@
       // NOTE: 'date' filter is applied on the input date with a format that will strip down the time part.
       //       As a result, we don't need to worry about timezone side-effects
       var newExpense = {
+        // todo stop using hard-coded value once the modal form has been tweaked to check credit card as an expense source
+        source: 'DEBIT_CARD',
         date: $filter('date')($scope.date, 'dd/MM/yyyy'),
         amount: $scope.amount,
         description: $scope.description

@@ -41,7 +41,7 @@
 		</RollingFile>
 	</Appenders>
 	<Loggers>
-		<Root level="error">
+		<Root level="debug">
 			<AppenderRef ref="CONSOLE" />
 		</Root>
 		<logger name="nxpense.controller" level="INFO" additivity="false">
