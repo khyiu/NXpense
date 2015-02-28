@@ -36,13 +36,13 @@ public abstract class Expense {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "EXPENSE_TAG",
-            joinColumns = {
-                @JoinColumn(name = "EXPENSE_ID", nullable = false, updatable = false)
-            },
-            inverseJoinColumns = {
-                @JoinColumn(name = "TAG_ID", nullable = false, updatable = false)
-            })
+        name = "EXPENSE_TAG",
+        joinColumns = {
+            @JoinColumn(name = "EXPENSE_ID", nullable = false, updatable = false)
+        },
+        inverseJoinColumns = {
+            @JoinColumn(name = "TAG_ID", nullable = false, updatable = false)
+        })
     private Set<Tag> tags;
 
     public Date getDate() {
