@@ -22,6 +22,21 @@
 				</span> 
 			</div>
 		</div>
+        <fieldset class="fieldset-border">
+            <legend class="fieldset-border">Source</legend>
+            <div class="radio radio-primary">
+                <input tabindex="0" id="debitcard" type="radio" name="source" value="DEBIT_CARD" checked>
+                <label for="debitcard">
+                    Debit card
+                </label>
+            </div>
+            <div class="radio radio-primary">
+                <input tabindex="0" id="creditcard" type="radio" name="source" value="CREDIT_CARD">
+                <label for="creditcard">
+                    Credit card
+                </label>
+            </div>
+        </fieldset>
 		<div id="description">
 			<textarea placeholder="Description" class="form-control" ng-model="description"></textarea>
 		</div>
