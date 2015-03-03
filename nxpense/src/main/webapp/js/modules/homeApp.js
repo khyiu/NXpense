@@ -22,18 +22,16 @@
     // todo make root route 'nxpense' somehow global --> using Factory?
     var expenseDAO = Restangular.one('nxpense');
 
+    $scope.newExpense = {
+      source: 'DEBIT_CARD'
+    }
+
     $scope.ok = function() {
       // NOTE: 'date' filter is applied on the input date with a format that will strip down the time part.
       //       As a result, we don't need to worry about timezone side-effects
-      var newExpense = {
-        // todo stop using hard-coded value once the modal form has been tweaked to check credit card as an expense source
-        source: 'DEBIT_CARD',
-        date: $filter('date')($scope.date, 'dd/MM/yyyy'),
-        amount: $scope.amount,
-        description: $scope.description
-      };
-
-      expenseDAO.post('expense/new', newExpense);
+      this.newExpense.date =  $filter('date')($scope.newExpense.date, 'dd/MM/yyyy'),
+      console.log(this.newExpense);
+      expenseDAO.post('expense/new', this);
     };
 
     $scope.cancel = function() {
