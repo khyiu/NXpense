@@ -31,7 +31,7 @@
       //       As a result, we don't need to worry about timezone side-effects
       this.newExpense.date =  $filter('date')($scope.newExpense.date, 'dd/MM/yyyy'),
       console.log(this.newExpense);
-      expenseDAO.post('expense/new', this);
+      expenseDAO.post('expense/new', this.newExpense);
     };
 
     $scope.cancel = function() {

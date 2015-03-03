@@ -1,6 +1,7 @@
 package nxpense.controller;
 
 import nxpense.domain.Expense;
+import nxpense.dto.ExpenseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,7 +18,7 @@ public class ExpenseController {
 
 
     @RequestMapping(value = "/new", method = RequestMethod.POST)
-    public ResponseEntity<Void> createExpense(@RequestBody Expense newExpense) {
+    public ResponseEntity<Void> createExpense(@RequestBody ExpenseDTO newExpenseDTO) {
         return new ResponseEntity(HttpStatus.CREATED);
     }
 }
