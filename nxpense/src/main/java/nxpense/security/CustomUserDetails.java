@@ -21,6 +21,10 @@ public class CustomUserDetails implements UserDetails {
         return null;
     }
 
+    public User getUser() {
+        return this.user;
+    }
+
     public String getPassword() {
         return String.valueOf(this.user.getPassword());
     }
