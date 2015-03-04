@@ -1,9 +1,9 @@
 package nxpense.security;
 
-import java.util.Collection;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
 
 public class CustomUserDetails implements UserDetails {
 
@@ -13,37 +13,37 @@ public class CustomUserDetails implements UserDetails {
     private String password;
 
     public CustomUserDetails(String email, String password) {
-	this.email = email;
-	this.password = password;
+        this.email = email;
+        this.password = password;
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
-	// TODO Auto-generated method stub
-	return null;
+        // TODO Auto-generated method stub
+        return null;
     }
 
     public String getPassword() {
-	return this.password;
+        return this.password;
     }
 
     public String getUsername() {
-	return this.email;
+        return this.email;
     }
 
     public boolean isAccountNonExpired() {
-	return true;
+        return true;
     }
 
     public boolean isAccountNonLocked() {
-	return true;
+        return true;
     }
 
     public boolean isCredentialsNonExpired() {
-	return true;
+        return true;
     }
 
     public boolean isEnabled() {
-	return true;
+        return true;
     }
 
 }
