@@ -8,7 +8,7 @@ public class BadCredentialsException extends RuntimeException {
 	
 	private static final long serialVersionUID = 2624061857006180274L;
 
-	public BadCredentialsException(String cause) {
-		super(cause);
+	public BadCredentialsException(String message) {
+		super(message);
 	}
 }
