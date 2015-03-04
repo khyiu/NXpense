@@ -1,5 +1,6 @@
 package nxpense.security;
 
+import nxpense.domain.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,12 +10,10 @@ public class CustomUserDetails implements UserDetails {
 
     private static final long serialVersionUID = -3060572330933644236L;
 
-    private String email;
-    private String password;
+    private User user;
 
-    public CustomUserDetails(String email, String password) {
-        this.email = email;
-        this.password = password;
+    public CustomUserDetails(User user) {
+        this.user = user;
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -23,11 +22,11 @@ public class CustomUserDetails implements UserDetails {
     }
 
     public String getPassword() {
-        return this.password;
+        return String.valueOf(this.user.getPassword());
     }
 
     public String getUsername() {
-        return this.email;
+        return this.user.getEmail();
     }
 
     public boolean isAccountNonExpired() {

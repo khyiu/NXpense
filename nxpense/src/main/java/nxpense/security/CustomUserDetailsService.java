@@ -28,7 +28,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new BadCredentialsException("No user found with provided email");
         }
 
-        return new CustomUserDetails(user.getEmail(), new String(user.getPassword()));
+        return new CustomUserDetails(user);
     }
 
 }
