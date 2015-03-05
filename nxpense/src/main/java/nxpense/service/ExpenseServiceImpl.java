@@ -6,6 +6,7 @@ import nxpense.dto.ExpenseDTO;
 import nxpense.exception.BadRequestException;
 import nxpense.exception.UnauthenticatedException;
 import nxpense.helper.ExpenseConverter;
+import nxpense.repository.ExpenseRepository;
 import nxpense.repository.UserRepository;
 import nxpense.security.CustomUserDetails;
 import nxpense.service.api.ExpenseService;
@@ -24,6 +25,9 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ExpenseRepository expenseRepository;
+
     @Transactional(rollbackFor = {Exception.class})
     public void createNewExpense(ExpenseDTO expenseDTO) {
         Expense expense = ExpenseConverter.dtoToEntity(expenseDTO);
@@ -39,8 +43,11 @@ public class ExpenseServiceImpl implements ExpenseService {
             throw new UnauthenticatedException("User does not seem to be authenticated!");
         }
 
-        // First, call save( ) to merge the detached User instance associated to security context...
-        User mergedUser = userRepository.save(currentUser);
-        mergedUser.addExpense(expense);
+        // First, call save( ) on existing user, to merge the detached User instance associated to security context...
+        currentUser = userRepository.save(currentUser);
+        currentUser.addExpense(expense);
+        expense.setUser(currentUser);
+
+        expenseRepository.save(expense);
     }
 }

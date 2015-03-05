@@ -22,9 +22,7 @@ public class User {
 
     private char[] temporaryPassword;
 
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "USER_ID", nullable = false, updatable = false)
-    @OrderColumn(nullable = false, name = "POSITION")
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "user")
     private List<Expense> expenses = new ArrayList<Expense>();
 
     public String getEmail() {

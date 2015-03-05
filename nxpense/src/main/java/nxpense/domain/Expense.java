@@ -16,6 +16,10 @@ public abstract class Expense {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EXPENSE_SEQ")
     private Integer id;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "USER_ID", nullable = false, updatable = false)
+    private User user;
+
     @Temporal(TemporalType.DATE)
     private Date date;
 
@@ -33,6 +37,10 @@ public abstract class Expense {
                 @JoinColumn(name = "TAG_ID", nullable = false, updatable = false)
             })
     private Set<Tag> tags;
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Date getDate() {
         return date;
