@@ -33,62 +33,62 @@ public class Tag {
     @ManyToOne
     @JoinColumn(name = "PARENT_TAG_ID")
     private Tag parentTag;
-    
+
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "tags")
     private Set<Expense> expenses;
 
     public String getName() {
-	return name;
+        return name;
     }
 
     public void setName(String name) {
-	this.name = name;
+        this.name = name;
     }
 
     public List<Tag> getSubTags() {
-	return subTags;
+        return subTags;
     }
 
     public void setSubTags(List<Tag> subTags) {
-	this.subTags = subTags;
+        this.subTags = subTags;
     }
 
     public Tag getParentTag() {
-	return parentTag;
+        return parentTag;
     }
 
     public void setParentTag(Tag parentTag) {
-	this.parentTag = parentTag;
+        this.parentTag = parentTag;
     }
 
     @Override
     public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + ((name == null) ? 0 : name.hashCode());
-	return result;
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        return result;
     }
 
     @Override
     public boolean equals(Object obj) {
-	if (this == obj) {
-	    return true;
-	}
-	if (obj == null) {
-	    return false;
-	}
-	if (!(obj instanceof Tag)) {
-	    return false;
-	}
-	Tag other = (Tag) obj;
-	if (name == null) {
-	    if (other.name != null) {
-		return false;
-	    }
-	} else if (!name.equals(other.name)) {
-	    return false;
-	}
-	return true;
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof Tag)) {
+            return false;
+        }
+        Tag other = (Tag) obj;
+        if (name == null) {
+            if (other.name != null) {
+                return false;
+            }
+        } else if (!name.equals(other.name)) {
+            return false;
+        }
+        return true;
     }
 
 }
