@@ -67,28 +67,26 @@ public abstract class Expense {
     }
 
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (int) (id ^ (id >>> 32));
-        return result;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Expense)) return false;
+
+        Expense expense = (Expense) o;
+
+        if (!amount.equals(expense.amount)) return false;
+        if (!date.equals(expense.date)) return false;
+        if (description != null ? !description.equals(expense.description) : expense.description != null) return false;
+        if (!user.equals(expense.user)) return false;
+
+        return true;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (!(obj instanceof Expense)) {
-            return false;
-        }
-        Expense other = (Expense) obj;
-        if (id != other.id) {
-            return false;
-        }
-        return true;
+    public int hashCode() {
+        int result = user.hashCode();
+        result = 31 * result + date.hashCode();
+        result = 31 * result + amount.hashCode();
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        return result;
     }
 }
