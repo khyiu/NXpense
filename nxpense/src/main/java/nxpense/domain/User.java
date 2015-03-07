@@ -2,6 +2,7 @@ package nxpense.domain;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -55,6 +56,10 @@ public class User {
 
     public void setTemporaryPassword(char[] temporaryPassword) {
         this.temporaryPassword = temporaryPassword;
+    }
+
+    public List<Expense> getExpenses() {
+        return Collections.unmodifiableList(this.expenses);
     }
 
     public void addExpense(Expense expense) {
