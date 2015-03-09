@@ -8,6 +8,7 @@ import java.util.Date;
 
 public class ExpenseDTO implements Serializable{
 
+    private Integer id;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date date;
@@ -17,6 +18,14 @@ public class ExpenseDTO implements Serializable{
     private ExpenseSource source;
 
     private String description;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Date getDate() {
         return date;
