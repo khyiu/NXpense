@@ -11,9 +11,6 @@ public class CreditExpense extends Expense {
 
     private boolean verified;
 
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private CreditCard card;
-
     public boolean isVerified() {
         return verified;
     }
