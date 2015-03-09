@@ -38,6 +38,10 @@ public abstract class Expense {
             })
     private Set<Tag> tags;
 
+    public Integer getId() {
+        return this.id;
+    }
+
     public User getUser() {
         return this.user;
     }
