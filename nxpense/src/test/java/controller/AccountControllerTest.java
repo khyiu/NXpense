@@ -32,56 +32,56 @@ public class AccountControllerTest {
 
     @Resource
     private FilterChainProxy springSecurityFilterChain;
-    
+
     @Autowired
     private WebApplicationContext wac;
 
     private DefaultMockMvcBuilder mockMvcBuilder;
 
     private MockMvc mockMvc;
-    
+
     @Test
     public void testCreateNewAccount() throws Exception {
-	mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
-	mockMvcBuilder.alwaysExpect(status().isOk());
-	mockMvc = mockMvcBuilder.build();
-	
-	RequestBuilder requestBuilder = post("/account/new")
-						.param("email", "new@test.com")
-						.param("password", "pwd1234")
-						.param("passwordRepeat", "pwd1234");
-	MvcResult result = mockMvc.perform(requestBuilder).andDo(print()).andReturn();
-	String responseContent = result.getResponse().getContentAsString();
-	assertThat(responseContent).contains("/view/home.html");
+        mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+        mockMvcBuilder.alwaysExpect(status().isOk());
+        mockMvc = mockMvcBuilder.build();
+
+        RequestBuilder requestBuilder = post("/account/new")
+                .param("email", "new@test.com")
+                .param("password", "pwd1234")
+                .param("passwordRepeat", "pwd1234");
+        MvcResult result = mockMvc.perform(requestBuilder).andDo(print()).andReturn();
+        String responseContent = result.getResponse().getContentAsString();
+        assertThat(responseContent).contains("/view/home.html");
     }
-    
+
     @Test
     public void testCreateNewAccount_ExistingUser() throws Exception {
-	mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
-	mockMvcBuilder.alwaysExpect(status().isConflict());
-	mockMvc = mockMvcBuilder.build();
-	
-	RequestBuilder requestBuilder = post("/account/new")
-						.param("email", "new@test.com")
-						.param("password", "pwd1234")
-						.param("passwordRepeat", "pwd1234");
-	MvcResult result = mockMvc.perform(requestBuilder).andDo(print()).andReturn();
-	result.getResponse().getContentAsString();
+        mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+        mockMvcBuilder.alwaysExpect(status().isConflict());
+        mockMvc = mockMvcBuilder.build();
+
+        RequestBuilder requestBuilder = post("/account/new")
+                .param("email", "new@test.com")
+                .param("password", "pwd1234")
+                .param("passwordRepeat", "pwd1234");
+        MvcResult result = mockMvc.perform(requestBuilder).andDo(print()).andReturn();
+        result.getResponse().getContentAsString();
     }
-    
+
     @Test
     public void testCreateNewAccount_PasswordMismatch() throws Exception {
-	mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
-	mockMvcBuilder.alwaysExpect(status().isConflict());
-	mockMvc = mockMvcBuilder.build();
-	
-	RequestBuilder requestBuilder = post("/account/new")
-						.param("email", "new@test.com")
-						.param("password", "pwd1234")
-						.param("passwordRepeat", "pwd4321");
-	mockMvc.perform(requestBuilder).andDo(print()).andReturn();
+        mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+        mockMvcBuilder.alwaysExpect(status().isConflict());
+        mockMvc = mockMvcBuilder.build();
+
+        RequestBuilder requestBuilder = post("/account/new")
+                .param("email", "new@test.com")
+                .param("password", "pwd1234")
+                .param("passwordRepeat", "pwd4321");
+        mockMvc.perform(requestBuilder).andDo(print()).andReturn();
     }
-    
+
     @Test
     public void testLogin() throws Exception {
         mockMvc = MockMvcBuilders
@@ -89,18 +89,18 @@ public class AccountControllerTest {
                 .alwaysExpect(status().isOk())
                 .addFilters(this.springSecurityFilterChain)
                 .build();
-        
-	RequestBuilder requestBuilder = post("/login")
-			.param("email", "new@test.com")
-			.param("password", "pwd1234")
-			.param("remember_me", "true");
-	MockHttpServletResponse response = mockMvc.perform(requestBuilder).andDo(print()).andReturn().getResponse();
-	String successRedirection = response.getContentAsString();
-	
-	assertThat(successRedirection).isEqualTo("/view/home.html");
-	assertThat(response.getHeaderNames()).isEmpty();
+
+        RequestBuilder requestBuilder = post("/login")
+                .param("email", "new@test.com")
+                .param("password", "pwd1234")
+                .param("remember_me", "true");
+        MockHttpServletResponse response = mockMvc.perform(requestBuilder).andDo(print()).andReturn().getResponse();
+        String successRedirection = response.getContentAsString();
+
+        assertThat(successRedirection).isEqualTo("/view/home.html");
+        assertThat(response.getHeaderNames()).isEmpty();
     }
-    
+
     @Test
     public void testLogin_WrongPassword() throws Exception {
         mockMvc = MockMvcBuilders
@@ -108,17 +108,17 @@ public class AccountControllerTest {
                 .alwaysExpect(status().isOk())
                 .addFilters(this.springSecurityFilterChain)
                 .build();
-        
-	RequestBuilder requestBuilder = post("/login")
-			.param("email", "new@test.com")
-			.param("password", "wrongPassword")
-			.param("remember_me", "true");
-	MockHttpServletResponse response = mockMvc.perform(requestBuilder).andDo(print()).andReturn().getResponse();
-	String headerValue = response.getHeader("nxpense-login-error");
-	
-	assertThat(headerValue).isNotNull().isEqualTo("Bad credentials");
+
+        RequestBuilder requestBuilder = post("/login")
+                .param("email", "new@test.com")
+                .param("password", "wrongPassword")
+                .param("remember_me", "true");
+        MockHttpServletResponse response = mockMvc.perform(requestBuilder).andDo(print()).andReturn().getResponse();
+        String headerValue = response.getHeader("nxpense-login-error");
+
+        assertThat(headerValue).isNotNull().isEqualTo("Bad credentials");
     }
-    
+
     @Test
     public void testLogin_UnexistingEmail() throws Exception {
         mockMvc = MockMvcBuilders
@@ -126,14 +126,14 @@ public class AccountControllerTest {
                 .alwaysExpect(status().isOk())
                 .addFilters(this.springSecurityFilterChain)
                 .build();
-        
-	RequestBuilder requestBuilder = post("/login")
-			.param("email", "unexisting@test.com")
-			.param("password", "pwd1234")
-			.param("remember_me", "true");
-	MockHttpServletResponse response = mockMvc.perform(requestBuilder).andDo(print()).andReturn().getResponse();
-	String headerValue = response.getHeader("nxpense-login-error");
-	
-	assertThat(headerValue).isNotNull().isEqualTo("Bad credentials");
+
+        RequestBuilder requestBuilder = post("/login")
+                .param("email", "unexisting@test.com")
+                .param("password", "pwd1234")
+                .param("remember_me", "true");
+        MockHttpServletResponse response = mockMvc.perform(requestBuilder).andDo(print()).andReturn().getResponse();
+        String headerValue = response.getHeader("nxpense-login-error");
+
+        assertThat(headerValue).isNotNull().isEqualTo("Bad credentials");
     }
 }
