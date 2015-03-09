@@ -1,6 +1,9 @@
 package nxpense.controller;
 
+import nxpense.domain.Expense;
 import nxpense.dto.ExpenseDTO;
+import nxpense.dto.ExpenseResponseDTO;
+import nxpense.helper.ExpenseConverter;
 import nxpense.service.api.ExpenseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,14 +28,15 @@ public class ExpenseController {
     private ExpenseService expenseService;
 
     @RequestMapping(value = "/new", method = RequestMethod.POST)
-    public ResponseEntity<Void> createExpense(@RequestBody ExpenseDTO newExpenseDTO) {
+    public ResponseEntity<ExpenseResponseDTO> createExpense(@RequestBody ExpenseDTO newExpenseDTO) {
 
         try {
-            expenseService.createNewExpense(newExpenseDTO);
-            return new ResponseEntity<Void>(HttpStatus.CREATED);
+            Expense createdExpense = expenseService.createNewExpense(newExpenseDTO);
+            ExpenseResponseDTO responseDto = ExpenseConverter.entityToResponseDto(createdExpense);
+            return new ResponseEntity<ExpenseResponseDTO>(responseDto, HttpStatus.CREATED);
         } catch (Exception e) {
             LOGGER.error("Could not complete new expense creation", e);
-            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<ExpenseResponseDTO>(HttpStatus.BAD_REQUEST);
         }
     }
 }
