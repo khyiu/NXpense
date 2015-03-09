@@ -58,8 +58,6 @@ public class ExpenseServiceImplTest {
     private static final Date DATE = new Date();
     private static final String DESCRIPTION = "Some DESCRIPTION";
 
-//    @BeforeClass
-//    public static void initAuthenticationMock() {
     @Before
     public void initAuthenticationMock() {
         mockUser = new User();
@@ -75,7 +73,6 @@ public class ExpenseServiceImplTest {
     public void initMocks() {
         given(userRepository.save(any(User.class))).willAnswer(new Answer<User>() {
 
-            @Override
             public User answer(InvocationOnMock invocation) throws Throwable {
                 return (User) invocation.getArguments()[0];
             }

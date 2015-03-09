@@ -29,7 +29,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     private ExpenseRepository expenseRepository;
 
     @Transactional(rollbackFor = {Exception.class})
-    public void createNewExpense(ExpenseDTO expenseDTO) {
+    public Expense createNewExpense(ExpenseDTO expenseDTO) {
         Expense expense = ExpenseConverter.dtoToEntity(expenseDTO);
 
         if (expense == null) {
@@ -48,6 +48,6 @@ public class ExpenseServiceImpl implements ExpenseService {
         currentUser.addExpense(expense);
         expense.setUser(currentUser);
 
-        expenseRepository.save(expense);
+        return expenseRepository.save(expense);
     }
 }
