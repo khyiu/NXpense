@@ -5,6 +5,7 @@ import nxpense.domain.CreditExpense;
 import nxpense.domain.DebitExpense;
 import nxpense.domain.Expense;
 import nxpense.dto.ExpenseDTO;
+import nxpense.dto.ExpenseResponseDTO;
 import nxpense.dto.ExpenseSource;
 import nxpense.helper.ExpenseConverter;
 import org.joda.time.DateTime;
@@ -67,5 +68,41 @@ public class ExpenseConverterTest {
                 .build();
 
         ExpenseConverter.dtoToEntity(expenseDTO);
+    }
+
+    @Test
+    public void testEntityToResponseDto_creditExpense() {
+        Expense expense = new CreditExpense() {
+            @Override
+            public Integer getId() {
+                return 5;
+            }
+        };
+        expense.setDate(EXPENSE_DATE);
+        expense.setAmount(EXPENSE_AMOUNT);
+        expense.setDescription(EXPENSE_DESCRIPTION);
+
+        ExpenseResponseDTO expenseDto = ExpenseConverter.entityToResponseDto(expense);
+        assertThat(expenseDto.getId()).isEqualTo(5);
+        assertThat(expenseDto.getAmount()).isEqualTo(EXPENSE_AMOUNT);
+        assertThat(expenseDto.getSource()).isEqualTo(ExpenseSource.CREDIT_CARD);
+    }
+
+    @Test
+    public void testEntityToResponseDto_debitExpense() {
+        Expense expense = new DebitExpense() {
+            @Override
+            public Integer getId() {
+                return 5;
+            }
+        };
+        expense.setDate(EXPENSE_DATE);
+        expense.setAmount(EXPENSE_AMOUNT);
+        expense.setDescription(EXPENSE_DESCRIPTION);
+
+        ExpenseResponseDTO expenseDto = ExpenseConverter.entityToResponseDto(expense);
+        assertThat(expenseDto.getId()).isEqualTo(5);
+        assertThat(expenseDto.getAmount()).isEqualTo(EXPENSE_AMOUNT);
+        assertThat(expenseDto.getSource()).isEqualTo(ExpenseSource.DEBIT_CARD);
     }
 }

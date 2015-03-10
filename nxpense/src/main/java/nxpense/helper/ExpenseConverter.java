@@ -28,17 +28,6 @@ public class ExpenseConverter {
         return expense;
     }
 
-    public static ExpenseDTO entityToDto(Expense expense) {
-        ExpenseDTO expenseDTO = null;
-
-        if(expense != null) {
-            expenseDTO = new ExpenseDTO();
-            copyAttributeValues(expenseDTO, expense);
-        }
-
-        return expenseDTO;
-    }
-
     public static ExpenseResponseDTO entityToResponseDto(Expense expense) {
         ExpenseResponseDTO expenseDto = null;
 
