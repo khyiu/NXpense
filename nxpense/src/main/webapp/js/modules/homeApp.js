@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    var homeAppModule = angular.module('homeApp', ['ui.bootstrap', 'restangular']);
+    var homeAppModule = angular.module('homeApp', ['ui.bootstrap', 'restangular', 'notificationHelperModule']);
 
     homeAppModule.controller('userController', ['$scope', function ($scope) {
         $scope.logout = function () {
@@ -18,7 +18,8 @@
         }
     }]);
 
-    homeAppModule.controller('modalController', ['$scope', '$modalInstance', 'Restangular', '$filter', function ($scope, $modalInstance, Restangular, $filter) {
+    homeAppModule.controller('modalController', ['$scope', '$modalInstance', 'Restangular', '$filter', 'notificationHelper',
+        function ($scope, $modalInstance, Restangular, $filter, notificationHelper) {
         // todo make root route 'nxpense' somehow global --> using Factory?
         var expenseDAO = Restangular.one('nxpense');
 
@@ -30,8 +31,12 @@
             // NOTE: 'date' filter is applied on the input date with a format that will strip down the time part.
             //       As a result, we don't need to worry about timezone side-effects
             this.newExpense.date = $filter('date')($scope.newExpense.date, 'dd/MM/yyyy'),
-                console.log(this.newExpense);
             expenseDAO.post('expense/new', this.newExpense);
+            $modalInstance.close();
+
+            // todo set saving notification
+            notificationHelper.showServerInfo('Saving...');
+            // end
         };
 
         $scope.cancel = function () {
