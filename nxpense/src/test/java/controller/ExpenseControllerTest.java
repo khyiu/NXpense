@@ -1,5 +1,6 @@
 package controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nxpense.builder.ExpenseDtoBuilder;
 import nxpense.domain.User;
@@ -26,6 +27,7 @@ import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;
@@ -82,5 +84,31 @@ public class ExpenseControllerTest {
 
         ExpenseResponseDTO expenseDto = om.readValue(responseContent, ExpenseResponseDTO.class);
         assertThat(expenseDto.getId()).isNotNull();
+    }
+
+    @Test
+    public void testCreateExpense_unauthenticated() throws Exception {
+        UserDetails userDetails = new CustomUserDetails(null);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, USER_PASSWORD, Collections.<GrantedAuthority>emptyList());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+        mockMvcBuilder.alwaysExpect(status().isBadRequest());
+        mockMvc = mockMvcBuilder.build();
+
+        ExpenseDTO expense = new ExpenseDtoBuilder()
+                .setDate(new Date())
+                .setAmount(BigDecimal.TEN)
+                .setDescription("Description of a new expense")
+                .setSource(ExpenseSource.DEBIT_CARD)
+                .build();
+        String expenseJson = om.writeValueAsString(expense);
+
+        RequestBuilder requestBuilder = post("/expense/new")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(expenseJson);
+        MvcResult result = mockMvc.perform(requestBuilder).andDo(print()).andReturn();
+        String responseContent = result.getResponse().getContentAsString();
+        assertThat(responseContent).isEmpty();
     }
 }
