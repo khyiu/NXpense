@@ -25,18 +25,27 @@
 
         $scope.newExpense = {
             source: 'DEBIT_CARD'
-        }
+        };
 
         $scope.ok = function () {
             // NOTE: 'date' filter is applied on the input date with a format that will strip down the time part.
             //       As a result, we don't need to worry about timezone side-effects
-            this.newExpense.date = $filter('date')($scope.newExpense.date, 'dd/MM/yyyy'),
-            expenseDAO.post('expense/new', this.newExpense);
-            $modalInstance.close();
+            this.newExpense.date = $filter('date')($scope.newExpense.date, 'dd/MM/yyyy');
 
-            // todo set saving notification
+            $modalInstance.close();
             notificationHelper.showServerInfo('Saving...');
-            // end
+
+            expenseDAO.post('expense/new', this.newExpense).then(
+                function(){
+                    notificationHelper.hideServerInfo();
+                    notificationHelper.showOperationSuccess("Expense saved.");
+                },
+
+                function(){
+                    notificationHelper.hideServerInfo();
+                    notificationHelper.showOperationFailure("Failed saving expense!");
+                }
+            );
         };
 
         $scope.cancel = function () {
