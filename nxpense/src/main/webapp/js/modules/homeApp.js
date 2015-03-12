@@ -9,6 +9,18 @@
     };
   }]);
 
+  homeAppModule.controller('paginationController', ['$scope', function($scope) {
+    // Page size 10 will be selected by default
+    $scope.pageSize = 10;
+
+    $scope.$watch('pageSize', function(newValue, oldValue, scope){
+
+      // todo notifiy other controllers
+      // -> to reload result table
+      // -> to update pagination footer
+    });
+  }]);
+
   homeAppModule.controller('expenseController', ['$scope', '$modal', function($scope, $modal) {
     $scope.openNewExpenseModal = function() {
       $modal.open({

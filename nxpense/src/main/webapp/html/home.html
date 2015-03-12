@@ -56,7 +56,7 @@
 <script src="../js/plugins/chosen/chosen.jquery.js"></script>
 <script>
 	$(document).ready(function() {
-		$('select').chosen({
+		$('select').not('#pagination-size').chosen({
 			single_backstroke_delete : false
 		});
 	});
@@ -158,26 +158,25 @@
 					<div id="expense-table" class="table-responsive">
 						<div id="dataTables-example_wrapper"
 							class="dataTables_wrapper form-inline" role="grid">
-							<div class="row">
+							<div id="pagination-header" class="row" ng-controller="paginationController">
 								<div class="col-sm-6">
 									<div class="dataTables_length" id="dataTables-example_length">
-										<label>
-                                            <select name="dataTables-example_length"
-                                                    aria-controls="dataTables-example"
-                                                    class="form-control input-sm">
-                                                <option value="10">10</option>
-                                                <option value="25">25</option>
-                                                <option value="50">50</option>
-                                                <option value="100">100</option>
-                                            </select>Records per page
-                                        </label>
+										<label for="pagination-size">
+											<span>Records per page : </span>
+										</label>
+										<select id="pagination-size" class="form-control input-sm" ng-model="pageSize" ng-select="setPageSize()">
+											<option value="10">10</option>
+											<option value="15">15</option>
+											<option value="25">25</option>
+										</select>
 									</div>
 								</div>
 								<div class="col-sm-6">
 									<div id="dataTables-example_filter" class="dataTables_filter">
-										<label>Search:<input type="search"
-											class="form-control input-sm"
-											aria-controls="dataTables-example"></label>
+										<label for="expense-search">
+											<span>Search : </span>
+										</label>
+										<input id="expense-search" type="search" class="form-control input-sm">
 									</div>
 								</div>
 							</div>

@@ -33,6 +33,15 @@
 }
 
 /* Pagination elements */
+#pagination-header {
+    margin-bottom: 10px;
+}
+
+#pagination-size {
+    font-size: 14px;
+    border-radius: 4px;
+}
+
 .pagination-control {
 	float: right;
 }
