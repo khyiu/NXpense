@@ -3,22 +3,17 @@
 
   var homeAppModule = angular.module('homeApp', ['ui.bootstrap', 'restangular', 'notificationHelperModule']);
 
+  // Run block to initialize attributes to be used across controllers that are not necessarily nested in each other
+  // --> cannot benefit from scope hierarchy...
+  homeAppModule.run(function($rootScope) {
+    // Page size selected by default when data is bound to view
+    $rootScope.pageSize = 10;
+  });
+
   homeAppModule.controller('userController', ['$scope', function($scope) {
     $scope.logout = function() {
       window.location.assign('/nxpense/logout');
     };
-  }]);
-
-  homeAppModule.controller('paginationController', ['$scope', function($scope) {
-    // Page size 10 will be selected by default
-    $scope.pageSize = 10;
-
-    $scope.$watch('pageSize', function(newValue, oldValue, scope){
-
-      // todo notifiy other controllers
-      // -> to reload result table
-      // -> to update pagination footer
-    });
   }]);
 
   homeAppModule.controller('expenseController', ['$scope', '$modal', function($scope, $modal) {
@@ -28,6 +23,13 @@
         controller: 'modalController'
       });
     }
+
+    // todo: trigger reloading of data to display
+    $scope.$watch('pageSize', function(newValue, oldValue) {
+      if(newValue !== oldValue) {
+        alert('>>> changed page size --> reload data to display');
+      }
+    });
   }]);
 
   homeAppModule.controller('modalController', ['$scope', '$modalInstance', 'Restangular', '$filter', 'notificationHelper',
