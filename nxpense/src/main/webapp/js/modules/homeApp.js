@@ -5,7 +5,10 @@
 
   // Run block to initialize attributes to be used across controllers that are not necessarily nested in each other
   // --> cannot benefit from scope hierarchy...
-  homeAppModule.run(function($rootScope) {
+  homeAppModule.run(function($rootScope, $location) {
+    // Deducing the current application's web context from the path to access the current page
+    $rootScope.WEB_CONTEXT = window.location.pathname.split('/')[1];
+
     // Page size selected by default when data is bound to view
     $rootScope.pageSize = 10;
   });
@@ -34,8 +37,7 @@
 
   homeAppModule.controller('modalController', ['$scope', '$modalInstance', 'Restangular', '$filter', 'notificationHelper',
     function($scope, $modalInstance, Restangular, $filter, notificationHelper) {
-      // todo make root route 'nxpense' somehow global --> using Factory?
-      var expenseDAO = Restangular.one('nxpense');
+      var expenseDAO = Restangular.one($scope.WEB_CONTEXT);
 
       $scope.newExpense = {
         source: 'DEBIT_CARD'
