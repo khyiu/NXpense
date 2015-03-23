@@ -13,6 +13,9 @@ import nxpense.service.api.ExpenseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,9 +48,23 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         // First, call save( ) on existing user, to merge the detached User instance associated to security context...
         currentUser = userRepository.save(currentUser);
+
+        int newExpensePosition = (int) expenseRepository.getNumberOfItemBeforeDate(currentUser, expense.getDate()) + 1;
+        LOGGER.debug("Position of new expense with date {} for user with email {} = {}", expense.getDate(), currentUser.getEmail(), newExpensePosition);
+
+        int numberOfUpdatedExpense = expenseRepository.incrementPosition(currentUser, newExpensePosition);
+        LOGGER.debug("Incremented {} expense items' position field", numberOfUpdatedExpense);
+
+        expense.setPosition(newExpensePosition);
         currentUser.addExpense(expense);
         expense.setUser(currentUser);
 
         return expenseRepository.save(expense);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Expense> getPageExpenses(Integer pageNumber, Integer size, Sort.Direction direction, String[] properties) {
+        PageRequest pageRequest = new PageRequest(pageNumber, size, direction, properties);
+        return expenseRepository.findAll(pageRequest);
     }
 }

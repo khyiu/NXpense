@@ -11,6 +11,9 @@
 
     // Page size selected by default when data is bound to view
     $rootScope.pageSize = 10;
+
+    // Page number selected by default = 1
+    $rootScope.page = 1;
   });
 
   homeAppModule.controller('userController', ['$scope', function($scope) {
@@ -19,7 +22,7 @@
     };
   }]);
 
-  homeAppModule.controller('expenseController', ['$scope', '$modal', function($scope, $modal) {
+  homeAppModule.controller('expenseController', ['$scope', '$modal', 'Restangular', function($scope, $modal, Restangular) {
     $scope.openNewExpenseModal = function() {
       $modal.open({
         templateUrl: 'modal/new-expense-modal.html',
@@ -29,9 +32,19 @@
 
     // todo: trigger reloading of data to display
     $scope.$watch('pageSize', function(newValue, oldValue) {
-      if(newValue !== oldValue) {
-        alert('>>> changed page size --> reload data to display');
-      }
+      var expenseDAO = Restangular.all($scope.WEB_CONTEXT + '/expense/list');
+      var queryParameters = {
+        page: $scope.page,
+        size: newValue,
+        direction: 'ASC',
+        properties: ['position', 'date']
+      };
+
+      expenseDAO.getList(queryParameters).then(
+        function() {
+          console.log('>>> get expense list');
+        }
+      );
     });
   }]);
 
