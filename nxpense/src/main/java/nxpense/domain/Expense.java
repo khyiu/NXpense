@@ -27,14 +27,17 @@ public abstract class Expense {
 
     private String description;
 
+    @Basic(optional = false)
+    private Integer position;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "EXPENSE_TAG",
             joinColumns = {
-                @JoinColumn(name = "EXPENSE_ID", nullable = false, updatable = false)
+                    @JoinColumn(name = "EXPENSE_ID", nullable = false, updatable = false)
             },
             inverseJoinColumns = {
-                @JoinColumn(name = "TAG_ID", nullable = false, updatable = false)
+                    @JoinColumn(name = "TAG_ID", nullable = false, updatable = false)
             })
     private Set<Tag> tags;
 
@@ -72,6 +75,14 @@ public abstract class Expense {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getPosition() {
+        return this.position;
+    }
+
+    public void setPosition(Integer position) {
+        this.position = position;
     }
 
     @Override
