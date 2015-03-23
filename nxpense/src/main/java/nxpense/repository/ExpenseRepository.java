@@ -24,6 +24,13 @@ public interface ExpenseRepository extends PagingAndSortingRepository<Expense, I
     public long getNumberOfItemBeforeDate(@Param("owner") User owner, @Param("date") Date date);
 
 
+    /**
+     * Increment by 1 the <em>position</em> attribute for all {@link nxpense.domain.Expense} items that belong to the
+     * specified user and whose position is greater or equal to the given one.
+     * @param owner User to which the targeted expense items belong to.
+     * @param startPosition Position value to filter the expense items that are to be updated.
+     * @return number of updated items.
+     */
     @Transactional(propagation = Propagation.SUPPORTS)
     @Modifying
     @Query("update Expense e set e.position = e.position + 1 where e.user = :owner and e.position >= :startPosition")
