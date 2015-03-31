@@ -12,6 +12,7 @@ public class ExpenseDtoBuilder {
     private BigDecimal amount;
     private String description;
     private ExpenseSource source;
+    private Integer position;
 
     public ExpenseDtoBuilder setDate(Date date) {
         this.date = date;
@@ -33,6 +34,11 @@ public class ExpenseDtoBuilder {
         return this;
     }
 
+    public ExpenseDtoBuilder setPosition(Integer position) {
+        this.position = position;
+        return this;
+    }
+
     public ExpenseDTO build() {
         ExpenseDTO expenseDto = new ExpenseDTO();
 
@@ -40,6 +46,7 @@ public class ExpenseDtoBuilder {
         expenseDto.setAmount(amount);
         expenseDto.setDescription(description);
         expenseDto.setSource(source);
+        expenseDto.setPosition(position);
 
         return expenseDto;
     }

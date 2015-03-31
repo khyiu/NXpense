@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ExpenseDTO implements Serializable{
+public class ExpenseDTO implements Serializable {
 
 
     @JsonFormat(pattern = "dd/MM/yyyy")
@@ -17,6 +17,8 @@ public class ExpenseDTO implements Serializable{
     private ExpenseSource source;
 
     private String description;
+
+    private Integer position;
 
     public Date getDate() {
         return date;
@@ -48,5 +50,9 @@ public class ExpenseDTO implements Serializable{
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setPosition(Integer position) {
+        this.position = position;
     }
 }

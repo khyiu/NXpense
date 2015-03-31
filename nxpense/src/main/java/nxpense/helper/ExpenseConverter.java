@@ -93,6 +93,7 @@ public class ExpenseConverter {
 
     private static void copyAttributeValues(ExpenseDTO targetDto, Expense sourceEntity) {
         if(targetDto != null && sourceEntity != null) {
+            targetDto.setPosition(sourceEntity.getPosition());
             targetDto.setDate(new Date(sourceEntity.getDate().getTime()));
             targetDto.setAmount(sourceEntity.getAmount());
             targetDto.setDescription(sourceEntity.getDescription());
