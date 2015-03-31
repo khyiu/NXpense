@@ -5,15 +5,18 @@
 
   // Run block to initialize attributes to be used across controllers that are not necessarily nested in each other
   // --> cannot benefit from scope hierarchy...
-  homeAppModule.run(function($rootScope, $location) {
-    // Deducing the current application's web context from the path to access the current page
-    $rootScope.WEB_CONTEXT = window.location.pathname.split('/')[1];
-
+  homeAppModule.run(function($rootScope) {
     // Page size selected by default when data is bound to view
     $rootScope.pageSize = 10;
 
     // Page number selected by default = 1
     $rootScope.page = 1;
+  });
+
+  homeAppModule.config(function(RestangularProvider) {
+    // Deducing the current application's web context from the path to access the current page + use it as base url in Restangular
+    var webContext = window.location.pathname.split('/')[1];
+    RestangularProvider.setBaseUrl('/' + webContext);
   });
 
   homeAppModule.controller('userController', ['$scope', function($scope) {
@@ -32,7 +35,7 @@
 
     // todo: trigger reloading of data to display
     $scope.$watch('pageSize', function(newValue, oldValue) {
-      var expenseDAO = Restangular.one($scope.WEB_CONTEXT + '/expense');
+      var expenseDAO = Restangular.one('expense');
       var queryParameters = {
         page: $scope.page,
         size: newValue,
@@ -42,8 +45,13 @@
 
       notificationHelper.showServerInfo("Fetching expenses...");
       expenseDAO.one('page').get(queryParameters).then(
+        function(response) {
+          notificationHelper.hideServerInfo();
+        },
+
         function() {
           notificationHelper.hideServerInfo();
+          notificationHelper.showOperationFailure("Failed fetching expenses! Please retry later...");
         }
       );
     });
@@ -51,7 +59,7 @@
 
   homeAppModule.controller('modalController', ['$scope', '$modalInstance', 'Restangular', '$filter', 'notificationHelper',
     function($scope, $modalInstance, Restangular, $filter, notificationHelper) {
-      var expenseDAO = Restangular.one($scope.WEB_CONTEXT);
+      var expenseDAO = Restangular.one('expense');
 
       $scope.newExpense = {
         source: 'DEBIT_CARD'
@@ -65,7 +73,7 @@
         $modalInstance.close();
         notificationHelper.showServerInfo('Saving...');
 
-        expenseDAO.post('expense/new', this.newExpense).then(
+        expenseDAO.all('new').post(this.newExpense).then(
           function() {
             notificationHelper.hideServerInfo();
             notificationHelper.showOperationSuccess("Expense saved.");
