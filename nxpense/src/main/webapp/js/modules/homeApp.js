@@ -6,6 +6,9 @@
   // Run block to initialize attributes to be used across controllers that are not necessarily nested in each other
   // --> cannot benefit from scope hierarchy...
   homeAppModule.run(function($rootScope) {
+    // Deducing the current application's web context from the path to access the current page
+    $rootScope.WEB_CONTEXT = window.location.pathname.split('/')[1];
+
     // Page size selected by default when data is bound to view
     $rootScope.pageSize = 10;
 
@@ -21,7 +24,7 @@
 
   homeAppModule.controller('userController', ['$scope', function($scope) {
     $scope.logout = function() {
-      window.location.assign('/nxpense/logout');
+      window.location.assign('/' + $scope.WEB_CONTEXT + '/logout');
     };
   }]);
 
