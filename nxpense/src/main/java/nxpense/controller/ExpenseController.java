@@ -42,7 +42,7 @@ public class ExpenseController {
         }
     }
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/page", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<PageDTO<ExpenseResponseDTO>> listExpense(@RequestParam Integer page,
                                                         @RequestParam Integer size,

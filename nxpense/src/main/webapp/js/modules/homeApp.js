@@ -22,7 +22,7 @@
     };
   }]);
 
-  homeAppModule.controller('expenseController', ['$scope', '$modal', 'Restangular', function($scope, $modal, Restangular) {
+  homeAppModule.controller('expenseController', ['$scope', '$modal', 'Restangular', 'notificationHelper', function($scope, $modal, Restangular, notificationHelper) {
     $scope.openNewExpenseModal = function() {
       $modal.open({
         templateUrl: 'modal/new-expense-modal.html',
@@ -32,7 +32,7 @@
 
     // todo: trigger reloading of data to display
     $scope.$watch('pageSize', function(newValue, oldValue) {
-      var expenseDAO = Restangular.all($scope.WEB_CONTEXT + '/expense/list');
+      var expenseDAO = Restangular.one($scope.WEB_CONTEXT + '/expense');
       var queryParameters = {
         page: $scope.page,
         size: newValue,
@@ -40,9 +40,10 @@
         properties: ['position', 'date']
       };
 
-      expenseDAO.getList(queryParameters).then(
+      notificationHelper.showServerInfo("Fetching expenses...");
+      expenseDAO.one('page').get(queryParameters).then(
         function() {
-          console.log('>>> get expense list');
+          notificationHelper.hideServerInfo();
         }
       );
     });
