@@ -1,13 +1,20 @@
 package nxpense.helper;
 
+import nxpense.builder.PageDtoBuilder;
 import nxpense.domain.CreditExpense;
 import nxpense.domain.DebitExpense;
 import nxpense.domain.Expense;
 import nxpense.dto.ExpenseDTO;
 import nxpense.dto.ExpenseResponseDTO;
 import nxpense.dto.ExpenseSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import nxpense.dto.PageDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 public class ExpenseConverter {
 
@@ -40,6 +47,35 @@ public class ExpenseConverter {
         return expenseDto;
     }
 
+    public static PageDTO<ExpenseResponseDTO> expensePageToExpensePageDto(Page<Expense> expensePage) {
+        PageDTO<ExpenseResponseDTO> expensePageDto = null;
+
+        if(expensePage != null) {
+            List<ExpenseResponseDTO> items = expenseListToExpenseResponseDtoList(expensePage.getContent());
+
+            String sortProperty = null;
+            Sort.Direction sortDirection = null;
+            Iterator<Sort.Order> orders = expensePage.getSort().iterator();
+
+            while(orders.hasNext() && sortProperty == null) {
+                Sort.Order order = orders.next();
+                sortProperty = order.getProperty();
+                sortDirection = order.getDirection();
+            }
+
+            expensePageDto = new PageDtoBuilder<ExpenseResponseDTO>()
+                    .setPageNumber(expensePage.getNumber())
+                    .setPageSize(expensePage.getSize())
+                    .setNumberOfItems(expensePage.getNumberOfElements())
+                    .setItems(items)
+                    .setSortProperty(sortProperty)
+                    .setSortDirection(sortDirection)
+                    .build();
+        }
+
+        return expensePageDto;
+    }
+
     private static Expense getExpenseEntityInstance(ExpenseSource expenseSource) {
         if(expenseSource == null) {
             throw new IllegalArgumentException("Cannot create Expense entity instance for NULL expense source");
@@ -57,7 +93,7 @@ public class ExpenseConverter {
 
     private static void copyAttributeValues(ExpenseDTO targetDto, Expense sourceEntity) {
         if(targetDto != null && sourceEntity != null) {
-            targetDto.setDate(sourceEntity.getDate());
+            targetDto.setDate(new Date(sourceEntity.getDate().getTime()));
             targetDto.setAmount(sourceEntity.getAmount());
             targetDto.setDescription(sourceEntity.getDescription());
 
@@ -69,5 +105,17 @@ public class ExpenseConverter {
                 throw new UnsupportedOperationException("Value copy from entity to DTO object is not yet supported for entity of type: " + sourceEntity.getClass());
             }
         }
+    }
+
+    private static List<ExpenseResponseDTO> expenseListToExpenseResponseDtoList(List<Expense> expenses) {
+        List<ExpenseResponseDTO> expenseResponseDTOs = new ArrayList<ExpenseResponseDTO>();
+
+        if(expenses != null && !expenses.isEmpty()) {
+            for(Expense expense : expenses) {
+                expenseResponseDTOs.add(entityToResponseDto(expense));
+            }
+        }
+
+        return expenseResponseDTOs;
     }
 }

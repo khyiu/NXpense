@@ -1,5 +1,7 @@
 package nxpense.dto;
 
+import java.util.Date;
+
 /**
  *
  */
