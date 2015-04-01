@@ -48,6 +48,10 @@ public class ExpenseDTO implements Serializable {
         return description;
     }
 
+    public Integer getPosition() {
+        return position;
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }
