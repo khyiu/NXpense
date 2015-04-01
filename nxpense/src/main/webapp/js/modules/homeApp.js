@@ -28,16 +28,9 @@
     };
   }]);
 
-  homeAppModule.controller('expenseController', ['$scope', '$modal', 'Restangular', 'notificationHelper', function($scope, $modal, Restangular, notificationHelper) {
-    $scope.openNewExpenseModal = function() {
-      $modal.open({
-        templateUrl: 'modal/new-expense-modal.html',
-        controller: 'modalController'
-      });
-    }
-
-    // todo: trigger reloading of data to display
-    $scope.$watch('pageSize', function(newValue, oldValue) {
+  homeAppModule.controller('expenseController', ['$rootScope', '$scope', '$modal', 'Restangular', 'notificationHelper', function($rootScope, $scope, $modal, Restangular, notificationHelper) {
+    $scope.bypassCallbackOnce = false;
+    $scope.changePageSizeCallback = function(newValue) {
       var expenseDAO = Restangular.one('expense');
       var queryParameters = {
         page: $scope.page,
@@ -50,6 +43,12 @@
       expenseDAO.one('page').get(queryParameters).then(
         function(response) {
           notificationHelper.hideServerInfo();
+          $scope.bypassCallbackOnce = true;
+
+          $scope.expenses = response.items;
+          $rootScope.numberOfExpense = response.numberOfItems;
+          $rootScope.pageSize = response.pageSize;
+          $rootScope.page = response.pageNumber + 1;
         },
 
         function() {
@@ -57,6 +56,21 @@
           notificationHelper.showOperationFailure("Failed fetching expenses! Please retry later...");
         }
       );
+    };
+
+    $scope.openNewExpenseModal = function() {
+      $modal.open({
+        templateUrl: 'modal/new-expense-modal.html',
+        controller: 'modalController'
+      });
+    };
+
+    $scope.$watch('pageSize', function(newValue) {
+      if($scope.bypassCallbackOnce) {
+        $scope.bypassCallbackOnce = false;
+      } else {
+        $scope.changePageSizeCallback(newValue);
+      }
     });
   }]);
 
