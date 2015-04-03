@@ -29,7 +29,6 @@
   }]);
 
   homeAppModule.controller('expenseController', ['$rootScope', '$scope', '$modal', 'Restangular', 'notificationHelper', function($rootScope, $scope, $modal, Restangular, notificationHelper) {
-    $scope.bypassCallbackOnce = false;
     $scope.changePageSizeCallback = function(newValue) {
       var expenseDAO = Restangular.one('expense');
       var queryParameters = {
@@ -43,7 +42,6 @@
       expenseDAO.one('page').get(queryParameters).then(
         function(response) {
           notificationHelper.hideServerInfo();
-          $scope.bypassCallbackOnce = true;
 
           $scope.expenses = response.items;
           $rootScope.numberOfExpense = response.numberOfItems;
@@ -65,13 +63,7 @@
       });
     };
 
-    $scope.$watch('pageSize', function(newValue) {
-      if($scope.bypassCallbackOnce) {
-        $scope.bypassCallbackOnce = false;
-      } else {
-        $scope.changePageSizeCallback(newValue);
-      }
-    });
+    $scope.$watch('pageSize', $scope.changePageSizeCallback);
   }]);
 
   homeAppModule.controller('modalController', ['$scope', '$modalInstance', 'Restangular', '$filter', 'notificationHelper',
