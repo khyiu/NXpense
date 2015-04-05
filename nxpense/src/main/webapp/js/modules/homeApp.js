@@ -33,7 +33,7 @@
             var expenseDAO = Restangular.one('expense');
             var queryParameters = {
                 page: $scope.page,
-                size: newValue,
+                size: newValue || $scope.pageSize,
                 direction: 'ASC',
                 properties: ['position', 'date']
             };
@@ -64,13 +64,17 @@
         };
 
         $scope.$watch('pageSize', $scope.changePageSizeCallback);
+        $scope.$on('expense:created', function() {
+            $scope.changePageSizeCallback();
+        });
     }]);
 
-    homeAppModule.controller('modalController', ['$scope', '$modalInstance', 'Restangular', '$filter', 'notificationHelper',
-        function ($scope, $modalInstance, Restangular, $filter, notificationHelper) {
+    homeAppModule.controller('modalController', ['$rootScope', '$scope', '$modalInstance', 'Restangular', '$filter', 'notificationHelper',
+        function ($rootScope, $scope, $modalInstance, Restangular, $filter, notificationHelper) {
             var expenseDAO = Restangular.one('expense');
 
             $scope.newExpense = {
+                // default expense source when creating a new expense item
                 source: 'DEBIT_CARD'
             };
 
@@ -86,6 +90,9 @@
                     function () {
                         notificationHelper.hideServerInfo();
                         notificationHelper.showOperationSuccess("Expense saved.");
+
+                        // send event to trigger items fetching
+                        $rootScope.$broadcast('expense:created');
                     },
 
                     function () {
