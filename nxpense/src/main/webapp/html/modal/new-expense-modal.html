@@ -3,25 +3,29 @@
 </div>
 <div class="modal-body">
     <div id="new-expense-form">
-        <div id="date">
-            <p class="input-group" ng-keydown="processKey($event)">
-                <input tabindex="0" type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="newExpense.date" is-open="calOpened" datepicker-options="dateOptions"
-                       date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" placeholder="Date" firstTab/>
-             	<span class="input-group-btn">
-                <button tabindex="0" type="button" class="btn btn-default" ng-click="openCal($event)">
-                	<i class="glyphicon glyphicon-calendar"></i>
-                </button>
-              </span>
-            </p>
-        </div>
-		<div id="amount">
-			<div class="form-group input-group">
-				<input tabindex="0" type="text" class="form-control" placeholder="Amount" ng-model="newExpense.amount"/>
+        <fieldset id="date" class="has-error">
+            <div id="dateInputGroup" class="input-group" ng-keydown="processKey($event)">
+                <input id="dateInput" tabindex="0" type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="newExpense.date" is-open="calOpened" datepicker-options="dateOptions"
+                       date-disabled="disabled(date, mode)" required close-text="Close" placeholder="Date" firstTab/>
+                <span id="calBtn" tabindex="0" class="input-group-addon" ng-click="openCal($event)" ng-keypress="openCal($event)">
+					<i class="fa fa-calendar"></i>
+				</span>
+            </div>
+            <div class="validationMsg">
+                <label class="control-label" for="dateInput">Date validation message</label>
+            </div>
+        </fieldset>
+		<fieldset id="amount" class="has-error">
+			<div id="amountInputGroup" class="input-group">
+				<input id="amountInput" tabindex="0" type="text" class="form-control" placeholder="Amount" ng-model="newExpense.amount"/>
 				<span class="input-group-addon">
 					<i class="fa fa-eur"></i> 
 				</span> 
 			</div>
-		</div>
+            <div class="validationMsg">
+                <label class="control-label" for="amountInput">Amount validation message</label>
+            </div>
+		</fieldset>
         <fieldset class="fieldset-border">
             <legend class="fieldset-border">Source</legend>
             <div class="radio radio-primary">
