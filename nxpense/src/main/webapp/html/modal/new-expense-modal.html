@@ -2,30 +2,34 @@
     <h3 class="modal-title">Expense creation</h3>
 </div>
 <div class="modal-body">
-    <div id="new-expense-form">
-        <fieldset id="date" class="has-error">
+    <form name="newExpenseForm" id="new-expense-form">
+        <fieldset id="date" ng-class="{'has-error': newExpenseForm.date.$invalid && newExpenseForm.date.$dirty}">
             <div id="dateInputGroup" class="input-group" ng-keydown="processKey($event)">
-                <input id="dateInput" tabindex="0" type="text" class="form-control" datepicker-popup="dd/MM/yyyy" ng-model="newExpense.date" is-open="calOpened" datepicker-options="dateOptions"
-                       date-disabled="disabled(date, mode)" required close-text="Close" placeholder="Date" firstTab/>
+                <input id="dateInput" name="date" type="text" tabindex="0" class="form-control" ng-model="newExpense.date" firstTab
+                       datepicker-popup="dd/MM/yyyy" is-open="calOpened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" close-text="Close" placeholder="Date"
+                       required  ng-pattern="(\d{2})/(\d{2})/(\d{4})"/>
                 <span id="calBtn" tabindex="0" class="input-group-addon" ng-click="openCal($event)" ng-keypress="openCal($event)">
 					<i class="fa fa-calendar"></i>
 				</span>
             </div>
             <div class="validationMsg">
-                <label class="control-label" for="dateInput">Date validation message</label>
+                <label ng-show="newExpenseForm.date.$dirty && newExpenseForm.date.$error.required" class="control-label" for="dateInput">Please specify a date</label>
+                <label ng-show="newExpenseForm.date.$dirty && (newExpenseForm.date.$error.date || newExpenseForm.date.$error.pattern)" class="control-label" for="dateInput">
+                    Date must use 'dd/mm/yyyy' format
+                </label>
             </div>
         </fieldset>
-		<fieldset id="amount" class="has-error">
-			<div id="amountInputGroup" class="input-group">
-				<input id="amountInput" tabindex="0" type="text" class="form-control" placeholder="Amount" ng-model="newExpense.amount"/>
+        <fieldset id="amount" class="has-error">
+            <div id="amountInputGroup" class="input-group">
+                <input id="amountInput" tabindex="0" type="text" class="form-control" placeholder="Amount" ng-model="newExpense.amount"/>
 				<span class="input-group-addon">
-					<i class="fa fa-eur"></i> 
-				</span> 
-			</div>
+					<i class="fa fa-eur"></i>
+				</span>
+            </div>
             <div class="validationMsg">
                 <label class="control-label" for="amountInput">Amount validation message</label>
             </div>
-		</fieldset>
+        </fieldset>
         <fieldset class="fieldset-border">
             <legend class="fieldset-border">Source</legend>
             <div class="radio radio-primary">
@@ -41,10 +45,10 @@
                 </label>
             </div>
         </fieldset>
-		<div id="description">
-			<textarea placeholder="Description" class="form-control" ng-model="newExpense.description"></textarea>
-		</div>
-	</div>
+        <div id="description">
+            <textarea placeholder="Description (optional)" class="form-control" ng-model="newExpense.description"></textarea>
+        </div>
+    </form>
 </div>
 <div class="modal-footer" ng-keydown=processKey($event)>
     <button tabindex="0" class="btn btn-success" ng-click="ok()">Save</button>
@@ -53,7 +57,7 @@
 
 
 <script>
-	$(document).ready(function() {
-		$('#description > textarea').autosize();
-	});
+    $(document).ready(function() {
+        $('#description > textarea').autosize();
+    });
 </script>
