@@ -79,10 +79,6 @@
             };
 
             $scope.ok = function () {
-                // NOTE: 'date' filter is applied on the input date with a format that will strip down the time part.
-                //       As a result, we don't need to worry about timezone side-effects
-                this.newExpense.date = $filter('date')($scope.newExpense.date, 'dd/MM/yyyy');
-
                 $modalInstance.close();
                 notificationHelper.showServerInfo('Saving...');
 

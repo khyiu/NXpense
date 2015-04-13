@@ -6,9 +6,8 @@
         <fieldset id="date" ng-class="{'has-error': newExpenseForm.date.$invalid && newExpenseForm.date.$dirty}">
             <div id="dateInputGroup" class="input-group" ng-keydown="processKey($event)">
                 <input id="dateInput" name="date" type="text" tabindex="0" class="form-control" ng-model="newExpense.date" firstTab
-                       datepicker-popup="dd/MM/yyyy" is-open="calOpened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" close-text="Close" placeholder="Date"
-                       required  ng-pattern="(\d{2})/(\d{2})/(\d{4})"/>
-                <span id="calBtn" tabindex="0" class="input-group-addon" ng-click="openCal($event)" ng-keypress="openCal($event)">
+                        required pattern="(\d{2})/(\d{2})/(\d{4})" maxlength="10"/>
+                <span class="input-group-addon">
 					<i class="fa fa-calendar"></i>
 				</span>
             </div>
@@ -59,5 +58,13 @@
 <script>
     $(document).ready(function() {
         $('#description > textarea').autosize();
+    });
+
+    $('#dateInput').datepicker({
+        format: "dd/mm/yyyy",
+        todayBtn: "linked",
+        clearBtn: true,
+        language: "en-GB",
+        autoclose: true
     });
 </script>
