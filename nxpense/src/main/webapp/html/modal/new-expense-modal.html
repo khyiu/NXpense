@@ -52,7 +52,7 @@
     </form>
 </div>
 <div class="modal-footer" ng-keydown=processKey($event)>
-    <button tabindex="0" class="btn btn-success" ng-click="ok()">Save</button>
+    <button tabindex="0" class="btn btn-success" ng-disabled="newExpenseForm.$invalid" ng-click="ok()">Save</button>
     <button tabindex="0" class="btn btn-warning" ng-click="cancel()" lastTab>Cancel</button>
 </div>
 
