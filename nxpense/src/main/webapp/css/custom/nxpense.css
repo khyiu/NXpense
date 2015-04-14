@@ -81,6 +81,18 @@
 	resize: none;
 }
 
+#dateInput, #amountInput {
+    font-weight: 700;
+}
+
+.pos-value {
+    color: green;
+}
+
+.neg-value {
+    color: #a94442;
+}
+
 /* Tags */
 .tag {
     border: solid;
