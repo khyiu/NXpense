@@ -102,13 +102,6 @@
                 $modalInstance.close();
             };
 
-            $scope.openCal = function ($event) {
-                $event.preventDefault();
-                $event.stopPropagation();
-
-                $scope.calOpened = true;
-            };
-
             $scope.processKey = function ($event) {
                 var tabbed = $event.keyCode === 9 && !$event.shiftKey;
                 var backTabbed = $event.keyCode === 9 && $event.shiftKey;
