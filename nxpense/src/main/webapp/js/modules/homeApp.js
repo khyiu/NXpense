@@ -46,7 +46,7 @@
                     $scope.expenses = response.items;
                     $rootScope.numberOfExpense = response.numberOfItems;
                     $rootScope.pageSize = response.pageSize;
-                    $rootScope.page = response.pageNumber + 1;
+                    $rootScope.page = response.pageNumber;
                 },
 
                 function () {
