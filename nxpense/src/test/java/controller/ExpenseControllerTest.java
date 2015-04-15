@@ -1,16 +1,17 @@
 package controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nxpense.builder.ExpenseDtoBuilder;
 import nxpense.domain.User;
 import nxpense.dto.ExpenseDTO;
 import nxpense.dto.ExpenseResponseDTO;
 import nxpense.dto.ExpenseSource;
+import nxpense.dto.PageDTO;
 import nxpense.security.CustomUserDetails;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,12 +28,12 @@ import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,6 +45,16 @@ public class ExpenseControllerTest {
 
     private static final String USER_EMAIL = "test@test.com";
     private static final String USER_PASSWORD = "secret";
+
+    private static final String PARAM_PAGE = "page";
+    private static final String PARAM_SIZE = "size";
+    private static final String PARAM_DIRECTION = "direction";
+    private static final String PARAM_PROPERTIES = "properties";
+
+    private static final Integer PAGE = 1;
+    private static final Integer PAGE_SIZE = 25;
+    private static final Sort.Direction SORT_DIRECTION = Sort.Direction.DESC;
+    private static final String [] SORT_PROPS = {"amount"};
 
     private static final ObjectMapper om = new ObjectMapper();
 
@@ -110,5 +121,27 @@ public class ExpenseControllerTest {
         MvcResult result = mockMvc.perform(requestBuilder).andDo(print()).andReturn();
         String responseContent = result.getResponse().getContentAsString();
         assertThat(responseContent).isEmpty();
+    }
+
+    @Test
+    public void testListPage() throws Exception {
+        mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+        mockMvcBuilder.alwaysExpect(status().isOk());
+        mockMvc = mockMvcBuilder.build();
+
+        RequestBuilder requestBuilder = get("/expense/page")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param(PARAM_PAGE, PAGE.toString())
+                .param(PARAM_SIZE, PAGE_SIZE.toString())
+                .param(PARAM_DIRECTION, SORT_DIRECTION.toString())
+                .param(PARAM_PROPERTIES, SORT_PROPS[0]);
+
+        MvcResult result = mockMvc.perform(requestBuilder).andDo(print()).andReturn();
+        PageDTO<ExpenseResponseDTO> responsePage = om.readValue(result.getResponse().getContentAsString(), PageDTO.class);
+
+        assertThat(responsePage.getPageSize()).isEqualTo(PAGE_SIZE);
+        assertThat(responsePage.getSortProperty()).isEqualTo(SORT_PROPS[0]);
+        assertThat(responsePage.getPageNumber()).isEqualTo(PAGE);
+        assertThat(responsePage.getSortDirection()).isEqualTo(SORT_DIRECTION);
     }
 }

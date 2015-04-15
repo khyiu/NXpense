@@ -30,6 +30,7 @@ public class ExpenseConverter {
             expense.setAmount(expenseDTO.getAmount());
             expense.setDate(expenseDTO.getDate());
             expense.setDescription(expenseDTO.getDescription());
+            expense.setPosition(expenseDTO.getPosition());
         }
 
         return expense;

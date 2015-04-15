@@ -23,6 +23,8 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -37,6 +39,7 @@ import java.util.Date;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ExpenseServiceImplTest {
@@ -122,5 +125,31 @@ public class ExpenseServiceImplTest {
                 .build();
 
         expenseService.createNewExpense(expenseDto);
+    }
+
+    @Test
+    public void testGetPageExpenses() {
+        int page = 5;
+        int pageSize = 25;
+        Sort.Direction direction = Sort.Direction.ASC;
+        String [] props = {"test"};
+
+        PageRequest expectedPageRequest = new PageRequest(page, pageSize, direction, props);
+        ArgumentCaptor<PageRequest> argumentCaptor = ArgumentCaptor.forClass(PageRequest.class);
+
+        expenseService.getPageExpenses(page, pageSize, direction, props);
+        verify(expenseRepository).findAll(argumentCaptor.capture());
+
+        assertThat(argumentCaptor.getValue()).isEqualTo(expectedPageRequest);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetPageExpenses_noSortingProperties() {
+        int page = 5;
+        int pageSize = 25;
+        Sort.Direction direction = Sort.Direction.ASC;
+        String [] props = {};
+
+        expenseService.getPageExpenses(page, pageSize, direction, props);
     }
 }
