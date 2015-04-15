@@ -52,6 +52,8 @@ public class ExpenseController {
         // NOTE: page number used by spring-data-jpa is zero-based!
         Page<Expense> expensePage = expenseService.getPageExpenses(page - 1, size, direction, properties);
         PageDTO<ExpenseResponseDTO> pageDto = ExpenseConverter.expensePageToExpensePageDto(expensePage);
+        // NOTE: increment page number before sending response to client, as we had to pass a zero-based value to the expenseService
+        pageDto.setPageNumber(pageDto.getPageNumber() + 1);
 
         return new ResponseEntity<PageDTO<ExpenseResponseDTO>>(pageDto, HttpStatus.OK);
     }
