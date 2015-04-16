@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * Created by Kro on 20/02/15.
  */
@@ -57,4 +59,12 @@ public class ExpenseController {
 
         return new ResponseEntity<PageDTO<ExpenseResponseDTO>>(pageDto, HttpStatus.OK);
     }
+
+    @RequestMapping(method = RequestMethod.DELETE)
+    @ResponseBody
+    public ResponseEntity<Void> deleteExpense(@RequestParam List<Integer> ids)  {
+        expenseService.deleteExpense(ids);
+        return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
 }

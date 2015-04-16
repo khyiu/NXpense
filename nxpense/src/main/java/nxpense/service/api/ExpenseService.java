@@ -2,8 +2,11 @@ package nxpense.service.api;
 
 import nxpense.domain.Expense;
 import nxpense.dto.ExpenseDTO;
+import nxpense.exception.RequestCannotCompleteException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
+
+import java.util.List;
 
 /**
  *
@@ -31,4 +34,11 @@ public interface ExpenseService {
      * @return {@link org.springframework.data.domain.Page} object containing requested expense items
      */
     public Page<Expense> getPageExpenses(Integer pageNumber, Integer size, Sort.Direction direction, String[] properties);
+
+    /**
+     * Deletes the {@link nxpense.domain.Expense} items whose ID is is the specified list of ID from the DB.
+     * @param ids List of ID of the {@link nxpense.domain.Expense} items that must be deleted from DB
+     * @throws RequestCannotCompleteException if the specified list of ID is null
+     */
+    public void deleteExpense(List<Integer> ids) throws RequestCannotCompleteException;
 }

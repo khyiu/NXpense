@@ -4,6 +4,7 @@ import nxpense.domain.Expense;
 import nxpense.domain.User;
 import nxpense.dto.ExpenseDTO;
 import nxpense.exception.BadRequestException;
+import nxpense.exception.RequestCannotCompleteException;
 import nxpense.exception.UnauthenticatedException;
 import nxpense.helper.ExpenseConverter;
 import nxpense.repository.ExpenseRepository;
@@ -19,6 +20,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service("expenseService")
 public class ExpenseServiceImpl implements ExpenseService {
@@ -66,5 +69,15 @@ public class ExpenseServiceImpl implements ExpenseService {
     public Page<Expense> getPageExpenses(Integer pageNumber, Integer size, Sort.Direction direction, String[] properties) {
         PageRequest pageRequest = new PageRequest(pageNumber, size, direction, properties);
         return expenseRepository.findAll(pageRequest);
+    }
+
+
+    @Transactional(rollbackFor = {Exception.class})
+    public void deleteExpense(List<Integer> ids) throws RequestCannotCompleteException {
+        if(ids == null) {
+            throw new RequestCannotCompleteException("Cannot proceed to expense deletion with a NULL list of IDs.");
+        }
+
+        expenseRepository.deleteByIdIn(ids);
     }
 }

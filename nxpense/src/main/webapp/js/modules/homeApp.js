@@ -64,8 +64,9 @@
         };
 
         $scope.$watch('pageSize', $scope.changePageSizeCallback);
-        $scope.$on('expense:created', function() {
+        $scope.$on('expense:reloadPage', function() {
             $scope.changePageSizeCallback();
+            $scope.selectedAll = false;
         });
 
         // Function called when the 'select all' checkbox value is changed --> based on the new value, all visible
@@ -74,6 +75,30 @@
             _.each($scope.expenses, function(expense) {
                 expense.selected = $scope.selectedAll;
             });
+        };
+
+        $scope.deleteSelected = function() {
+            var idsToDelete = _.where($scope.expenses, {selected: true});
+            idsToDelete = _.pluck(idsToDelete, 'id');
+
+            var expenseDao = Restangular.all('expense');
+            var queryParameters = {
+                ids: idsToDelete
+            };
+
+            expenseDao.remove(queryParameters).then(
+              function() {
+                  notificationHelper.showOperationSuccess("Expense(s) deleted.");
+
+                  // send event to trigger reloading of current item page
+                  $rootScope.$broadcast('expense:reloadPage');
+              },
+
+              function() {
+                  notificationHelper.hideServerInfo();
+                  notificationHelper.showOperationFailure("Failed deleting expenses! Please retry later...");
+              }
+            );
         };
     }]);
 
@@ -90,13 +115,14 @@
                 $modalInstance.close();
                 notificationHelper.showServerInfo('Saving...');
 
+                // todo remove ('/new' path)
                 expenseDAO.all('new').post(this.newExpense).then(
                     function () {
                         notificationHelper.hideServerInfo();
                         notificationHelper.showOperationSuccess("Expense saved.");
 
-                        // send event to trigger items fetching
-                        $rootScope.$broadcast('expense:created');
+                        // send event to trigger reloading of current item page
+                        $rootScope.$broadcast('expense:reloadPage');
                     },
 
                     function () {

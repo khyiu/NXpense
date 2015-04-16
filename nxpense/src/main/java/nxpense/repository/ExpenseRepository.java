@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 public interface ExpenseRepository extends PagingAndSortingRepository<Expense, Integer> {
 
@@ -35,4 +36,10 @@ public interface ExpenseRepository extends PagingAndSortingRepository<Expense, I
     @Modifying
     @Query("update Expense e set e.position = e.position + 1 where e.user = :owner and e.position >= :startPosition")
     public int incrementPosition(@Param("owner") User owner, @Param("startPosition") int startPosition);
+
+    /**
+     * Deletes {@link nxpense.domain.Expense} items whose ID is in the given list
+     * @param ids List of ID from the items to be deleted
+     */
+    public void deleteByIdIn(List<Integer> ids);
 }
