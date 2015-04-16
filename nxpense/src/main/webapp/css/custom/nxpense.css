@@ -8,6 +8,12 @@
 }
 
 /* Expense table header */
+.col-selection {
+    width: 30px;
+    text-align: center;
+    vertical-align: middle !important;
+}
+
 .col-position {
 	width: 30px;
 	text-align: center;
@@ -124,4 +130,21 @@ legend.fieldset-border {
 /* Validation message elements in modal popup */
 div.validationMsg {
     min-height: 25px;
+}
+
+/* Custom checkbox to select rows */
+input[type=checkbox] { display:none; } /* to hide the checkbox itself */
+input[type=checkbox] + label:before {
+    font-family: FontAwesome;
+    display: inline-block;
+}
+
+input[type=checkbox] + label:before { content: "\f096"; } /* unchecked icon */
+input[type=checkbox]:checked + label:before { content: "\f046"; } /* checked icon */
+
+.col-selection > label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 0px;
+    font-weight: 700;
 }

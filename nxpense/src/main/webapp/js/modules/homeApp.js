@@ -67,6 +67,14 @@
         $scope.$on('expense:created', function() {
             $scope.changePageSizeCallback();
         });
+
+        // Function called when the 'select all' checkbox value is changed --> based on the new value, all visible
+        // expenses will be un-checked
+        $scope.toggleSelectAll = function() {
+            _.each($scope.expenses, function(expense) {
+                expense.selected = $scope.selectedAll;
+            });
+        };
     }]);
 
     homeAppModule.controller('modalController', ['$rootScope', '$scope', '$modalInstance', 'Restangular', '$filter', 'notificationHelper',
