@@ -2,8 +2,6 @@ package nxpense.domain;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
 
 @Entity
 @DiscriminatorValue("CREDIT")
