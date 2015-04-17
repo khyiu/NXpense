@@ -35,7 +35,7 @@
                 page: $scope.page,
                 size: newValue || $scope.pageSize,
                 direction: 'ASC',
-                properties: ['position', 'date']
+                properties: ['date', 'position']
             };
 
             notificationHelper.showServerInfo("Fetching expenses...");

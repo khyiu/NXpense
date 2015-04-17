@@ -52,11 +52,8 @@ public class ExpenseServiceImpl implements ExpenseService {
         // First, call save( ) on existing user, to merge the detached User instance associated to security context...
         currentUser = userRepository.save(currentUser);
 
-        int newExpensePosition = (int) expenseRepository.getNumberOfItemBeforeDate(currentUser, expense.getDate()) + 1;
+        int newExpensePosition = (int) expenseRepository.countByUserAndDate(currentUser, expense.getDate());
         LOGGER.debug("Position of new expense with date {} for user with email {} = {}", expense.getDate(), currentUser.getEmail(), newExpensePosition);
-
-        int numberOfUpdatedExpense = expenseRepository.incrementPosition(currentUser, newExpensePosition);
-        LOGGER.debug("Incremented {} expense items' position field", numberOfUpdatedExpense);
 
         expense.setPosition(newExpensePosition);
         currentUser.addExpense(expense);
@@ -70,7 +67,6 @@ public class ExpenseServiceImpl implements ExpenseService {
         PageRequest pageRequest = new PageRequest(pageNumber, size, direction, properties);
         return expenseRepository.findAll(pageRequest);
     }
-
 
     @Transactional(rollbackFor = {Exception.class})
     public void deleteExpense(List<Integer> ids) throws RequestCannotCompleteException {
