@@ -32,7 +32,6 @@ public interface ExpenseRepository extends PagingAndSortingRepository<Expense, I
      * @param startPosition Position value to filter the expense items that are to be updated.
      * @return number of updated items.
      */
-    @Transactional(propagation = Propagation.SUPPORTS)
     @Modifying
     @Query("update Expense e set e.position = e.position + 1 where e.user = :owner and e.position >= :startPosition")
     public int incrementPosition(@Param("owner") User owner, @Param("startPosition") int startPosition);
