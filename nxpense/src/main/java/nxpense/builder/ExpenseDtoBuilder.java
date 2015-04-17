@@ -2,19 +2,19 @@ package nxpense.builder;
 
 import nxpense.dto.ExpenseDTO;
 import nxpense.dto.ExpenseSource;
+import org.joda.time.LocalDate;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 public class ExpenseDtoBuilder {
 
-    private Date date;
+    private LocalDate date;
     private BigDecimal amount;
     private String description;
     private ExpenseSource source;
     private Integer position;
 
-    public ExpenseDtoBuilder setDate(Date date) {
+    public ExpenseDtoBuilder setDate(LocalDate date) {
         this.date = date;
         return this;
     }

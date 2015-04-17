@@ -13,6 +13,7 @@ import nxpense.repository.ExpenseRepository;
 import nxpense.repository.UserRepository;
 import nxpense.security.CustomUserDetails;
 import nxpense.service.ExpenseServiceImpl;
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +35,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.math.BigDecimal;
 import java.util.Collections;
-import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -58,7 +58,7 @@ public class ExpenseServiceImplTest {
     private static User mockUser;
 
     private static final BigDecimal AMOUNT = BigDecimal.TEN;
-    private static final Date DATE = new Date();
+    private static final LocalDate DATE = new LocalDate();
     private static final String DESCRIPTION = "Some DESCRIPTION";
 
     @Before
@@ -88,7 +88,7 @@ public class ExpenseServiceImplTest {
 
         Expense expense = new DebitExpense();
         expense.setAmount(AMOUNT);
-        expense.setDate(DATE);
+        expense.setDate(DATE.toDate());
         expense.setDescription(DESCRIPTION);
         expense.setUser(mockUser);
 

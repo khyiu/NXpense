@@ -8,11 +8,11 @@ import nxpense.dto.ExpenseDTO;
 import nxpense.dto.ExpenseResponseDTO;
 import nxpense.dto.ExpenseSource;
 import nxpense.dto.PageDTO;
+import org.joda.time.LocalDate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class ExpenseConverter {
         if(expenseDTO != null) {
             expense = getExpenseEntityInstance(expenseDTO.getSource());
             expense.setAmount(expenseDTO.getAmount());
-            expense.setDate(expenseDTO.getDate());
+            expense.setDate(expenseDTO.getDate().toDate());
             expense.setDescription(expenseDTO.getDescription());
             expense.setPosition(expenseDTO.getPosition());
         }
@@ -95,7 +95,7 @@ public class ExpenseConverter {
     private static void copyAttributeValues(ExpenseDTO targetDto, Expense sourceEntity) {
         if(targetDto != null && sourceEntity != null) {
             targetDto.setPosition(sourceEntity.getPosition());
-            targetDto.setDate(new Date(sourceEntity.getDate().getTime()));
+            targetDto.setDate(new LocalDate(sourceEntity.getDate().getTime()));
             targetDto.setAmount(sourceEntity.getAmount());
             targetDto.setDescription(sourceEntity.getDescription());
 

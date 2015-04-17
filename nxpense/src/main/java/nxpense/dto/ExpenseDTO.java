@@ -1,16 +1,20 @@
 package nxpense.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import nxpense.helper.serialization.CustomLocalDateDeserializer;
+import nxpense.helper.serialization.CustomLocalDateSerializer;
+import org.joda.time.LocalDate;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 
 public class ExpenseDTO implements Serializable {
 
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private Date date;
+    @JsonSerialize(using = CustomLocalDateSerializer.class)
+    @JsonDeserialize(using = CustomLocalDateDeserializer.class)
+    private LocalDate date;
 
     private BigDecimal amount;
 
@@ -20,11 +24,11 @@ public class ExpenseDTO implements Serializable {
 
     private Integer position;
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

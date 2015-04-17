@@ -9,7 +9,7 @@ import nxpense.dto.ExpenseResponseDTO;
 import nxpense.dto.ExpenseSource;
 import nxpense.dto.PageDTO;
 import nxpense.helper.ExpenseConverter;
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -18,7 +18,6 @@ import org.springframework.data.domain.Sort;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,7 +29,7 @@ public class ExpenseConverterTest {
 
     private static final String EXPENSE_DESCRIPTION = "Test groceries";
     private static final BigDecimal EXPENSE_AMOUNT = new BigDecimal(49.95);
-    private static final Date EXPENSE_DATE = new DateTime(2015, 3, 1, 0, 0).toDate();
+    private static final LocalDate EXPENSE_DATE = new LocalDate(2015, 3, 1);
     private static final int EXPENSE_POSITION = 15;
 
     @Test
@@ -46,7 +45,7 @@ public class ExpenseConverterTest {
         Expense expense = ExpenseConverter.dtoToEntity(expenseDTO);
 
         assertThat(expense).isNotNull().isInstanceOf(DebitExpense.class);
-        assertThat(expense.getDate()).isEqualTo(EXPENSE_DATE);
+        assertThat(expense.getDate()).isEqualTo(EXPENSE_DATE.toDate());
         assertThat(expense.getAmount()).isEqualTo(EXPENSE_AMOUNT);
         assertThat(expense.getDescription()).isEqualTo(EXPENSE_DESCRIPTION);
         assertThat(expense.getPosition()).isEqualTo(EXPENSE_POSITION);
@@ -65,7 +64,7 @@ public class ExpenseConverterTest {
         Expense expense = ExpenseConverter.dtoToEntity(expenseDTO);
 
         assertThat(expense).isNotNull().isInstanceOf(CreditExpense.class);
-        assertThat(expense.getDate()).isEqualTo(EXPENSE_DATE);
+        assertThat(expense.getDate()).isEqualTo(EXPENSE_DATE.toDate());
         assertThat(expense.getAmount()).isEqualTo(EXPENSE_AMOUNT);
         assertThat(expense.getDescription()).isEqualTo(EXPENSE_DESCRIPTION);
         assertThat(expense.getPosition()).isEqualTo(EXPENSE_POSITION);
@@ -90,7 +89,7 @@ public class ExpenseConverterTest {
                 return 5;
             }
         };
-        expense.setDate(EXPENSE_DATE);
+        expense.setDate(EXPENSE_DATE.toDate());
         expense.setAmount(EXPENSE_AMOUNT);
         expense.setDescription(EXPENSE_DESCRIPTION);
 
@@ -108,7 +107,7 @@ public class ExpenseConverterTest {
                 return 5;
             }
         };
-        expense.setDate(EXPENSE_DATE);
+        expense.setDate(EXPENSE_DATE.toDate());
         expense.setAmount(EXPENSE_AMOUNT);
         expense.setDescription(EXPENSE_DESCRIPTION);
 
@@ -127,7 +126,7 @@ public class ExpenseConverterTest {
                 return 5;
             }
         };
-        expense.setDate(EXPENSE_DATE);
+        expense.setDate(EXPENSE_DATE.toDate());
         expense.setAmount(EXPENSE_AMOUNT);
         expense.setDescription(EXPENSE_DESCRIPTION);
         expenses.add(expense);

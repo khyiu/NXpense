@@ -1,6 +1,7 @@
 package controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 import nxpense.builder.ExpenseDtoBuilder;
 import nxpense.domain.User;
 import nxpense.dto.ExpenseDTO;
@@ -8,6 +9,7 @@ import nxpense.dto.ExpenseResponseDTO;
 import nxpense.dto.ExpenseSource;
 import nxpense.dto.PageDTO;
 import nxpense.security.CustomUserDetails;
+import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +58,7 @@ public class ExpenseControllerTest {
     private static final Sort.Direction SORT_DIRECTION = Sort.Direction.DESC;
     private static final String [] SORT_PROPS = {"amount"};
 
-    private static final ObjectMapper om = new ObjectMapper();
+    private static final ObjectMapper om = new ObjectMapper().registerModule(new JodaModule());
 
     @Autowired
     private WebApplicationContext wac;
@@ -80,7 +82,7 @@ public class ExpenseControllerTest {
         mockMvc = mockMvcBuilder.build();
 
         ExpenseDTO expense = new ExpenseDtoBuilder()
-                .setDate(new Date())
+                .setDate(new LocalDate())
                 .setAmount(BigDecimal.TEN)
                 .setDescription("Description of a new expense")
                 .setSource(ExpenseSource.DEBIT_CARD)
@@ -108,7 +110,7 @@ public class ExpenseControllerTest {
         mockMvc = mockMvcBuilder.build();
 
         ExpenseDTO expense = new ExpenseDtoBuilder()
-                .setDate(new Date())
+                .setDate(new LocalDate())
                 .setAmount(BigDecimal.TEN)
                 .setDescription("Description of a new expense")
                 .setSource(ExpenseSource.DEBIT_CARD)
