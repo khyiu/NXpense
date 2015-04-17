@@ -4,6 +4,7 @@ import nxpense.domain.Expense;
 import nxpense.domain.User;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -17,6 +18,7 @@ public interface ExpenseRepository extends PagingAndSortingRepository<Expense, I
      * @param date Date to which items' date is compared to
      * @return number of items belonging to the {@code owner} User and whose date is equal to the {@code date} Date
      */
+    @Transactional(readOnly = true)
     public long countByUserAndDate(@Param("owner") User owner, @Param("date") Date date);
 
     /**
