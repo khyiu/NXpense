@@ -74,6 +74,8 @@ public class ExpenseServiceImpl implements ExpenseService {
             throw new RequestCannotCompleteException("Cannot proceed to expense deletion with a NULL list of IDs.");
         }
 
-        expenseRepository.deleteByIdIn(ids);
+        User currentUser = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
+        expenseRepository.decrementSameDateHigherPosition(ids, currentUser);
+        expenseRepository.deleteByIdInAndUser(ids, currentUser);
     }
 }
