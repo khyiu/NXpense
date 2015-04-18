@@ -75,6 +75,9 @@ public class ExpenseServiceImpl implements ExpenseService {
         }
 
         User currentUser = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
+        // First, call save( ) on existing user, to merge the detached User instance associated to security context...
+        currentUser = userRepository.save(currentUser);
+
         expenseRepository.decrementSameDateHigherPosition(ids, currentUser);
         expenseRepository.deleteByIdInAndUser(ids, currentUser);
     }
