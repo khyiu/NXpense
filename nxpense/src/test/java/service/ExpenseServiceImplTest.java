@@ -8,6 +8,7 @@ import nxpense.domain.User;
 import nxpense.dto.ExpenseDTO;
 import nxpense.dto.ExpenseSource;
 import nxpense.exception.BadRequestException;
+import nxpense.exception.RequestCannotCompleteException;
 import nxpense.exception.UnauthenticatedException;
 import nxpense.repository.ExpenseRepository;
 import nxpense.repository.UserRepository;
@@ -34,7 +35,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -60,6 +63,8 @@ public class ExpenseServiceImplTest {
     private static final BigDecimal AMOUNT = BigDecimal.TEN;
     private static final LocalDate DATE = new LocalDate();
     private static final String DESCRIPTION = "Some DESCRIPTION";
+
+    private static final List<Integer> EXPENSE_IDS = Arrays.asList(new Integer[]{1, 2, 3});
 
     @Before
     public void initAuthenticationMock() {
@@ -151,5 +156,18 @@ public class ExpenseServiceImplTest {
         String [] props = {};
 
         expenseService.getPageExpenses(page, pageSize, direction, props);
+    }
+
+    @Test(expected = RequestCannotCompleteException.class)
+    public void testDeleteExpense_noExpenseIds() {
+        expenseService.deleteExpense(null);
+    }
+
+    @Test
+    public void testDeleteExpense() {
+        expenseService.deleteExpense(EXPENSE_IDS);
+
+        verify(expenseRepository).decrementSameDateHigherPosition(EXPENSE_IDS, mockUser);
+        verify(expenseRepository).deleteByIdInAndUser(EXPENSE_IDS, mockUser);
     }
 }
