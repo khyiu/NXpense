@@ -100,6 +100,11 @@
               }
             );
         };
+
+        $scope.enableDeleteButton = function() {
+            var hasSelectedItems = $scope.expenses && _.findWhere($scope.expenses, {selected: true});
+            return !hasSelectedItems;
+        }
     }]);
 
     homeAppModule.controller('modalController', ['$rootScope', '$scope', '$modalInstance', 'Restangular', '$filter', 'notificationHelper',

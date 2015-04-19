@@ -228,7 +228,8 @@
 										<button type="button" class="btn btn-primary" title="Add an expense" ng-click="openNewExpenseModal()">
 											<i class="fa fa-plus-circle"></i>
 										</button>
-										<button type="button" class="btn btn-danger" title="Delete selected expense(s)" ng-click="deleteSelected()">
+										<button type="button" class="btn btn-danger" title="Delete selected expense(s)"
+                                                ng-click="deleteSelected()" ng-disabled="enableDeleteButton()">
 											<i class="fa fa-trash-o"></i>
 										</button>
 										<button type="button" class="btn btn-success" title="Mark selected expense (and all before it) as validated">
