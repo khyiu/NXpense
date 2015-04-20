@@ -51,8 +51,20 @@
 	float: right;
 }
 
-#pagination-control > ul {
-	margin: 0;
+.pager {
+	margin: 0 !important;
+}
+
+#selected-page, #selected-page + span {
+    border-radius: 15px;
+    border: solid 1px #ddd;
+    padding: 5px 14px;
+    text-align: right;
+    width: 55px;
+}
+
+.page-btn {
+    font-weight: bold;
 }
 
 /* New expense modal */
