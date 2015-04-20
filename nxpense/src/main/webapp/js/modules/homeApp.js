@@ -90,8 +90,20 @@
         });
 
         // Function called when the 'select all' checkbox value is changed --> based on the new value, all visible
-        // expenses will be un-checked
-        $scope.toggleSelectAll = function() {
+        // expenses will be un-checked.
+        // The $event parameter may be:
+        // - undefined --> event initiated by mouse
+        // - defined --> event initiated by keyboard
+        $scope.toggleSelectAll = function($event) {
+            if($event) {
+                if($event.keyCode === 32) {
+                    $scope.selectedAll = !$scope.selectedAll;
+                    $event.preventDefault();
+                } else {
+                    return;
+                }
+            }
+
             _.each($scope.expenses, function(expense) {
                 expense.selected = $scope.selectedAll;
             });
