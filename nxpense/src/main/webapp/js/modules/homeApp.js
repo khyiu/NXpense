@@ -97,6 +97,14 @@
             });
         };
 
+        $scope.toggleItemSelection = function($event, expense) {
+            // pressed key = space bar
+            if($event.keyCode === 32) {
+                expense.selected = !expense.selected;
+                $event.preventDefault();
+            }
+        };
+
         $scope.deleteSelected = function() {
             var idsToDelete = _.where($scope.expenses, {selected: true});
             idsToDelete = _.pluck(idsToDelete, 'id');
