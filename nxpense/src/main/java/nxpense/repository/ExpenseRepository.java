@@ -24,7 +24,7 @@ public interface ExpenseRepository extends PagingAndSortingRepository<Expense, I
     public long countByUserAndDate(@Param("owner") User owner, @Param("date") Date date);
 
     /**
-     * Deletes {@link nxpense.domain.Expense} items whose ID is in the given list and that belong to the specifed user
+     * Deletes {@link nxpense.domain.Expense} items whose ID is in the given list and that belong to the specified user
      * @param owner User to which the items to be deleted belong to
      * @param ids List of ID from the items to be deleted
      */
