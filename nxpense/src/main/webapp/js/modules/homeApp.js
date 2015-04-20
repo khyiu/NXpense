@@ -22,6 +22,18 @@
         RestangularProvider.setBaseUrl('/' + webContext);
     });
 
+    // todo directive for pagination navigation
+    homeAppModule.directive('nxPageNavigator', function() {
+        return {
+            restrict: 'E',
+            transclude: true,
+            templateUrl: 'pagination/pagination-navigator.html',
+            controller: function($scope) {
+
+            }
+        };
+    });
+
     homeAppModule.controller('userController', ['$scope', function ($scope) {
         $scope.logout = function () {
             window.location.assign('/' + $scope.WEB_CONTEXT + '/logout');

@@ -218,54 +218,7 @@
 									</tr>
 								</tbody>
 							</table>
-							<div class="row">
-								<div class="col-sm-12">
-									<div class="dataTables_info pagination-control">Showing
-										1 to 10 of 57 entries</div>
-								</div>
-								<div class="col-sm-12">
-									<div id="table-control">
-										<button type="button" class="btn btn-primary" title="Add an expense" ng-click="openNewExpenseModal()">
-											<i class="fa fa-plus-circle"></i>
-										</button>
-										<button type="button" class="btn btn-danger" title="Delete selected expense(s)"
-                                                ng-click="deleteSelected()" ng-disabled="enableDeleteButton()">
-											<i class="fa fa-trash-o"></i>
-										</button>
-										<button type="button" class="btn btn-success" title="Mark selected expense (and all before it) as validated">
-											<i class="fa fa-check-circle"></i>
-										</button>
-									</div>
-									<div id="pagination-control" class="dataTables_paginate paging_simple_numbers pagination-control">
-										<ul class="pagination">
-											<li class="paginate_button previous disabled"
-												aria-controls="dataTables-example" tabindex="0"
-												id="dataTables-example_previous"><a href="#">Previous</a></li>
-											<li class="paginate_button active"
-												aria-controls="dataTables-example" tabindex="0"><a
-												href="#">1</a></li>
-											<li class="paginate_button "
-												aria-controls="dataTables-example" tabindex="0"><a
-												href="#">2</a></li>
-											<li class="paginate_button "
-												aria-controls="dataTables-example" tabindex="0"><a
-												href="#">3</a></li>
-											<li class="paginate_button "
-												aria-controls="dataTables-example" tabindex="0"><a
-												href="#">4</a></li>
-											<li class="paginate_button "
-												aria-controls="dataTables-example" tabindex="0"><a
-												href="#">5</a></li>
-											<li class="paginate_button "
-												aria-controls="dataTables-example" tabindex="0"><a
-												href="#">6</a></li>
-											<li class="paginate_button next"
-												aria-controls="dataTables-example" tabindex="0"
-												id="dataTables-example_next"><a href="#">Next</a></li>
-										</ul>
-									</div>
-								</div>
-							</div>
+							<nx-page-navigator />
 						</div>
 					</div>
 					<!-- /.table-responsive -->
