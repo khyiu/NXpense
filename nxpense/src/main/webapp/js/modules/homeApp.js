@@ -59,6 +59,8 @@
                     $rootScope.numberOfExpense = response.numberOfItems;
                     $rootScope.pageSize = response.pageSize;
                     $rootScope.page = response.pageNumber;
+                    $rootScope.totalNumberOfExpense = response.totalNumberOfItems;
+                    $rootScope.totalNumberOfPage = response.totalNumberOfPages;
                 },
 
                 function () {
