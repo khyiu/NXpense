@@ -68,6 +68,8 @@ public class ExpenseConverter {
                     .setPageNumber(expensePage.getNumber())
                     .setPageSize(expensePage.getSize())
                     .setNumberOfItems(expensePage.getNumberOfElements())
+                    .setTotalNumberOfItems(expensePage.getTotalElements())
+                    .setTotalNumberOfPages(expensePage.getTotalPages())
                     .setItems(items)
                     .setSortProperty(sortProperty)
                     .setSortDirection(sortDirection)

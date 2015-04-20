@@ -12,6 +12,8 @@ public class PageDTO<E> {
     private String sortProperty;
     private Sort.Direction sortDirection;
     private int numberOfItems;
+    private long totalNumberOfItems;
+    private long totalNumberOfPages;
     private List<E> items;
 
     public int getPageNumber() {
@@ -52,6 +54,22 @@ public class PageDTO<E> {
 
     public void setNumberOfItems(int numberOfItems) {
         this.numberOfItems = numberOfItems;
+    }
+
+    public long getTotalNumberOfItems() {
+        return totalNumberOfItems;
+    }
+
+    public void setTotalNumberOfItems(long totalNumberOfItems) {
+        this.totalNumberOfItems = totalNumberOfItems;
+    }
+
+    public long getTotalNumberOfPages() {
+        return totalNumberOfPages;
+    }
+
+    public void setTotalNumberOfPages(long totalNumberOfPages) {
+        this.totalNumberOfPages = totalNumberOfPages;
     }
 
     public List<E> getItems() {

@@ -5,11 +5,13 @@ import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
-public class PageDtoBuilder <E> {
+public class PageDtoBuilder<E> {
 
     private int pageSize;
     private int pageNumber;
     private int numberOfItems;
+    private long totalNumberOfItems;
+    private long totalNumberOfPages;
     private List<E> items;
     private String sortProperty;
     private Sort.Direction sortDirection;
@@ -26,6 +28,16 @@ public class PageDtoBuilder <E> {
 
     public PageDtoBuilder<E> setNumberOfItems(int numberOfItems) {
         this.numberOfItems = numberOfItems;
+        return this;
+    }
+
+    public PageDtoBuilder<E> setTotalNumberOfItems(long totalNumberOfItems) {
+        this.totalNumberOfItems = totalNumberOfItems;
+        return this;
+    }
+
+    public PageDtoBuilder<E> setTotalNumberOfPages(long totalNumberOfPages) {
+        this.totalNumberOfPages = totalNumberOfPages;
         return this;
     }
 
@@ -50,6 +62,8 @@ public class PageDtoBuilder <E> {
         pageDto.setPageSize(pageSize);
         pageDto.setPageNumber(pageNumber);
         pageDto.setNumberOfItems(numberOfItems);
+        pageDto.setTotalNumberOfItems(totalNumberOfItems);
+        pageDto.setTotalNumberOfPages(totalNumberOfPages);
         pageDto.setItems(items);
         pageDto.setSortProperty(sortProperty);
         pageDto.setSortDirection(sortDirection);
