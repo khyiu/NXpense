@@ -27,9 +27,12 @@ public interface ExpenseRepository extends PagingAndSortingRepository<Expense, I
      * Deletes {@link nxpense.domain.Expense} items whose ID is in the given list and that belong to the specified user
      * @param owner User to which the items to be deleted belong to
      * @param ids List of ID from the items to be deleted
+     * @long number of item deleted from the DB
      */
     @Transactional
-    public void deleteByIdInAndUser(@Param("ids") List<Integer> ids, @Param("user") User owner);
+    @Modifying
+    @Query("delete Expense e where e.user = :owner and e.id in :ids")
+    public int deleteByIdInAndUser(@Param("owner") User owner, @Param("ids") List<Integer> ids);
 
     @Query("update Expense e set e.position = e.position - 1 " +
             "where e.user = :owner " +

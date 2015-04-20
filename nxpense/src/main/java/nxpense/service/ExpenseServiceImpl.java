@@ -79,6 +79,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         currentUser = userRepository.save(currentUser);
 
         expenseRepository.decrementSameDateHigherPosition(ids, currentUser);
-        expenseRepository.deleteByIdInAndUser(ids, currentUser);
+        int numberDeletedItems = expenseRepository.deleteByIdInAndUser(currentUser, ids);
+        LOGGER.info("User {} deleted {} item(s)", currentUser, numberDeletedItems);
     }
 }

@@ -168,6 +168,6 @@ public class ExpenseServiceImplTest {
         expenseService.deleteExpense(EXPENSE_IDS);
 
         verify(expenseRepository).decrementSameDateHigherPosition(EXPENSE_IDS, mockUser);
-        verify(expenseRepository).deleteByIdInAndUser(EXPENSE_IDS, mockUser);
+        verify(expenseRepository).deleteByIdInAndUser(mockUser, EXPENSE_IDS);
     }
 }
