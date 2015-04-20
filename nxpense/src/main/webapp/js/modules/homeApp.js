@@ -29,7 +29,13 @@
             transclude: true,
             templateUrl: 'pagination/pagination-navigator.html',
             controller: function($scope) {
+                $scope.getPageFirstItem = function() {
+                    return $scope.page + (($scope.page - 1) * ($scope.pageSize - 1));
+                };
 
+                $scope.getPageLastItem = function() {
+                    return $scope.page * $scope.pageSize;
+                };
             }
         };
     });
