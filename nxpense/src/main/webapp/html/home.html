@@ -15,8 +15,6 @@
 <link href="../css/sb-admin-2.css" rel="stylesheet" type="text/css">
 <!-- Custom Fonts -->
 <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
-<!-- Chosen plugin CSS -->
-<link href="../css/plugins/chosen/chosen.css" rel="stylesheet" type="text/css">
 <!-- Custom stylesheets -->
 <link href="../css/custom/nxpense.css" rel="stylesheet" type="text/css">
 <!-- Bootstrap datepicker -->
@@ -56,15 +54,6 @@
 <script src="../js/restangular.js"></script>
 <!-- Notify -->
 <script src="../js/plugins/notify/notify-custom.js"></script>
-<!-- Chosen plugin -->
-<script src="../js/plugins/chosen/chosen.jquery.js"></script>
-<script>
-	$(document).ready(function() {
-		$('select').not('#pagination-size').chosen({
-			single_backstroke_delete : false
-		});
-	});
-</script>
 
 <body>
 	<div id="wrapper" ng-app="homeApp">
@@ -207,14 +196,6 @@
 										<td>{{expense.date}}</td>
 										<td>€{{expense.amount}}</td>
 										<td>{{expense.description}}</td>
-										<td>
-											<select data-placeholder="Expense category(ies)" multiple style="width:350px;" class="chosen-select" tabindex="0">
-												<option>Facture</option>
-												<option>Frais bancaires</option>
-												<option>Cashback carte de crédit</option>
-												<option>Salaire</option>
-											</select>
-										</td>
 									</tr>
 								</tbody>
 							</table>
