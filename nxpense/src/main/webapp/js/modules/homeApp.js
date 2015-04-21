@@ -28,13 +28,33 @@
             restrict: 'E',
             transclude: true,
             templateUrl: 'pagination/pagination-navigator.html',
-            controller: function($scope) {
+            controller: function($scope, $rootScope) {
                 $scope.getPageFirstItem = function() {
-                    return $scope.page + (($scope.page - 1) * ($scope.pageSize - 1));
+                    return $rootScope.page + (($rootScope.page - 1) * ($rootScope.pageSize - 1));
                 };
 
                 $scope.getPageLastItem = function() {
-                    return $scope.page * $scope.pageSize;
+                    return $rootScope.page * $rootScope.pageSize;
+                };
+
+                // bound to pagination-navigator.html with getterSetter option...
+                $scope.page = function(newSelectedPage) {
+                    var newSelectPageIndex;
+                    if (newSelectedPage) {
+                        newSelectPageIndex = parseInt(newSelectedPage, 10);
+
+                        if(!isNaN(newSelectPageIndex) && newSelectedPage > 0 && newSelectedPage <= $rootScope.totalNumberOfPage) {
+                            $rootScope.page = parseInt(newSelectedPage, 10);
+                            $rootScope.$broadcast('expense:reloadPage');
+                        }
+                    }
+
+                    return $rootScope.page;
+                };
+
+                $scope.goToNextPage = function($event, step) {
+                    $event.preventDefault();
+                    $scope.page($rootScope.page + step);
                 };
             }
         };
@@ -47,11 +67,16 @@
     }]);
 
     homeAppModule.controller('expenseController', ['$rootScope', '$scope', '$modal', 'Restangular', 'notificationHelper', function ($rootScope, $scope, $modal, Restangular, notificationHelper) {
-        $scope.changePageSizeCallback = function (newValue) {
+        $scope.updatePageSize = function(newPageSize) {
+            $rootScope.pageSize = newPageSize;
+            $scope.reloadPage();
+        };
+
+        $scope.reloadPage = function () {
             var expenseDAO = Restangular.one('expense');
             var queryParameters = {
-                page: $scope.page,
-                size: newValue || $scope.pageSize,
+                page: $rootScope.page,
+                size: $rootScope.pageSize,
                 direction: 'ASC',
                 properties: ['date', 'position']
             };
@@ -64,6 +89,7 @@
                     $scope.expenses = response.items;
                     $rootScope.numberOfExpense = response.numberOfItems;
                     $rootScope.pageSize = response.pageSize;
+                    $scope.pageSize = response.pageSize;
                     $rootScope.page = response.pageNumber;
                     $rootScope.totalNumberOfExpense = response.totalNumberOfItems;
                     $rootScope.totalNumberOfPage = response.totalNumberOfPages;
@@ -83,9 +109,10 @@
             });
         };
 
-        $scope.$watch('pageSize', $scope.changePageSizeCallback);
+        $scope.$watch('pageSize', $scope.updatePageSize);
+
         $scope.$on('expense:reloadPage', function() {
-            $scope.changePageSizeCallback();
+            $scope.reloadPage();
             $scope.selectedAll = false;
         });
 

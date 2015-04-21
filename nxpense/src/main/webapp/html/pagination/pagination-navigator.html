@@ -18,12 +18,12 @@
         <div id="pagination-control" class="pagination-control">
             <nav>
                 <ul class="pager">
-                    <li><a href="#" class="page-btn" title="Go to previous page">&lt;&lt;</a></li>
+                    <li><a href="#" class="page-btn" title="Go to previous page" ng-click="goToNextPage($event, -1)">&lt;&lt;</a></li>
                     <li>
-                        <input id="selected-page" title="Current page index" type="text" maxlength="3" value="{{page}}">
+                        <input id="selected-page" title="Current page index" type="text" maxlength="3" ng-model="page" ng-model-options="{getterSetter: true}">
                         <span title="Total number of page">/{{totalNumberOfPage}}</span>
                     </li>
-                    <li><a href="#" class="page-btn" title="Go to next page">&gt;&gt;</a></li>
+                    <li><a href="#" class="page-btn" title="Go to next page" ng-click="goToNextPage($event, 1)">&gt;&gt;</a></li>
                 </ul>
             </nav>
         </div>
