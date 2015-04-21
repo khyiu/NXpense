@@ -68,8 +68,17 @@
 
     homeAppModule.controller('expenseController', ['$rootScope', '$scope', '$modal', 'Restangular', 'notificationHelper', function ($rootScope, $scope, $modal, Restangular, notificationHelper) {
         $scope.updatePageSize = function(newPageSize) {
-            $rootScope.pageSize = newPageSize;
-            $scope.reloadPage();
+            var newPageSizeInt;
+
+            if(newPageSize) {
+                newPageSizeInt = parseInt(newPageSize, 10);
+
+                if(!isNaN(newPageSizeInt)) {
+                    $rootScope.pageSize = newPageSize;
+                    $rootScope.page = 1;
+                    $scope.reloadPage();
+                }
+            }
         };
 
         $scope.reloadPage = function () {
