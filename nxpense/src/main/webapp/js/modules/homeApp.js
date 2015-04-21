@@ -132,7 +132,7 @@
         // - defined --> event initiated by keyboard
         $scope.toggleSelectAll = function($event) {
             if($event) {
-                if($event.keyCode === 32) {
+                if($event.keyCode === 13) {
                     $scope.selectedAll = !$scope.selectedAll;
                     $event.preventDefault();
                 } else {
@@ -147,7 +147,7 @@
 
         $scope.toggleItemSelection = function($event, expense) {
             // pressed key = space bar
-            if($event.keyCode === 32) {
+            if($event.keyCode === 13) {
                 expense.selected = !expense.selected;
                 $event.preventDefault();
             }
