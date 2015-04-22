@@ -187,7 +187,8 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr class="gradeA odd" ng-repeat="expense in expenses" tabindex="0" ng-keydown="toggleItemSelection($event, expense)">
+									<tr class="gradeA odd" ng-repeat="expense in expenses" tabindex="0"
+										ng-keydown="toggleItemSelection($event, expense)" ng-dblclick="toggleItemSelection(undefined, expense)">
 										<td class="col-selection">
 											<input id="select-row-{{expense.id}}" type="checkbox" ng-model="expense.selected"/>
 											<label for="select-row-{{expense.id}}"></label>

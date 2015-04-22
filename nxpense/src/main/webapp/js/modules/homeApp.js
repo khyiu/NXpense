@@ -146,10 +146,21 @@
         };
 
         $scope.toggleItemSelection = function($event, expense) {
-            // pressed key = space bar
-            if($event.keyCode === 13) {
+            var numberOfSelectedItem;
+
+            // if $event provided -> event triggered by keyboard --> check that pressed key = space bar
+            // if $event == undefined -> event triggered by mouse
+            if(_.isUndefined($event) || $event.keyCode === 13) {
                 expense.selected = !expense.selected;
-                $event.preventDefault();
+
+                // Update 'selectedAll' attribute accordingly only if its value will change --> prevent $digest loop to run if not actually necessary
+                numberOfSelectedItem = _.where($scope.expenses, {selected: true}).length;
+
+                if(numberOfSelectedItem < $scope.expenses.length && $scope.selectedAll) {
+                    $scope.selectedAll = false;
+                } else if (numberOfSelectedItem === $scope.expenses.length && !$scope.selectedAll) {
+                    $scope.selectedAll = true;
+                }
             }
         };
 
