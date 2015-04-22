@@ -22,12 +22,49 @@
         RestangularProvider.setBaseUrl('/' + webContext);
     });
 
-    homeAppModule.directive('nxPageNavigator', function() {
+    homeAppModule.directive('nxExpenseTableFooter', ['Restangular', '$modal', 'notificationHelper', function (Restangular, $modal, notificationHelper) {
         return {
             restrict: 'E',
             transclude: true,
-            templateUrl: 'pagination/pagination-navigator.html',
+            templateUrl: 'pagination/expense-table-footer.html',
             controller: function($scope, $rootScope) {
+                // open modal for expense creation
+                $scope.openNewExpenseModal = function () {
+                    $modal.open({
+                        templateUrl: 'modal/new-expense-modal.html',
+                        controller: 'modalController'
+                    });
+                };
+
+                $scope.deleteSelected = function() {
+                    var idsToDelete = _.where($scope.expenses, {selected: true});
+                    idsToDelete = _.pluck(idsToDelete, 'id');
+
+                    var expenseDao = Restangular.all('expense');
+                    var queryParameters = {
+                        ids: idsToDelete
+                    };
+
+                    expenseDao.remove(queryParameters).then(
+                      function() {
+                          notificationHelper.showOperationSuccess("Expense(s) deleted.");
+
+                          // send event to trigger reloading of current item page
+                          $rootScope.$broadcast('expense:reloadPage');
+                      },
+
+                      function() {
+                          notificationHelper.hideServerInfo();
+                          notificationHelper.showOperationFailure("Failed deleting expenses! Please retry later...");
+                      }
+                    );
+                };
+
+                $scope.enableDeleteButton = function() {
+                    var hasSelectedItems = $scope.expenses && _.findWhere($scope.expenses, {selected: true});
+                    return !hasSelectedItems;
+                };
+
                 $scope.getPageFirstItem = function() {
                     return $rootScope.page + (($rootScope.page - 1) * ($rootScope.pageSize - 1));
                 };
@@ -36,7 +73,7 @@
                     return $rootScope.page * $rootScope.pageSize;
                 };
 
-                // bound to pagination-navigator.html with getterSetter option...
+                // bound to expense-table-footer.html with getterSetter option...
                 $scope.page = function(newSelectedPage) {
                     var newSelectPageIndex;
                     if (newSelectedPage) {
@@ -57,7 +94,7 @@
                 };
             }
         };
-    });
+    }]);
 
     homeAppModule.controller('userController', ['$scope', function ($scope) {
         $scope.logout = function () {
@@ -65,7 +102,7 @@
         };
     }]);
 
-    homeAppModule.controller('expenseController', ['$rootScope', '$scope', '$modal', 'Restangular', 'notificationHelper', function ($rootScope, $scope, $modal, Restangular, notificationHelper) {
+    homeAppModule.controller('expenseController', ['$rootScope', '$scope', 'Restangular', 'notificationHelper', function ($rootScope, $scope, Restangular, notificationHelper) {
         $scope.updatePageSize = function(newPageSize) {
             var newPageSizeInt;
 
@@ -108,13 +145,6 @@
                     notificationHelper.showOperationFailure("Failed fetching expenses! Please retry later...");
                 }
             );
-        };
-
-        $scope.openNewExpenseModal = function () {
-            $modal.open({
-                templateUrl: 'modal/new-expense-modal.html',
-                controller: 'modalController'
-            });
         };
 
         $scope.$watch('pageSize', $scope.updatePageSize);
@@ -162,35 +192,6 @@
                 }
             }
         };
-
-        $scope.deleteSelected = function() {
-            var idsToDelete = _.where($scope.expenses, {selected: true});
-            idsToDelete = _.pluck(idsToDelete, 'id');
-
-            var expenseDao = Restangular.all('expense');
-            var queryParameters = {
-                ids: idsToDelete
-            };
-
-            expenseDao.remove(queryParameters).then(
-              function() {
-                  notificationHelper.showOperationSuccess("Expense(s) deleted.");
-
-                  // send event to trigger reloading of current item page
-                  $rootScope.$broadcast('expense:reloadPage');
-              },
-
-              function() {
-                  notificationHelper.hideServerInfo();
-                  notificationHelper.showOperationFailure("Failed deleting expenses! Please retry later...");
-              }
-            );
-        };
-
-        $scope.enableDeleteButton = function() {
-            var hasSelectedItems = $scope.expenses && _.findWhere($scope.expenses, {selected: true});
-            return !hasSelectedItems;
-        }
     }]);
 
     homeAppModule.controller('modalController', ['$rootScope', '$scope', '$modalInstance', 'Restangular', '$filter', 'notificationHelper',
