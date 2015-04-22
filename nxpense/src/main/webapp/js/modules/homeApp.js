@@ -230,7 +230,7 @@
                 $modalInstance.close();
                 notificationHelper.showServerInfo('Saving...');
 
-                expenseDAO.customPOST(this.newExpense).then(
+                expenseDAO.customPOST(this.expense).then(
                     function () {
                         notificationHelper.hideServerInfo();
                         notificationHelper.showOperationSuccess("Expense saved.");
