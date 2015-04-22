@@ -95,7 +95,7 @@ public class ExpenseControllerTest {
                 .build();
         String expenseJson = om.writeValueAsString(expense);
 
-        RequestBuilder requestBuilder = post("/expense/new")
+        RequestBuilder requestBuilder = post("/expense")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(expenseJson);
         MvcResult result = mockMvc.perform(requestBuilder).andDo(print()).andReturn();
@@ -123,7 +123,7 @@ public class ExpenseControllerTest {
                 .build();
         String expenseJson = om.writeValueAsString(expense);
 
-        RequestBuilder requestBuilder = post("/expense/new")
+        RequestBuilder requestBuilder = post("/expense")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(expenseJson);
         MvcResult result = mockMvc.perform(requestBuilder).andDo(print()).andReturn();

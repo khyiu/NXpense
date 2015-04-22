@@ -206,8 +206,7 @@
                 $modalInstance.close();
                 notificationHelper.showServerInfo('Saving...');
 
-                // todo remove ('/new' path)
-                expenseDAO.all('new').post(this.newExpense).then(
+                expenseDAO.customPOST(this.newExpense).then(
                     function () {
                         notificationHelper.hideServerInfo();
                         notificationHelper.showOperationSuccess("Expense saved.");

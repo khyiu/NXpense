@@ -31,7 +31,7 @@ public class ExpenseController {
     @Autowired
     private ExpenseService expenseService;
 
-    @RequestMapping(value = "/new", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<ExpenseResponseDTO> createExpense(@RequestBody ExpenseDTO newExpenseDTO) {
 
         try {
