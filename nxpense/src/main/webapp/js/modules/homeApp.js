@@ -36,6 +36,16 @@
                     });
                 };
 
+                // todo
+                $scope.editSelectedExpense = function() {
+                    alert('>>> edit selected expense');
+                };
+
+                $scope.disableEditButton = function() {
+                  var hasOnlyOneSelectedExpense = $scope.expenses && _.where($scope.expenses, {selected: true}).length === 1;
+                  return !hasOnlyOneSelectedExpense;
+                };
+
                 $scope.deleteSelected = function() {
                     var idsToDelete = _.where($scope.expenses, {selected: true});
                     idsToDelete = _.pluck(idsToDelete, 'id');
@@ -60,9 +70,9 @@
                     );
                 };
 
-                $scope.enableDeleteButton = function() {
-                    var hasSelectedItems = $scope.expenses && _.findWhere($scope.expenses, {selected: true});
-                    return !hasSelectedItems;
+                $scope.disableDeleteButton = function() {
+                  var hasSelectedItems = $scope.expenses && _.findWhere($scope.expenses, {selected: true});
+                  return !hasSelectedItems;
                 };
 
                 $scope.getPageFirstItem = function() {
