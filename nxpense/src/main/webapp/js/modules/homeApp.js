@@ -22,7 +22,6 @@
         RestangularProvider.setBaseUrl('/' + webContext);
     });
 
-    // todo directive for pagination navigation
     homeAppModule.directive('nxPageNavigator', function() {
         return {
             restrict: 'E',
