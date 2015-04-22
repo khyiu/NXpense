@@ -37,6 +37,10 @@
 	float: left;	
 }
 
+#table-control > button {
+    width: 38px;
+}
+
 /* Pagination elements */
 #pagination-header {
     margin-bottom: 10px;
