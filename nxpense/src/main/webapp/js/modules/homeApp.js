@@ -32,13 +32,25 @@
                 $scope.openNewExpenseModal = function () {
                     $modal.open({
                         templateUrl: 'modal/new-expense-modal.html',
-                        controller: 'modalController'
+                        controller: 'modalController',
+                        resolve: {
+                            selectedExpense: function() {
+                                return null;
+                            }
+                        }
                     });
                 };
 
-                // todo
                 $scope.editSelectedExpense = function() {
-                    alert('>>> edit selected expense');
+                    $modal.open({
+                        templateUrl: 'modal/new-expense-modal.html',
+                        controller: 'modalController',
+                        resolve: {
+                            selectedExpense: function() {
+                                return _.findWhere($scope.expenses, {selected: true});
+                            }
+                        }
+                    });
                 };
 
                 $scope.disableEditButton = function() {
@@ -204,14 +216,15 @@
         };
     }]);
 
-    homeAppModule.controller('modalController', ['$rootScope', '$scope', '$modalInstance', 'Restangular', '$filter', 'notificationHelper',
-        function ($rootScope, $scope, $modalInstance, Restangular, $filter, notificationHelper) {
+    homeAppModule.controller('modalController', ['$rootScope', '$scope', '$modalInstance', 'Restangular', '$filter', 'notificationHelper', 'selectedExpense',
+        function ($rootScope, $scope, $modalInstance, Restangular, $filter, notificationHelper, selectedExpense) {
             var expenseDAO = Restangular.one('expense');
 
-            $scope.newExpense = {
-                // default expense source when creating a new expense item
-                source: 'DEBIT_CARD'
-            };
+            if(selectedExpense) {
+                $scope.newExpense = selectedExpense;
+            } else {
+                $scope.newExpense = {source: 'DEBIT_CARD'};
+            }
 
             $scope.ok = function () {
                 $modalInstance.close();
