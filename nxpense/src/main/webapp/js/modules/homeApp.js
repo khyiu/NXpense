@@ -221,9 +221,9 @@
             var expenseDAO = Restangular.one('expense');
 
             if(selectedExpense) {
-                $scope.newExpense = selectedExpense;
+                $scope.expense = selectedExpense;
             } else {
-                $scope.newExpense = {source: 'DEBIT_CARD'};
+                $scope.expense = {source: 'DEBIT_CARD'};
             }
 
             $scope.ok = function () {

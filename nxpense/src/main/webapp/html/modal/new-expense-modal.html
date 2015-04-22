@@ -2,57 +2,57 @@
     <h3 class="modal-title">Expense creation</h3>
 </div>
 <div class="modal-body">
-    <form name="newExpenseForm" id="new-expense-form">
-        <fieldset id="date" ng-class="{'has-error': newExpenseForm.date.$invalid && newExpenseForm.date.$dirty}">
+    <form name="expenseForm" id="new-expense-form">
+        <fieldset id="date" ng-class="{'has-error': expenseForm.date.$invalid && expenseForm.date.$dirty}">
             <div id="dateInputGroup" class="input-group" ng-keydown="processKey($event)">
-                <input id="dateInput" name="date" type="text" tabindex="0" class="form-control"  ng-model="newExpense.date" placeholder="Date" firstTab
+                <input id="dateInput" name="date" type="text" tabindex="0" class="form-control"  ng-model="expense.date" placeholder="Date" firstTab
                        required pattern="(\d{2})/(\d{2})/(\d{4})" maxlength="10"/>
                 <span class="input-group-addon">
 					<i class="fa fa-calendar"></i>
 				</span>
             </div>
             <div class="validationMsg">
-                <label ng-show="newExpenseForm.date.$dirty && newExpenseForm.date.$error.required" class="control-label" for="dateInput">Please specify a date</label>
-                <label ng-show="newExpenseForm.date.$dirty && (newExpenseForm.date.$error.date || newExpenseForm.date.$error.pattern)" class="control-label" for="dateInput">
+                <label ng-show="expenseForm.date.$dirty && expenseForm.date.$error.required" class="control-label" for="dateInput">Please specify a date</label>
+                <label ng-show="expenseForm.date.$dirty && (expenseForm.date.$error.date || expenseForm.date.$error.pattern)" class="control-label" for="dateInput">
                     Date must use 'dd/mm/yyyy' format
                 </label>
             </div>
         </fieldset>
-        <fieldset id="amount" ng-class="{'has-error': newExpenseForm.amount.$invalid && newExpenseForm.amount.$dirty}">
+        <fieldset id="amount" ng-class="{'has-error': expenseForm.amount.$invalid && expenseForm.amount.$dirty}">
             <div id="amountInputGroup" class="input-group">
-                <input id="amountInput" name="amount" tabindex="0" type="text" class="form-control" ng-class="{'neg-value': newExpense.amount < 0, 'pos-value': newExpense.amount >= 0}" placeholder="Amount" ng-model="newExpense.amount"
+                <input id="amountInput" name="amount" tabindex="0" type="text" class="form-control" ng-class="{'neg-value': expense.amount < 0, 'pos-value': expense.amount >= 0}" placeholder="Amount" ng-model="expense.amount"
                        required pattern="^(-?)\d+(\.\d{1,2})*$"/>
 				<span class="input-group-addon">
 					<i class="fa fa-eur"></i>
 				</span>
             </div>
             <div class="validationMsg">
-                <label ng-show="newExpenseForm.amount.$dirty && newExpenseForm.amount.$error.required" class="control-label" for="amountInput">Please specify an amount</label>
-                <label ng-show="newExpenseForm.amount.$dirty && newExpenseForm.amount.$error.pattern" class="control-label" for="amountInput">Amount must be a signed number with double digit precision</label>
+                <label ng-show="expenseForm.amount.$dirty && expenseForm.amount.$error.required" class="control-label" for="amountInput">Please specify an amount</label>
+                <label ng-show="expenseForm.amount.$dirty && expenseForm.amount.$error.pattern" class="control-label" for="amountInput">Amount must be a signed number with double digit precision</label>
             </div>
         </fieldset>
         <fieldset class="fieldset-border">
             <legend class="fieldset-border">Source</legend>
             <div class="radio radio-primary">
-                <input tabindex="0" ng-model="newExpense.source" id="debitcard" type="radio" name="source" value="DEBIT_CARD" checked>
+                <input tabindex="0" ng-model="expense.source" id="debitcard" type="radio" name="source" value="DEBIT_CARD" checked>
                 <label for="debitcard">
                     Debit card
                 </label>
             </div>
             <div class="radio radio-primary">
-                <input tabindex="0" ng-model="newExpense.source" id="creditcard" type="radio" name="source" value="CREDIT_CARD">
+                <input tabindex="0" ng-model="expense.source" id="creditcard" type="radio" name="source" value="CREDIT_CARD">
                 <label for="creditcard">
                     Credit card
                 </label>
             </div>
         </fieldset>
         <div id="description">
-            <textarea placeholder="Description (optional)" class="form-control" ng-model="newExpense.description"></textarea>
+            <textarea placeholder="Description (optional)" class="form-control" ng-model="expense.description"></textarea>
         </div>
     </form>
 </div>
 <div class="modal-footer" ng-keydown=processKey($event)>
-    <button tabindex="0" class="btn btn-success" ng-disabled="newExpenseForm.$invalid" ng-click="ok()">Save</button>
+    <button tabindex="0" class="btn btn-success" ng-disabled="expenseForm.$invalid" ng-click="ok()">Save</button>
     <button tabindex="0" class="btn btn-warning" ng-click="cancel()" lastTab>Cancel</button>
 </div>
 
