@@ -140,12 +140,10 @@ public class ExpenseServiceImplTest {
         String [] props = {"test"};
 
         PageRequest expectedPageRequest = new PageRequest(page, pageSize, direction, props);
-        ArgumentCaptor<PageRequest> argumentCaptor = ArgumentCaptor.forClass(PageRequest.class);
 
         expenseService.getPageExpenses(page, pageSize, direction, props);
-        verify(expenseRepository).findAll(argumentCaptor.capture());
+        verify(expenseRepository).findAllByUser(expectedPageRequest, mockUser);
 
-        assertThat(argumentCaptor.getValue()).isEqualTo(expectedPageRequest);
     }
 
     @Test(expected = IllegalArgumentException.class)

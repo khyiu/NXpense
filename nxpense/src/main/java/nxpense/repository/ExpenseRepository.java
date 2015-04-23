@@ -2,6 +2,8 @@ package nxpense.repository;
 
 import nxpense.domain.Expense;
 import nxpense.domain.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -46,4 +48,12 @@ public interface ExpenseRepository extends PagingAndSortingRepository<Expense, I
     @Modifying
     public int decrementSameDateHigherPosition(@Param("ids") List<Integer> ids, @Param("owner") User owner);
 
+    /**
+     * Returns a {@link Page} of {@link nxpense.domain.Expense} items meeting the paging restriction provided in the {@code Pageable} object,
+     * and belonging to the specified {@code User}.
+     * @param pageable Object that holds the paging restrictions to be met
+     * @param user to which items to be returned must belong to
+     * @return Page of {@link nxpense.domain.Expense} items belonging to the specified {@code user} and meeting the provided restrictions.
+     */
+    public Page<Expense> findAllByUser(Pageable pageable, User user);
 }

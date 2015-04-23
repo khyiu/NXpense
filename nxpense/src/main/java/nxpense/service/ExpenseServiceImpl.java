@@ -65,7 +65,8 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Transactional(readOnly = true)
     public Page<Expense> getPageExpenses(Integer pageNumber, Integer size, Sort.Direction direction, String[] properties) {
         PageRequest pageRequest = new PageRequest(pageNumber, size, direction, properties);
-        return expenseRepository.findAll(pageRequest);
+        User currentUser = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
+        return expenseRepository.findAllByUser(pageRequest, currentUser);
     }
 
     @Transactional(rollbackFor = {Exception.class})
