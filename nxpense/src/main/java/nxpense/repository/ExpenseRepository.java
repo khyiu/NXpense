@@ -36,6 +36,17 @@ public interface ExpenseRepository extends PagingAndSortingRepository<Expense, I
     @Query("delete Expense e where e.user = :owner and e.id in :ids")
     public int deleteByIdInAndUser(@Param("owner") User owner, @Param("ids") List<Integer> ids);
 
+    /**
+     * Increments the {@code position} attribute of the {@link nxpense.domain.Expense} items: <br/>
+     * <ul>
+     *      <li>that belong to the specified {@code User}</li>
+     *      <li>whose {@code date} is equal to the {@code date} of the expenses whose ID is given in the provided {@code ids} list</li>
+     *      <li>whose {@code position} attribute is greater than the {@code position} of the expenses whose ID is given in the provided {@code ids} list</li>
+     * </ul>
+     * @param ids List of IDs that identify the expense items to which {@code date} and {@code position} attributes are compared
+     * @param owner User to which expense items to be modified must belong to
+     * @return number of updated items
+     */
     @Query("update Expense e set e.position = e.position - 1 " +
             "where e.user = :owner " +
             "and e.id in" +
