@@ -25,8 +25,13 @@ public class ExpenseConverter {
     public static Expense dtoToEntity(ExpenseDTO expenseDTO) {
         Expense expense = null;
 
-        if(expenseDTO != null) {
-            expense = expenseDTO.getSource().getEmptyExpenseInstance();
+        if (expenseDTO != null) {
+            if (expenseDTO.getSource() != null) {
+                expense = expenseDTO.getSource().getEmptyExpenseInstance();
+            } else {
+                throw new IllegalArgumentException("DTO object to be converted into Expense entity must have a 'source' specified");
+            }
+
             expense.setAmount(expenseDTO.getAmount());
             expense.setDate(expenseDTO.getDate().toDate());
             expense.setDescription(expenseDTO.getDescription());
@@ -39,7 +44,7 @@ public class ExpenseConverter {
     public static ExpenseResponseDTO entityToResponseDto(Expense expense) {
         ExpenseResponseDTO expenseDto = null;
 
-        if(expense != null) {
+        if (expense != null) {
             expenseDto = new ExpenseResponseDTO();
             expenseDto.setId(expense.getId());
             copyAttributeValues(expenseDto, expense);
@@ -51,14 +56,14 @@ public class ExpenseConverter {
     public static PageDTO<ExpenseResponseDTO> expensePageToExpensePageDto(Page<Expense> expensePage) {
         PageDTO<ExpenseResponseDTO> expensePageDto = null;
 
-        if(expensePage != null) {
+        if (expensePage != null) {
             List<ExpenseResponseDTO> items = expenseListToExpenseResponseDtoList(expensePage.getContent());
 
             String sortProperty = null;
             Sort.Direction sortDirection = null;
             Iterator<Sort.Order> orders = expensePage.getSort().iterator();
 
-            while(orders.hasNext() && sortProperty == null) {
+            while (orders.hasNext() && sortProperty == null) {
                 Sort.Order order = orders.next();
                 sortProperty = order.getProperty();
                 sortDirection = order.getDirection();
@@ -80,15 +85,15 @@ public class ExpenseConverter {
     }
 
     private static void copyAttributeValues(ExpenseDTO targetDto, Expense sourceEntity) {
-        if(targetDto != null && sourceEntity != null) {
+        if (targetDto != null && sourceEntity != null) {
             targetDto.setPosition(sourceEntity.getPosition());
             targetDto.setDate(new LocalDate(sourceEntity.getDate().getTime()));
             targetDto.setAmount(sourceEntity.getAmount());
             targetDto.setDescription(sourceEntity.getDescription());
 
-            if(sourceEntity instanceof DebitExpense) {
+            if (sourceEntity instanceof DebitExpense) {
                 targetDto.setSource(ExpenseSource.DEBIT_CARD);
-            } else if(sourceEntity instanceof CreditExpense) {
+            } else if (sourceEntity instanceof CreditExpense) {
                 targetDto.setSource(ExpenseSource.CREDIT_CARD);
             } else {
                 throw new UnsupportedOperationException("Value copy from entity to DTO object is not yet supported for entity of type: " + sourceEntity.getClass());
@@ -99,8 +104,8 @@ public class ExpenseConverter {
     private static List<ExpenseResponseDTO> expenseListToExpenseResponseDtoList(List<Expense> expenses) {
         List<ExpenseResponseDTO> expenseResponseDTOs = new ArrayList<ExpenseResponseDTO>();
 
-        if(expenses != null && !expenses.isEmpty()) {
-            for(Expense expense : expenses) {
+        if (expenses != null && !expenses.isEmpty()) {
+            for (Expense expense : expenses) {
                 expenseResponseDTOs.add(entityToResponseDto(expense));
             }
         }
