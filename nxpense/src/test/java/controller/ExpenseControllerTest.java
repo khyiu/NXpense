@@ -42,6 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(locations = "classpath:/spring/application-test-config.xml")
 @WebAppConfiguration
 @Transactional(readOnly = true)
+// todo rename to integration test + include dataset for initialization data such as User
 public class ExpenseControllerTest {
 
     private static final String USER_EMAIL = "test@test.com";
