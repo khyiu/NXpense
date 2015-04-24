@@ -5,12 +5,11 @@ import nxpense.domain.User;
 import nxpense.dto.ExpenseDTO;
 import nxpense.exception.BadRequestException;
 import nxpense.exception.RequestCannotCompleteException;
-import nxpense.exception.UnauthenticatedException;
 import nxpense.helper.ExpenseConverter;
 import nxpense.helper.ExpenseHelper;
+import nxpense.helper.SecurityPrincipalHelper;
 import nxpense.repository.ExpenseRepository;
 import nxpense.repository.UserRepository;
-import nxpense.security.CustomUserDetails;
 import nxpense.service.api.ExpenseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,11 +43,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             throw new BadRequestException("Cannot persist a NULL expense entity");
         }
 
-        User currentUser = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
-
-        if (currentUser == null) {
-            throw new UnauthenticatedException("User does not seem to be authenticated!");
-        }
+        User currentUser = SecurityPrincipalHelper.getCurrentUser();
 
         // First, call save( ) on existing user, to merge the detached User instance associated to security context...
         currentUser = userRepository.save(currentUser);
@@ -67,23 +61,21 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Transactional(readOnly = true)
     public Page<Expense> getPageExpenses(Integer pageNumber, Integer size, Sort.Direction direction, String[] properties) {
         PageRequest pageRequest = new PageRequest(pageNumber, size, direction, properties);
-        User currentUser = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
+        User currentUser = SecurityPrincipalHelper.getCurrentUser();
         return expenseRepository.findAllByUser(pageRequest, currentUser);
     }
 
     @Transactional(rollbackFor = {Exception.class})
     public Expense updateExpense(int id, ExpenseDTO expenseDTO) {
-        User currentUser = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
-        // First, call save( ) on existing user, to merge the detached User instance associated to security context...
-        currentUser = userRepository.save(currentUser);
+        User currentUser = SecurityPrincipalHelper.getCurrentUser();
         Expense existingExpense = expenseRepository.findByIdAndUser(id, currentUser);
 
-        if(existingExpense == null) {
+        if (existingExpense == null) {
             throw new RequestCannotCompleteException("Expense [" + id + "] either does not exist, or does not belong to user [" + currentUser + "]");
         }
 
         // date didn't change --> updating the existing expense's content
-        if(existingExpense.getDate().equals(expenseDTO.getDate().toDate())) {
+        if (existingExpense.getDate().equals(expenseDTO.getDate().toDate())) {
             LOGGER.debug("Updating expense [{}] -> update", id);
             ExpenseHelper.overwriteFields(ExpenseConverter.dtoToEntity(expenseDTO), existingExpense);
             expenseRepository.save(existingExpense);
@@ -100,14 +92,11 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Transactional(rollbackFor = {Exception.class})
     public void deleteExpense(List<Integer> ids) throws RequestCannotCompleteException {
-        if(ids == null) {
+        if (ids == null) {
             throw new RequestCannotCompleteException("Cannot proceed to expense deletion with a NULL list of IDs.");
         }
 
-        User currentUser = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
-        // First, call save( ) on existing user, to merge the detached User instance associated to security context...
-        currentUser = userRepository.save(currentUser);
-
+        User currentUser = SecurityPrincipalHelper.getCurrentUser();
         expenseRepository.decrementSameDateHigherPosition(ids, currentUser);
         int numberDeletedItems = expenseRepository.deleteByIdInAndUser(currentUser, ids);
         LOGGER.info("User {} deleted {} item(s)", currentUser, numberDeletedItems);
