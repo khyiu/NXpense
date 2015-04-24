@@ -60,6 +60,12 @@ public class ExpenseController {
         return new ResponseEntity<PageDTO<ExpenseResponseDTO>>(pageDto, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/{expenseId}", method = RequestMethod.PUT)
+    public ResponseEntity<ExpenseResponseDTO> updateExpense(@PathVariable int expenseId, @RequestBody ExpenseDTO expenseDto) {
+        Expense updatedExpense = expenseService.updateExpense(expenseId, expenseDto);
+        return new ResponseEntity<ExpenseResponseDTO>(ExpenseConverter.entityToResponseDto(updatedExpense), HttpStatus.OK);
+    }
+
     @RequestMapping(method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<Void> deleteExpense(@RequestParam List<Integer> ids)  {

@@ -26,7 +26,7 @@ public class ExpenseConverter {
         Expense expense = null;
 
         if(expenseDTO != null) {
-            expense = getExpenseEntityInstance(expenseDTO.getSource());
+            expense = expenseDTO.getSource().getEmptyExpenseInstance();
             expense.setAmount(expenseDTO.getAmount());
             expense.setDate(expenseDTO.getDate().toDate());
             expense.setDescription(expenseDTO.getDescription());
@@ -77,21 +77,6 @@ public class ExpenseConverter {
         }
 
         return expensePageDto;
-    }
-
-    private static Expense getExpenseEntityInstance(ExpenseSource expenseSource) {
-        if(expenseSource == null) {
-            throw new IllegalArgumentException("Cannot create Expense entity instance for NULL expense source");
-        }
-
-        switch(expenseSource) {
-            case DEBIT_CARD:
-                return new DebitExpense();
-            case CREDIT_CARD:
-                return new CreditExpense();
-            default:
-                throw new IllegalArgumentException("Unsupported expense source!");
-        }
     }
 
     private static void copyAttributeValues(ExpenseDTO targetDto, Expense sourceEntity) {

@@ -7,6 +7,7 @@ import nxpense.exception.BadRequestException;
 import nxpense.exception.RequestCannotCompleteException;
 import nxpense.exception.UnauthenticatedException;
 import nxpense.helper.ExpenseConverter;
+import nxpense.helper.ExpenseHelper;
 import nxpense.repository.ExpenseRepository;
 import nxpense.repository.UserRepository;
 import nxpense.security.CustomUserDetails;
@@ -21,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service("expenseService")
@@ -67,6 +69,33 @@ public class ExpenseServiceImpl implements ExpenseService {
         PageRequest pageRequest = new PageRequest(pageNumber, size, direction, properties);
         User currentUser = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
         return expenseRepository.findAllByUser(pageRequest, currentUser);
+    }
+
+    @Transactional(rollbackFor = {Exception.class})
+    public Expense updateExpense(int id, ExpenseDTO expenseDTO) {
+        User currentUser = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
+        // First, call save( ) on existing user, to merge the detached User instance associated to security context...
+        currentUser = userRepository.save(currentUser);
+        Expense existingExpense = expenseRepository.findByIdAndUser(id, currentUser);
+
+        if(existingExpense == null) {
+            throw new RequestCannotCompleteException("Expense [" + id + "] either does not exist, or does not belong to user [" + currentUser + "]");
+        }
+
+        // date didn't change --> updating the existing expense's content
+        if(existingExpense.getDate().equals(expenseDTO.getDate().toDate())) {
+            LOGGER.debug("Updating expense [{}] -> update", id);
+            ExpenseHelper.overwriteFields(ExpenseConverter.dtoToEntity(expenseDTO), existingExpense);
+            expenseRepository.save(existingExpense);
+        } else {
+            // date did change --> delete existing one + creating new one by using existing service method in order
+            // properly handle the 'position' attribute
+            LOGGER.debug("Updating expense [{}] -> delete + update", id);
+            deleteExpense(Arrays.asList(id));
+            createNewExpense(expenseDTO);
+        }
+
+        return existingExpense;
     }
 
     @Transactional(rollbackFor = {Exception.class})

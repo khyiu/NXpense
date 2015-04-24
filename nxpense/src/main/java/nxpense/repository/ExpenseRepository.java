@@ -67,4 +67,12 @@ public interface ExpenseRepository extends PagingAndSortingRepository<Expense, I
      * @return Page of {@link nxpense.domain.Expense} items belonging to the specified {@code user} and meeting the provided restrictions.
      */
     public Page<Expense> findAllByUser(Pageable pageable, User user);
+
+    /**
+     * Retrieves the {@link nxpense.domain.Expense} item that has the specified {@code id} and that belongs to the specified {@code user}.
+     * @param id ID of the expense to retrieve
+     * @param user User to which the retrieved expense must belong to
+     * @return The expense with the specified ID and belonging to the specified user
+     */
+    public Expense findByIdAndUser(int id, User user);
 }

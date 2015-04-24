@@ -227,23 +227,27 @@
             }
 
             $scope.ok = function () {
+                var successCallback = function () {
+                    notificationHelper.hideServerInfo();
+                    notificationHelper.showOperationSuccess("Expense saved.");
+
+                    // send event to trigger reloading of current item page
+                    $rootScope.$broadcast('expense:reloadPage');
+                };
+
+                var failureCallback = function () {
+                    notificationHelper.hideServerInfo();
+                    notificationHelper.showOperationFailure("Failed saving expense!");
+                };
+
                 $modalInstance.close();
                 notificationHelper.showServerInfo('Saving...');
 
-                expenseDAO.customPOST(this.expense).then(
-                    function () {
-                        notificationHelper.hideServerInfo();
-                        notificationHelper.showOperationSuccess("Expense saved.");
-
-                        // send event to trigger reloading of current item page
-                        $rootScope.$broadcast('expense:reloadPage');
-                    },
-
-                    function () {
-                        notificationHelper.hideServerInfo();
-                        notificationHelper.showOperationFailure("Failed saving expense!");
-                    }
-                );
+                if(this.expense.id) {
+                    expenseDAO.customPUT(this.expense, this.expense.id).then(successCallback, failureCallback);
+                }else {
+                    expenseDAO.customPOST(this.expense).then(successCallback, failureCallback);
+                }
             };
 
             $scope.cancel = function () {

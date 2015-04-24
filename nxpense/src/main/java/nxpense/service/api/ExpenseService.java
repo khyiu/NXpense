@@ -36,6 +36,14 @@ public interface ExpenseService {
     public Page<Expense> getPageExpenses(Integer pageNumber, Integer size, Sort.Direction direction, String[] properties);
 
     /**
+     * Updates the expense with the specified {@code id} with the information held in the {@code expenseDTO} object.
+     * @param id ID of the expense item to be updated
+     * @param expenseDTO Object containing the new state of the expense to be updated
+     * @return The updated version of the expense item
+     */
+    public Expense updateExpense(int id, ExpenseDTO expenseDTO);
+
+    /**
      * Deletes the {@link nxpense.domain.Expense} items whose ID is is the specified list of ID from the DB.
      * @param ids List of ID of the {@link nxpense.domain.Expense} items that must be deleted from DB
      * @throws RequestCannotCompleteException if the specified list of ID is null
