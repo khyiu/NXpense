@@ -65,6 +65,14 @@ public class ExpenseServiceImplTest {
     private static final String DESCRIPTION = "Some DESCRIPTION";
 
     private static final List<Integer> EXPENSE_IDS = Arrays.asList(new Integer[]{1, 2, 3});
+    private static final Integer EXPENSE_ID_UNEXISTING = 100;
+
+    private static final ExpenseDTO EXPENSE_DTO = new ExpenseDtoBuilder()
+            .setSource(ExpenseSource.DEBIT_CARD)
+            .setAmount(AMOUNT)
+            .setDate(DATE)
+            .setDescription(DESCRIPTION)
+            .build();
 
     @Before
     public void initAuthenticationMock() {
@@ -85,6 +93,8 @@ public class ExpenseServiceImplTest {
                 return (User) invocation.getArguments()[0];
             }
         });
+
+        given(expenseRepository.findByIdAndUser(EXPENSE_ID_UNEXISTING, mockUser)).willReturn(null);
     }
 
     @Test
@@ -97,14 +107,7 @@ public class ExpenseServiceImplTest {
         expense.setDescription(DESCRIPTION);
         expense.setUser(mockUser);
 
-        ExpenseDTO expenseDto = new ExpenseDtoBuilder()
-                .setSource(ExpenseSource.DEBIT_CARD)
-                .setAmount(AMOUNT)
-                .setDate(DATE)
-                .setDescription(DESCRIPTION)
-                .build();
-
-        expenseService.createNewExpense(expenseDto);
+        expenseService.createNewExpense(EXPENSE_DTO);
         Mockito.<CrudRepository>verify(expenseRepository).save(expenseArgument.capture());
 
         assertThat(expenseArgument.getValue()).isEqualTo(expense);
@@ -122,14 +125,7 @@ public class ExpenseServiceImplTest {
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, USER_PASSWORD, Collections.<GrantedAuthority>emptyList());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        ExpenseDTO expenseDto = new ExpenseDtoBuilder()
-                .setSource(ExpenseSource.DEBIT_CARD)
-                .setAmount(AMOUNT)
-                .setDate(DATE)
-                .setDescription(DESCRIPTION)
-                .build();
-
-        expenseService.createNewExpense(expenseDto);
+        expenseService.createNewExpense(EXPENSE_DTO);
     }
 
     @Test
@@ -167,5 +163,10 @@ public class ExpenseServiceImplTest {
 
         verify(expenseRepository).decrementSameDateHigherPosition(EXPENSE_IDS, mockUser);
         verify(expenseRepository).deleteByIdInAndUser(mockUser, EXPENSE_IDS);
+    }
+
+    @Test(expected = RequestCannotCompleteException.class)
+    public void testUpdateExpense_unexisting() {
+        expenseService.updateExpense(EXPENSE_ID_UNEXISTING, EXPENSE_DTO);
     }
 }
