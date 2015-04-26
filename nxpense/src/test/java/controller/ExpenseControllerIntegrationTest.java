@@ -220,4 +220,86 @@ public class ExpenseControllerIntegrationTest {
         int numberOfExpenseUser2 = JdbcTestUtils.countRowsInTableWhere(new JdbcTemplate(datasource), "EXPENSE", "user_id = 2");
         assertThat(numberOfExpenseUser2).isEqualTo(2);
     }
+
+    @Test
+    public void testDelete_notOwner() throws Exception {
+        mockAuthenticatedUser(1);
+
+        mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+        mockMvcBuilder.alwaysExpect(status().isOk());
+        mockMvc = mockMvcBuilder.build();
+
+        RequestBuilder requestBuilder = delete("/expense")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param(PARAM_IDS, "6");
+
+        mockMvc.perform(requestBuilder).andDo(print());
+
+        int numberOfExpenseRow = JdbcTestUtils.countRowsInTable(new JdbcTemplate(datasource), "EXPENSE");
+        assertThat(numberOfExpenseRow).isEqualTo(6);
+    }
+
+    @Test
+    public void testUpdateExpense() throws Exception {
+        mockAuthenticatedUser(1);
+
+        mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+        mockMvcBuilder.alwaysExpect(status().isOk());
+        mockMvc = mockMvcBuilder.build();
+
+        BigDecimal newAmount = new BigDecimal(88.88);
+        String newDescription = "Description updated in integration test";
+        LocalDate newDate = new LocalDate(2016, 1, 1);
+
+        ExpenseDTO expenseDto = new ExpenseDtoBuilder()
+                .setDescription(newDescription)
+                .setAmount(newAmount)
+                .setDate(newDate)
+                .setSource(ExpenseSource.DEBIT_CARD)
+                .build();
+
+        RequestBuilder requestBuilder = put("/expense/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(expenseDto));
+
+        MvcResult result = mockMvc.perform(requestBuilder).andDo(print()).andReturn();
+        String jsonResponse = result.getResponse().getContentAsString();
+
+        ExpenseResponseDTO responseDto = om.readValue(jsonResponse, ExpenseResponseDTO.class);
+        assertThat(responseDto.getAmount()).isEqualTo(newAmount);
+        assertThat(responseDto.getDescription()).isEqualTo(newDescription);
+        assertThat(responseDto.getDate()).isEqualTo(newDate);
+    }
+
+    @Test
+    public void testUpdateExpense_keepDateUnchanged() throws Exception {
+        mockAuthenticatedUser(1);
+
+        mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+        mockMvcBuilder.alwaysExpect(status().isOk());
+        mockMvc = mockMvcBuilder.build();
+
+        BigDecimal newAmount = new BigDecimal(88.88);
+        String newDescription = "Description updated in integration test";
+        LocalDate newDate = new LocalDate(2015, 1, 1);
+
+        ExpenseDTO expenseDto = new ExpenseDtoBuilder()
+                .setDescription(newDescription)
+                .setAmount(newAmount)
+                .setDate(newDate)
+                .setSource(ExpenseSource.DEBIT_CARD)
+                .build();
+
+        RequestBuilder requestBuilder = put("/expense/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(expenseDto));
+
+        MvcResult result = mockMvc.perform(requestBuilder).andDo(print()).andReturn();
+        String jsonResponse = result.getResponse().getContentAsString();
+
+        ExpenseResponseDTO responseDto = om.readValue(jsonResponse, ExpenseResponseDTO.class);
+        assertThat(responseDto.getAmount()).isEqualTo(newAmount);
+        assertThat(responseDto.getDescription()).isEqualTo(newDescription);
+        assertThat(responseDto.getDate()).isEqualTo(newDate);
+    }
 }
