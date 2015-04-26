@@ -78,16 +78,14 @@ public class ExpenseServiceImpl implements ExpenseService {
         if (existingExpense.getDate().equals(expenseDTO.getDate().toDate())) {
             LOGGER.debug("Updating expense [{}] -> update", id);
             ExpenseHelper.overwriteFields(ExpenseConverter.dtoToEntity(expenseDTO), existingExpense);
-            expenseRepository.save(existingExpense);
+            return expenseRepository.save(existingExpense);
         } else {
             // date did change --> delete existing one + creating new one by using existing service method in order
             // properly handle the 'position' attribute
             LOGGER.debug("Updating expense [{}] -> delete + update", id);
             deleteExpense(Arrays.asList(id));
-            createNewExpense(expenseDTO);
+            return createNewExpense(expenseDTO);
         }
-
-        return existingExpense;
     }
 
     @Transactional(rollbackFor = {Exception.class})
