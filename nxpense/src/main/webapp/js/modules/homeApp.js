@@ -125,6 +125,9 @@
     }]);
 
     homeAppModule.controller('expenseController', ['$rootScope', '$scope', 'Restangular', 'notificationHelper', function ($rootScope, $scope, Restangular, notificationHelper) {
+        $scope.sortProp = 'date';
+        $scope.sortAsc = true;
+
         $scope.updatePageSize = function(newPageSize) {
             var newPageSizeInt;
 
@@ -144,8 +147,8 @@
             var queryParameters = {
                 page: $rootScope.page,
                 size: $rootScope.pageSize,
-                direction: 'ASC',
-                properties: ['date', 'position']
+                direction: $scope.sortAsc ? 'ASC' : 'DESC',
+                properties: [$scope.sortProp, 'position']
             };
 
             notificationHelper.showServerInfo("Fetching expenses...");
@@ -199,7 +202,7 @@
         $scope.toggleItemSelection = function($event, expense) {
             var numberOfSelectedItem;
 
-            // if $event provided -> event triggered by keyboard --> check that pressed key = space bar
+            // if $event provided -> event triggered by keyboard --> check that pressed key = ENTER
             // if $event == undefined -> event triggered by mouse
             if(_.isUndefined($event) || $event.keyCode === 13) {
                 expense.selected = !expense.selected;
@@ -212,6 +215,21 @@
                 } else if (numberOfSelectedItem === $scope.expenses.length && !$scope.selectedAll) {
                     $scope.selectedAll = true;
                 }
+            }
+        };
+
+        // Function to handle changing sort criteria (property/direction).
+        // If $event is provided, the event is triggered by keyboard --> restrict on key = ENTER
+        $scope.updateSort = function($event, sortProp) {
+            if(_.isUndefined($event) || $event.keyCode === 13) {
+                if($scope.sortProp === sortProp) {
+                    $scope.sortAsc = !$scope.sortAsc;
+                } else {
+                    $scope.sortProp = sortProp;
+                    $scope.sortAsc = true;
+                }
+
+                $scope.reloadPage();
             }
         };
     }]);

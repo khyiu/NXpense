@@ -179,10 +179,19 @@
 											<input id="select-all-row" type="checkbox" ng-model="selectedAll"/>
 											<label for="select-all-row"></label>
 										</th>
-										<th class="col-position sorting_asc" tabindex="0" rowspan="1" colspan="1">#</th>
-										<th class="col-date sorting" tabindex="0" rowspan="1" colspan="1">Date</th>
-										<th class="col-amount sorting" tabindex="0" rowspan="1" colspan="1">Amount</th>
-										<th class="col-description sorting" tabindex="0" rowspan="1" colspan="1">Description</th>
+                                        <!-- todo delete column once not necessary-->
+										<th class="col-position" tabindex="0" rowspan="1" colspan="1">#</th>
+										<th class="col-date" tabindex="0" rowspan="1" colspan="1"
+                                            ng-class="{'sorting': sortProp !== 'date', 'sorting_asc': sortProp === 'date' && sortAsc, 'sorting_desc': sortProp === 'date' && !sortAsc}"
+                                            ng-dblclick="updateSort(undefined, 'date')" ng-keydown="updateSort($event, 'date')">
+                                            Date
+                                        </th>
+										<th class="col-amount" tabindex="0" rowspan="1" colspan="1"
+                                            ng-class="{'sorting': sortProp !== 'amount', 'sorting_asc': sortProp === 'amount' && sortAsc, 'sorting_desc': sortProp === 'amount' && !sortAsc}"
+											ng-dblclick="updateSort(undefined, 'amount')" ng-keydown="updateSort($event, 'amount')">
+                                            Amount
+                                        </th>
+										<th class="col-description" tabindex="0" rowspan="1" colspan="1">Description</th>
 										<th class="col-tags" tabindex="0" rowspan="1" colspan="1">Tags</th>
 									</tr>
 								</thead>
