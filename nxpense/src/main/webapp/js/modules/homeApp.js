@@ -26,6 +26,10 @@
           .when('/expense/details', {
               templateUrl: 'views/expense-details.html',
               controller: 'expenseController'
+          })
+          .when('/tag/management', {
+              templateUrl: 'views/tag-manage.html',
+              controller: 'tagController'
           });
     });
 
