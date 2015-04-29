@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    var homeAppModule = angular.module('homeApp', ['ui.bootstrap', 'restangular', 'notificationHelperModule']);
+    var homeAppModule = angular.module('homeApp', ['ngRoute', 'ui.bootstrap', 'restangular', 'notificationHelperModule']);
 
     // Run block to initialize attributes to be used across controllers that are not necessarily nested in each other
     // --> cannot benefit from scope hierarchy...
@@ -16,10 +16,17 @@
         $rootScope.page = 1;
     });
 
-    homeAppModule.config(function (RestangularProvider) {
+    homeAppModule.config(function (RestangularProvider, $routeProvider) {
         // Deducing the current application's web context from the path to access the current page + use it as base url in Restangular
         var webContext = window.location.pathname.split('/')[1];
         RestangularProvider.setBaseUrl('/' + webContext);
+
+        // Routes configuration
+        $routeProvider
+          .when('/expense/details', {
+              templateUrl: 'views/expense-details.html',
+              controller: 'expenseController'
+          });
     });
 
     homeAppModule.directive('nxExpenseTableFooter', ['Restangular', '$modal', 'notificationHelper', function (Restangular, $modal, notificationHelper) {

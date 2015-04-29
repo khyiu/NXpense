@@ -1,0 +1,75 @@
+<div id="expense-table" class="table-responsive">
+    <div id="dataTables-example_wrapper" class="dataTables_wrapper form-inline">
+        <div id="pagination-header" class="row">
+            <div class="col-sm-6">
+                <div class="dataTables_length" id="dataTables-example_length">
+                    <label for="pagination-size">
+                        <span>Records per page : </span>
+                    </label>
+                    <select id="pagination-size" class="form-control input-sm" ng-model="pageSize">
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="25">25</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div id="dataTables-example_filter" class="dataTables_filter">
+                    <label for="expense-search">
+                        <span>Search : </span>
+                    </label>
+                    <input id="expense-search" type="search" class="form-control input-sm">
+                </div>
+            </div>
+        </div>
+        <table id="dataTables-example" class="table table-striped table-bordered table-hover dataTable no-footer">
+            <thead>
+            <tr role="row">
+                <th class="col-selection" tabindex="0" rowspan="1" colspan="1" ng-click="toggleSelectAll()" ng-keydown="toggleSelectAll($event)">
+                    <input id="select-all-row" type="checkbox" ng-model="selectedAll"/>
+                    <label for="select-all-row"></label>
+                </th>
+                <!-- todo delete column once not necessary-->
+                <th class="col-position" tabindex="0" rowspan="1" colspan="1">#</th>
+                <th class="col-date" tabindex="0" rowspan="1" colspan="1"
+                    ng-class="{'sorting': sortProp !== 'date', 'sorting_asc': sortProp === 'date' && sortAsc, 'sorting_desc': sortProp === 'date' && !sortAsc}"
+                    ng-dblclick="updateSort(undefined, 'date')" ng-keydown="updateSort($event, 'date')">
+                    Date
+                </th>
+                <th class="col-amount" tabindex="0" rowspan="1" colspan="1"
+                    ng-class="{'sorting': sortProp !== 'amount', 'sorting_asc': sortProp === 'amount' && sortAsc, 'sorting_desc': sortProp === 'amount' && !sortAsc}"
+                    ng-dblclick="updateSort(undefined, 'amount')" ng-keydown="updateSort($event, 'amount')">
+                    Amount
+                </th>
+                <th class="col-description" tabindex="0" rowspan="1" colspan="1">Description</th>
+                <th class="col-tags" tabindex="0" rowspan="1" colspan="1">Tags</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="gradeA odd" ng-repeat="expense in expenses" tabindex="0"
+                ng-keydown="toggleItemSelection($event, expense)" ng-dblclick="toggleItemSelection(undefined, expense)">
+                <td class="col-selection">
+                    <input id="select-row-{{expense.id}}" type="checkbox" ng-model="expense.selected"/>
+                    <label for="select-row-{{expense.id}}"></label>
+                </td>
+                <td>{{expense.position}}</td>
+                <td>{{expense.date}}</td>
+                <td>€{{expense.amount}}</td>
+                <td>{{expense.description}}</td>
+                <!-- todo tags mockup -->
+                <td>
+                    <ul class="tags">
+                        <li><a href="#">Facture Essent</a></li>
+                        <li><a href="#">Carte crédit</a></li>
+                        <li><a href="#">Cashback</a></li>
+                        <li><a href="#">Frais bancaire</a></li>
+                        <li><a href="#">Happy meal</a></li>
+                        <li><a href="#">Salaire</a></li>
+                    </ul>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <nx-expense-table-footer />
+    </div>
+</div>
