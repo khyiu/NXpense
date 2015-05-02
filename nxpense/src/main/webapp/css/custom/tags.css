@@ -17,7 +17,7 @@
 
 .tags a {
     margin-left: 20px;
-    padding: 0 10px 0 12px;
+    padding: 0 5px 0 12px;
     background: #0089e0;
     color: #fff;
     text-decoration: none;
@@ -65,4 +65,18 @@
 
 .tags a:hover:before {
     border-color: transparent #555 transparent transparent;
+}
+
+.tag-label {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 80px;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.tag-remover {
+    cursor: pointer;
+    display: inline-block;
+    top: -6px;
 }
