@@ -59,12 +59,12 @@
     box-shadow: -1px -1px 2px #004977;
 }
 
-.tags a:hover {
-    background: #555;
+.tags a:hover, .tags a:focus{
+    background: rgba(0, 137, 224, .60);
 }
 
-.tags a:hover:before {
-    border-color: transparent #555 transparent transparent;
+.tags a:hover:before, .tags a:focus:before {
+    border-right-color: rgba(0, 137, 224, .60);
 }
 
 .tag-label {
@@ -79,4 +79,8 @@
     cursor: pointer;
     display: inline-block;
     top: -6px;
+}
+
+.tag-remover:hover, .tag-remover:focus {
+    color: crimson;
 }
