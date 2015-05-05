@@ -86,6 +86,10 @@
 }
 
 #tagName {
-    width: 33% !important;
+    width: 80% !important;
     text-align: center;
+}
+
+.footer-row {
+    margin: 10px 0 10px 0;
 }
