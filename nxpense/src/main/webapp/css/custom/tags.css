@@ -84,3 +84,8 @@
 .tag-remover:hover, .tag-remover:focus {
     color: crimson;
 }
+
+#tagName {
+    width: 33% !important;
+    text-align: center;
+}

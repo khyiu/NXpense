@@ -135,6 +135,10 @@
         };
     }]);
 
+    homeAppModule.controller('tagController', ['$rootScope', '$scope', 'Restangular', 'notificationHelper', function ($rootScope, $scope, Restangular, notificationHelper) {
+
+    }]);
+
     homeAppModule.controller('expenseController', ['$rootScope', '$scope', 'Restangular', 'notificationHelper', function ($rootScope, $scope, Restangular, notificationHelper) {
         $scope.sortProp = 'date';
         $scope.sortAsc = true;

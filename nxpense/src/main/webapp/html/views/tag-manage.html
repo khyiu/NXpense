@@ -1,3 +1,36 @@
 <div>
-    here comes tag management view
+    <form name="tagForm">
+        <fieldset class="fieldset-border">
+            <legend class="fieldset-border">New tag</legend>
+            <div class="row show-grid">
+                <label>Foreground color</label>
+                <div id="foreground-color-group" class="foreground-color form-group input-group col-md-1">
+                    <span class="input-group-addon" title="Tag text color">
+                        <span class="glyphicon glyphicon-text-color"></span>
+                    </span>
+                    <input type="color" name="foreground-color" class="form-control" title="Click to pick a color" ng-model="newTag.foregroundCol" required>
+                </div>
+                <label>Background color</label>
+                <div id="background-color-group" class="background-color form-group input-group col-md-1">
+                    <span class="input-group-addon" title="Tag background color">
+                        <span class="glyphicon glyphicon-text-background"></span>
+                    </span>
+                    <input id="backgroundColor" type="color" name="backgroundColor" class="form-control" title="Click to pick a color" ng-model="newTag.backgroundCol" required>
+                </div>
+                <div class="form-group">
+                    <label>Tag name (max: 50 characters)</label>
+                    <input id="tagName" type="text" placeholder="Type in the tag's name" name="tagName" class="form-control" ng-model="newTag.name" required maxlength="50">
+                </div>
+            </div>
+            <!-- todo: insert tag preview -->
+            <ul class="tags">
+                <li>
+                    <a href="#">
+                        <span class="tag-label" title="Facture Essent">Facture Essent</span>
+                        <span class="tag-remover glyphicon glyphicon-remove-circle" tabindex="0" title="Click to remove tag"></span>
+                    </a>
+                </li>
+            </ul>
+        </fieldset>
+    </form>
 </div>
