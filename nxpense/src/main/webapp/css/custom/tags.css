@@ -93,3 +93,7 @@
 .footer-row {
     margin: 10px 0 10px 0;
 }
+
+#tag-reset-btn {
+    margin-right: 5px;
+}

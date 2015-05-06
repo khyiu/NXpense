@@ -5,7 +5,6 @@
             <div class="row">
                 <div class="col-md-2">
                     <label>Foreground color</label>
-
                     <div id="foreground-color-group" class="foreground-color form-group input-group col-md-8">
                     <span class="input-group-addon" title="Tag text color">
                         <span class="glyphicon glyphicon-text-color"></span>
@@ -14,7 +13,6 @@
                                ng-model="newTag.foregroundCol" required>
                     </div>
                     <label>Background color</label>
-
                     <div id="background-color-group" class="background-color form-group input-group col-md-8">
                     <span class="input-group-addon" title="Tag background color">
                         <span class="glyphicon glyphicon-text-background"></span>
@@ -42,12 +40,8 @@
                 </div>
             </div>
             <div class="row footer-row">
-                <!-- todo ADD RESET BUTTON -->
-                <div class="col-md-1 col-md-offset-5">
-                    <div>
-                        <button type="button" class="btn btn-success" title="Click to save your new tag">Create tag</button>
-                    </div>
-                </div>
+                <button id="tag-reset-btn" type="button" class="btn btn-warning" title="Click to restart tag creation from scratch">Reset</button>
+                <button type="button" class="btn btn-success" title="Click to save your new tag">Create tag</button>
             </div>
         </fieldset>
     </form>
