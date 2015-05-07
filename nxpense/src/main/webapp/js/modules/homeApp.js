@@ -137,8 +137,15 @@
 
     homeAppModule.controller('tagController', ['$rootScope', '$scope', 'Restangular', 'notificationHelper', function ($rootScope, $scope, Restangular, notificationHelper) {
         // todo handle tag creation
-        var defaultForegroundColor = '#FFFFFF';
-        var defaultBackgroundColor = '#000000';
+        var defaultForegroundColor = '#FFFF00';
+        var defaultBackgroundColor = '#8546EB';
+        var defaultName = null;
+
+        $scope.newTag = {
+            backgroundCol: defaultBackgroundColor,
+            foregroundCol: defaultForegroundColor,
+            name: defaultName
+        };
     }]);
 
     homeAppModule.controller('expenseController', ['$rootScope', '$scope', 'Restangular', 'notificationHelper', function ($rootScope, $scope, Restangular, notificationHelper) {
