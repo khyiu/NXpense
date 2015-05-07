@@ -136,15 +136,16 @@
     }]);
 
     homeAppModule.controller('tagController', ['$rootScope', '$scope', 'Restangular', 'notificationHelper', function ($rootScope, $scope, Restangular, notificationHelper) {
-        // todo handle tag creation
-        var defaultForegroundColor = '#FFFF00';
-        var defaultBackgroundColor = '#8546EB';
-        var defaultName = null;
+        var defaultTag = {
+            backgroundCol: '#8546EB',
+            foregroundCol: '#FFFF00',
+            name: null
+        };
 
-        $scope.newTag = {
-            backgroundCol: defaultBackgroundColor,
-            foregroundCol: defaultForegroundColor,
-            name: defaultName
+        $scope.newTag = angular.copy(defaultTag, {});
+
+        $scope.reset = function() {
+            $scope.newTag = angular.copy(defaultTag, {});
         };
     }]);
 
