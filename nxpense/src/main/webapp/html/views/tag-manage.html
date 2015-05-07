@@ -12,15 +12,6 @@
                         <input type="color" name="foreground-color" class="form-control" title="Click to pick a color"
                                ng-model="newTag.foregroundCol" required>
                     </div>
-                    <fieldset>
-                        <label>Tag name (min: 3 characters - max: 50 characters)</label>
-                        <input id="tagName" type="text" placeholder="Type in the tag's name" name="tagName"
-                               class="form-control form-group" ng-model="newTag.name" required maxlength="50"
-                               pattern="^(.){3,50}$">
-                        <div class="validationMsg">
-                            <label class="control-label" for="amountInput">Please specify an amount</label>
-                        </div>
-                    </fieldset>
                 </div>
                 <div class="col-md-5">
                     <label>Background color</label>
@@ -31,6 +22,20 @@
                         <input type="color" name="background-color" class="form-control"
                                title="Click to pick a color" ng-model="newTag.backgroundCol" required>
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5" ng-class="{'has-error': tagForm.tagName.$invalid && tagForm.tagName.$dirty}">
+                    <label>Tag name (min: 3 characters - max: 50 characters)</label>
+                    <input id="tagName" type="text" placeholder="Type in the tag's name" name="tagName"
+                           class="form-control form-group" ng-model="newTag.name" required maxlength="50"
+                           pattern="^(.){3,50}$">
+                    <div class="validationMsg">
+                        <label ng-show="tagForm.tagName.$dirty && tagForm.tagName.$error.required" class="control-label" for="tagName">Please specify a tag name</label>
+                        <label ng-show="tagForm.tagName.$dirty && tagForm.tagName.$error.pattern" class="control-label" for="tagName">A tag name must have between 3 and 50 characters</label>
+                    </div>
+                </div>
+                <div class="col-md-5">
                     <label>Tag preview</label>
                     <ul class="tags">
                         <li>
@@ -49,7 +54,7 @@
                 <button id="tag-reset-btn" type="button" class="btn btn-warning"
                         title="Click to restart tag creation from scratch" ng-click="reset()">Reset
                 </button>
-                <button type="button" class="btn btn-success" title="Click to save your new tag">Create tag</button>
+                <button ng-disabled="tagForm.$invalid" type="button" class="btn btn-success" title="Click to save your new tag">Create tag</button>
             </div>
         </fieldset>
     </form>
