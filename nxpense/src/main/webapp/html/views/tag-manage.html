@@ -4,32 +4,29 @@
             <legend class="fieldset-border">New tag</legend>
             <div class="row">
                 <div class="col-md-5">
-                    <label>Foreground color</label>
+                    <label for="foreground-color-group">Foreground color</label>
                     <div id="foreground-color-group" class="foreground-color form-group input-group col-md-4">
                         <span class="input-group-addon" title="Tag text color">
                             <span class="glyphicon glyphicon-text-color"></span>
                         </span>
-                        <input type="color" name="foreground-color" class="form-control" title="Click to pick a color"
-                               ng-model="newTag.foregroundCol" required>
+                        <input type="color" name="foreground-color" class="form-control" title="Click to pick a color" ng-model="newTag.foregroundCol" required>
                     </div>
                 </div>
                 <div class="col-md-5">
-                    <label>Background color</label>
+                    <label for="background-color-group">Background color</label>
                     <div id="background-color-group" class="background-color form-group input-group col-md-4">
                         <span class="input-group-addon" title="Tag background color">
                             <span class="glyphicon glyphicon-text-background"></span>
                         </span>
-                        <input type="color" name="background-color" class="form-control"
-                               title="Click to pick a color" ng-model="newTag.backgroundCol" required>
+                        <input type="color" name="background-color" class="form-control" title="Click to pick a color" ng-model="newTag.backgroundCol" required>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-5" ng-class="{'has-error': tagForm.tagName.$invalid && tagForm.tagName.$dirty}">
                     <label>Tag name (min: 3 characters - max: 50 characters)</label>
-                    <input id="tagName" type="text" placeholder="Type in the tag's name" name="tagName"
-                           class="form-control form-group" ng-model="newTag.name" required maxlength="50"
-                           pattern="^(.){3,50}$">
+                    <input id="tagName" type="text" placeholder="Type in the tag's name" name="tagName" class="form-control form-group" ng-model="newTag.name"
+                           required maxlength="50" pattern="^(.){3,50}$">
                     <div class="validationMsg">
                         <label ng-show="tagForm.tagName.$dirty && tagForm.tagName.$error.required" class="control-label" for="tagName">Please specify a tag name</label>
                         <label ng-show="tagForm.tagName.$dirty && tagForm.tagName.$error.pattern" class="control-label" for="tagName">A tag name must have between 3 and 50 characters</label>
@@ -39,21 +36,16 @@
                     <label>Tag preview</label>
                     <ul class="tags">
                         <li>
-                            <a href="#"
-                               style="background-color: {{newTag.backgroundCol}}; border-right-color: {{newTag.backgroundCol}}; opacity: {{tagPreviewOpacity}}; color: {{newTag.foregroundCol}}">
-                                <span class="tag-label"
-                                      title="{{newTag.name || '&nbsp;'}}">{{newTag.name || '&nbsp;'}}</span>
-                            <span class="tag-remover glyphicon glyphicon-remove-circle" tabindex="0"
-                                  title="Click to remove tag"></span>
+                            <a style="background-color: {{newTag.backgroundCol}}; border-right-color: {{newTag.backgroundCol}}; opacity: {{tagPreviewOpacity}}; color: {{newTag.foregroundCol}}">
+                                <span class="tag-label" title="{{newTag.name || '&nbsp;'}}">{{newTag.name || '&nbsp;'}}</span>
+                                <span class="tag-remover glyphicon glyphicon-remove-circle" tabindex="0" title="Click to remove tag"></span>
                             </a>
                         </li>
                     </ul>
                 </div>
             </div>
             <div class="row footer-row">
-                <button id="tag-reset-btn" type="button" class="btn btn-warning"
-                        title="Click to restart tag creation from scratch" ng-click="reset()">Reset
-                </button>
+                <button id="tag-reset-btn" type="button" class="btn btn-warning" title="Click to restart tag creation from scratch" ng-click="reset()">Reset</button>
                 <button ng-disabled="tagForm.$invalid" type="button" class="btn btn-success" title="Click to save your new tag">Create tag</button>
             </div>
         </fieldset>
