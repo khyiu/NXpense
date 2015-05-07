@@ -1,6 +1,9 @@
 package nxpense.domain;
 
+import nxpense.helper.ColorConverter;
+
 import javax.persistence.*;
+import java.awt.*;
 import java.util.List;
 import java.util.Set;
 
@@ -14,6 +17,14 @@ public class Tag {
     private Integer id;
 
     private String name;
+
+    @Convert(converter = ColorConverter.class)
+    @Column(name="BACKGROUND_COLOR", nullable = false, length = 7)
+    private Color backgroundColor;
+
+    @Convert(converter = ColorConverter.class)
+    @Column(name="FOREGROUND_COLOR", nullable = false, length = 7)
+    private Color foregroundColor;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "parentTag")
     private List<Tag> subTags;
@@ -31,6 +42,22 @@ public class Tag {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Color getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
+
+    public Color getForegroundColor() {
+        return foregroundColor;
+    }
+
+    public void setForegroundColor(Color foregroundColor) {
+        this.foregroundColor = foregroundColor;
     }
 
     public List<Tag> getSubTags() {
