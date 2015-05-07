@@ -9,7 +9,7 @@
                         <span class="input-group-addon" title="Tag text color">
                             <span class="glyphicon glyphicon-text-color"></span>
                         </span>
-                        <input type="color" name="foreground-color" class="form-control" title="Click to pick a color" ng-model="newTag.foregroundCol" required>
+                        <input type="color" name="foreground-color" class="form-control" title="Click to pick a color" ng-model="newTag.foregroundColor" required>
                     </div>
                 </div>
                 <div class="col-md-5">
@@ -18,7 +18,7 @@
                         <span class="input-group-addon" title="Tag background color">
                             <span class="glyphicon glyphicon-text-background"></span>
                         </span>
-                        <input type="color" name="background-color" class="form-control" title="Click to pick a color" ng-model="newTag.backgroundCol" required>
+                        <input type="color" name="background-color" class="form-control" title="Click to pick a color" ng-model="newTag.backgroundColor" required>
                     </div>
                 </div>
             </div>
@@ -36,7 +36,7 @@
                     <label>Tag preview</label>
                     <ul class="tags">
                         <li>
-                            <a style="background-color: {{newTag.backgroundCol}}; border-right-color: {{newTag.backgroundCol}}; opacity: {{tagPreviewOpacity}}; color: {{newTag.foregroundCol}}">
+                            <a style="background-color: {{newTag.backgroundColor}}; border-right-color: {{newTag.backgroundColor}}; opacity: {{tagPreviewOpacity}}; color: {{newTag.foregroundColor}}">
                                 <span class="tag-label" title="{{newTag.name || '&nbsp;'}}">{{newTag.name || '&nbsp;'}}</span>
                                 <span class="tag-remover glyphicon glyphicon-remove-circle" tabindex="0" title="Click to remove tag"></span>
                             </a>
@@ -46,7 +46,7 @@
             </div>
             <div class="row footer-row">
                 <button id="tag-reset-btn" type="button" class="btn btn-warning" title="Click to restart tag creation from scratch" ng-click="reset()">Reset</button>
-                <button ng-disabled="tagForm.$invalid" type="button" class="btn btn-success" title="Click to save your new tag">Create tag</button>
+                <button ng-disabled="tagForm.$invalid" type="button" class="btn btn-success" title="Click to save your new tag" ng-click="saveTag()">Create tag</button>
             </div>
         </fieldset>
     </form>

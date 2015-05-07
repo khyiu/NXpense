@@ -136,9 +136,11 @@
     }]);
 
     homeAppModule.controller('tagController', ['$rootScope', '$scope', 'Restangular', 'notificationHelper', function ($rootScope, $scope, Restangular, notificationHelper) {
+        var tagDAO = Restangular.all('tag');
+
         var defaultTag = {
-            backgroundCol: '#8546EB',
-            foregroundCol: '#FFFF00',
+            backgroundColor: '#8546EB',
+            foregroundColor: '#FFFF00',
             name: null
         };
 
@@ -146,6 +148,11 @@
 
         $scope.reset = function() {
             $scope.newTag = angular.copy(defaultTag, {});
+        };
+
+        $scope.saveTag = function() {
+          // todo
+            tagDAO.customPOST(this.newTag).then();
         };
     }]);
 
