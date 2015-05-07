@@ -23,15 +23,15 @@
                 </div>
                 <div class="col-md-5">
                     <div class="form-group">
-                        <label>Tag name (max: 50 characters)</label>
+                        <label>Tag name (min: 3 characters - max: 50 characters)</label>
                         <input id="tagName" type="text" placeholder="Type in the tag's name" name="tagName"
-                               class="form-control" ng-model="newTag.name" required maxlength="50">
+                               class="form-control" ng-model="newTag.name" required maxlength="50" pattern="^(.){3,50}$">
                     </div>
                     <label>Tag preview</label>
                     <ul class="tags">
                         <li>
                             <a href="#" style="background-color: {{newTag.backgroundCol}}; border-right-color: {{newTag.backgroundCol}}; opacity: {{tagPreviewOpacity}}; color: {{newTag.foregroundCol}}">
-                                <span class="tag-label" title="Facture Essent">Facture Essent</span>
+                                <span class="tag-label" title="{{newTag.name || '&nbsp;'}}">{{newTag.name || '&nbsp;'}}</span>
                             <span class="tag-remover glyphicon glyphicon-remove-circle" tabindex="0"
                                   title="Click to remove tag"></span>
                             </a>
