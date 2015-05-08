@@ -3,6 +3,11 @@
 
   var loginAppModule = angular.module('loginApp', []);
 
+    loginAppModule.run(function ($rootScope) {
+        // Deducing the current application's web context from the path to access the current page
+        $rootScope.WEB_CONTEXT = window.location.pathname.split('/')[1];
+    });
+
   // Controller to manage flippable containers
   loginAppModule.controller('welcomeController', ['$scope', function($scope) {
     $scope.visiblePanel = 'login';
@@ -16,13 +21,13 @@
     }
 
   }]);
-  // todo: replace hardcoded '/nxpense' path with computed web context
+
   loginAppModule.controller('loginController', ['$scope', '$http', '$location', function($scope, $http, $location) {
     $scope.login = function() {
       var rememberMe = this.rememberMe || false;
       var request = {
         method: 'POST',
-        url: '/nxpense/login',
+        url: $scope.WEB_CONTEXT + '/login',
         params: {
           email: this.email,
           password: this.password,
