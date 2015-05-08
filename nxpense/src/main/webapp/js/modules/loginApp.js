@@ -53,11 +53,11 @@
     };
 
     // When any of credentials changes, reset previous error
-    $scope.$watch('email', function(newValue, oldValue, scope) {
+    $scope.$watch('email', function() {
       $scope.loginForm.email.$setValidity('credentials', true);
     });
 
-    $scope.$watch('password', function(newValue, oldValue, scope) {
+    $scope.$watch('password', function() {
       $scope.loginForm.email.$setValidity('credentials', true);
     });
   }]);
