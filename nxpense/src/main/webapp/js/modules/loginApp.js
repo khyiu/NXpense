@@ -18,10 +18,6 @@
   }]);
   // todo: replace hardcoded '/nxpense' path with computed web context
   loginAppModule.controller('loginController', ['$scope', '$http', '$location', function($scope, $http, $location) {
-    $scope.email;
-    $scope.password;
-    $scope.rememberMe;
-
     $scope.login = function() {
       var rememberMe = this.rememberMe || false;
       var request = {
@@ -34,7 +30,7 @@
         }
       };
 
-      $http(request).success(function(data, status, headers, config) {
+      $http(request).success(function(data, status, headers) {
         var protocol = $location.protocol();
         var host = $location.host();
         var port = $location.port();
@@ -65,9 +61,6 @@
   // Controller to manage registration process
   loginAppModule.controller('registrationController', ['$scope', '$http', function($scope, $http) {
     var emailTakenRule = 'emailTaken';
-    $scope.email;
-    $scope.password;
-    $scope.passwordRepeat;
 
     $scope.createAccount = function() {
       var request = {
@@ -84,7 +77,7 @@
 
       var response = $http(request);
 
-      response.success(function(data, status, headers, config) {
+      response.success(function(data) {
         // programmatic login -> redirect to URL sent by server
         window.location.assign(data);
       });
@@ -94,7 +87,7 @@
           $scope.registrationForm.email.$setValidity(emailTakenRule, false);
         }
       });
-    }
+    };
 
     // When passwordRepeat field changes, check if it matches password
     $scope.$watch('passwordRepeat', function(newValue, oldValue, scope) {
