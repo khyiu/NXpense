@@ -1,0 +1,1 @@
+alter table TAG add constraint NAME_UNIQUE unique(name, user_id);

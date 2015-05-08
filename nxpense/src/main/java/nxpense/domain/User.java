@@ -1,9 +1,7 @@
 package nxpense.domain;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "USR")
@@ -25,6 +23,10 @@ public class User {
 
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "user")
     private List<Expense> expenses = new ArrayList<Expense>();
+
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "USER_ID", nullable = false, updatable = false)
+    private Set<Tag> tags = new HashSet<Tag>();
 
     public String getEmail() {
         return email;
@@ -68,6 +70,18 @@ public class User {
 
     public void removeExpense(Expense expense) {
         this.expenses.remove(expense);
+    }
+
+    public void addTag(Tag tag) {
+        this.tags.add(tag);
+    }
+
+    public void removeTag(Tag tag) {
+        this.tags.remove(tag);
+    }
+
+    public boolean ownTag(Tag tag) {
+        return tag != null && this.tags.contains(tag);
     }
 
     @Override

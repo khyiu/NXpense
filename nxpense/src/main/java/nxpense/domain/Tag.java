@@ -36,6 +36,10 @@ public class Tag {
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "tags")
     private Set<Expense> expenses;
 
+    public Integer getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }

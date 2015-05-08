@@ -150,9 +150,28 @@
             $scope.newTag = angular.copy(defaultTag, {});
         };
 
+        $scope.$watch('newTag.name', function() {
+            $scope.tagForm.tagName.$setValidity('alreadyExists', true);
+        });
+
         $scope.saveTag = function() {
           // todo
-            tagDAO.customPOST(this.newTag).then();
+            var successCallback = function () {
+                notificationHelper.hideServerInfo();
+                notificationHelper.showOperationSuccess("Tag saved.");
+            };
+
+            var failureCallback = function (response) {
+                var serverSideValidationMsg = response.headers('SERVERSIDE_VALIDATION_ERROR_MSG');
+                notificationHelper.hideServerInfo();
+                notificationHelper.showOperationFailure("Failed saving tag!");
+
+                if(serverSideValidationMsg) {
+                    $scope.tagForm.tagName.$setValidity('alreadyExists', false);
+                }
+            };
+
+            tagDAO.customPOST(this.newTag).then(successCallback, failureCallback);
         };
     }]);
 

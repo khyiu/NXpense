@@ -30,6 +30,7 @@
                     <div class="validationMsg">
                         <label ng-show="tagForm.tagName.$dirty && tagForm.tagName.$error.required" class="control-label" for="tagName">Please specify a tag name</label>
                         <label ng-show="tagForm.tagName.$dirty && tagForm.tagName.$error.pattern" class="control-label" for="tagName">A tag name must have between 3 and 50 characters</label>
+                        <label ng-show="tagForm.tagName.$dirty && tagForm.tagName.$error.alreadyExists" class="control-label" for="tagName">A tag with same name already exists</label>
                     </div>
                 </div>
                 <div class="col-md-5">
