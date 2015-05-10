@@ -26,15 +26,11 @@ public class TagConverter {
             tag.setForegroundColor(COLOR_CONVERTER.convertToEntityAttribute(tagDto.getForegroundColor()));
 
             if (!CollectionUtils.isEmpty(tagDto.getSubTags())) {
-                List<Tag> subTags = new ArrayList<Tag>();
 
                 for (TagDTO subTagDto : tagDto.getSubTags()) {
                     Tag subTag = dtoToEntity(subTagDto);
-                    subTag.setParentTag(tag);
-                    subTags.add(subTag);
+                    tag.addSubTag(subTag);
                 }
-
-                tag.setSubTags(subTags);
             }
         }
 
