@@ -1,9 +1,11 @@
 package nxpense.domain;
 
+import com.google.common.collect.ImmutableList;
 import nxpense.helper.ColorConverter;
 
 import javax.persistence.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -27,7 +29,7 @@ public class Tag {
     private Color foregroundColor;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "parentTag")
-    private List<Tag> subTags;
+    private List<Tag> subTags = new ArrayList<Tag>();
 
     @ManyToOne
     @JoinColumn(name = "PARENT_TAG_ID")
@@ -65,18 +67,24 @@ public class Tag {
     }
 
     public List<Tag> getSubTags() {
-        return subTags;
+        return ImmutableList.copyOf(subTags);
     }
 
-    public void setSubTags(List<Tag> subTags) {
-        this.subTags = subTags;
+    public boolean addSubTag(Tag subTag) {
+        subTag.setParentTag(this);
+        return subTags.add(subTag);
+    }
+
+    public boolean removeTag(Tag subTag) {
+        subTag.setParentTag(null);
+        return subTags.remove(subTag);
     }
 
     public Tag getParentTag() {
         return parentTag;
     }
 
-    public void setParentTag(Tag parentTag) {
+    private void setParentTag(Tag parentTag) {
         this.parentTag = parentTag;
     }
 
