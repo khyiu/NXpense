@@ -1,4 +1,4 @@
-package service;
+package nxpense.service;
 
 
 import nxpense.builder.ExpenseDtoBuilder;
@@ -13,7 +13,6 @@ import nxpense.exception.UnauthenticatedException;
 import nxpense.repository.ExpenseRepository;
 import nxpense.repository.UserRepository;
 import nxpense.security.CustomUserDetails;
-import nxpense.service.ExpenseServiceImpl;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,7 +44,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ExpenseServiceImplTest {
+public class ExpenseServiceImplTest extends AbstractServiceTest {
 
     @Mock
     private UserRepository userRepository;
@@ -56,15 +55,11 @@ public class ExpenseServiceImplTest {
     @InjectMocks
     private ExpenseServiceImpl expenseService;
 
-    private static final String USER_EMAIL = "test@test.com";
-    private static final String USER_PASSWORD = "secret";
-    private static User mockUser;
-
     private static final BigDecimal AMOUNT = BigDecimal.TEN;
     private static final LocalDate DATE = new LocalDate();
     private static final String DESCRIPTION = "Some DESCRIPTION";
 
-    private static final List<Integer> EXPENSE_IDS = Arrays.asList(new Integer[]{1, 2, 3});
+    private static final List<Integer> EXPENSE_IDS = Arrays.asList(1, 2, 3);
     private static final Integer EXPENSE_ID_UNEXISTING = 100;
 
     private static final ExpenseDTO EXPENSE_DTO = new ExpenseDtoBuilder()
@@ -73,17 +68,6 @@ public class ExpenseServiceImplTest {
             .setDate(DATE)
             .setDescription(DESCRIPTION)
             .build();
-
-    @Before
-    public void initAuthenticationMock() {
-        mockUser = new User();
-        mockUser.setEmail(USER_EMAIL);
-        mockUser.setPassword(USER_PASSWORD.toCharArray());
-
-        UserDetails userDetails = new CustomUserDetails(mockUser);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, USER_PASSWORD, Collections.<GrantedAuthority>emptyList());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
 
     @Before
     public void initMocks() {
