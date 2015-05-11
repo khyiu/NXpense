@@ -23,7 +23,7 @@ import java.lang.reflect.Field;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TagServiceImplTest extends AbstractServiceTest {
@@ -90,5 +90,11 @@ public class TagServiceImplTest extends AbstractServiceTest {
         mockUser.addTag(tag);
 
         tagService.createNewTag(TAG_DTO);
+    }
+
+    @Test
+    public void testGetCurrentUserTags() {
+        tagService.getCurrentUserTags();
+        verify(tagRepository).findByUserOrderByName(mockUser);
     }
 }
