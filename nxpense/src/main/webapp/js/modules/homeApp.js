@@ -155,10 +155,10 @@
         });
 
         $scope.saveTag = function() {
-          // todo
             var successCallback = function () {
                 notificationHelper.hideServerInfo();
                 notificationHelper.showOperationSuccess("Tag saved.");
+                $scope.reset();
             };
 
             var failureCallback = function (response) {
