@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class TagServiceImpl implements TagService {
 
@@ -46,5 +48,15 @@ public class TagServiceImpl implements TagService {
 
         currentUser.addTag(tag);
         return tagRepository.save(tag);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Tag> getCurrentUserTags() {
+        User currentUser = securityPrincipalHelper.getCurrentUser();
+        List<Tag> currentUserTags = tagRepository.findByUserOrderByName(currentUser);
+
+        LOGGER.debug("Number of tags retrieved for user [{}]: {}", currentUser, currentUserTags.size());
+        return currentUserTags;
     }
 }

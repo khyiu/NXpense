@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Controller
 @RequestMapping("/tag")
@@ -33,7 +35,6 @@ public class TagController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<TagResponseDTO> createTag(@RequestBody TagDTO tagDto) {
-
         try {
             Tag persistedTag = tagService.createNewTag(tagDto);
             TagResponseDTO tagResponseDto = TagConverter.entityToResponseDto(persistedTag);
@@ -44,5 +45,17 @@ public class TagController {
             customHeaders.put(CustomResponseHeader.SERVERSIDE_VALIDATION_ERROR_MSG.name(), Arrays.asList(taee.getMessage()));
             return new ResponseEntity<TagResponseDTO>(customHeaders, HttpStatus.CONFLICT);
         }
+    }
+
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    public ResponseEntity<List<TagResponseDTO>> getCurrentUserTags() {
+        List<Tag> currentUserTags = tagService.getCurrentUserTags();
+        List<TagResponseDTO> responseTags = new ArrayList<TagResponseDTO>();
+
+        for(Tag tag : currentUserTags) {
+            responseTags.add(TagConverter.entityToResponseDto(tag));
+        }
+
+        return new ResponseEntity(responseTags, HttpStatus.OK);
     }
 }

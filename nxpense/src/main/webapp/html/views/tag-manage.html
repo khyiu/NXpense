@@ -1,7 +1,7 @@
 <div>
     <form name="tagForm">
         <fieldset class="fieldset-border">
-            <legend class="fieldset-border">New tag</legend>
+            <legend class="fieldset-border">Create/edit tag</legend>
             <div class="row">
                 <div class="col-md-5">
                     <label for="foreground-color-group">Foreground color</label>
@@ -44,6 +44,18 @@
                         </li>
                     </ul>
                 </div>
+            </div>
+            <!-- todo -->
+            <label for="existing-tag-previews">Existing tags</label>
+            <div id="existing-tag-previews" class="row">
+                <ul class="tags">
+                    <li ng-repeat="tag in existingTags">
+                        <a style="background-color: #8546EB; border-right-color: #8546EB; opacity: ; color: #FFFF00">
+                            <span class="tag-label ng-binding" title="testeststststteststststs">testeststststteststststs</span>
+                            <span class="tag-remover glyphicon glyphicon-remove-circle" tabindex="0" title="Click to remove tag"></span>
+                        </a>
+                    </li>
+                </ul>
             </div>
             <div class="row footer-row">
                 <button id="tag-reset-btn" type="button" class="btn btn-warning" title="Click to restart tag creation from scratch" ng-click="reset()">Reset</button>

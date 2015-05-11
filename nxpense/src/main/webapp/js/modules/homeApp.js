@@ -138,6 +138,8 @@
     homeAppModule.controller('tagController', ['$rootScope', '$scope', 'Restangular', 'notificationHelper', function ($rootScope, $scope, Restangular, notificationHelper) {
         var tagDAO = Restangular.all('tag');
 
+        $scope.existingTags = tagDAO.customGET('user');
+
         var defaultTag = {
             backgroundColor: '#8546EB',
             foregroundColor: '#FFFF00',

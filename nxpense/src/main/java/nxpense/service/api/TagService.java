@@ -4,6 +4,8 @@ package nxpense.service.api;
 import nxpense.domain.Tag;
 import nxpense.dto.TagDTO;
 
+import java.util.List;
+
 public interface TagService {
 
     /**
@@ -12,4 +14,10 @@ public interface TagService {
      * @return {@code Tag} entity that has been saved in DB
      */
     public Tag createNewTag(TagDTO tagDTO);
+
+    /**
+     * Retrieves the tags that are associated to the current user
+     * @return List of tags that are associated to the current user
+     */
+    public List<Tag> getCurrentUserTags();
 }
