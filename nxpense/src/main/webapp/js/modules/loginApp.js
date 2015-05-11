@@ -23,6 +23,12 @@
   }]);
 
   loginAppModule.controller('loginController', ['$scope', '$http', '$location', function($scope, $http, $location) {
+    $scope.keyboardSubmitForm = function($event) {
+        if($event && $event.keyCode === 13 && $scope.loginForm.$valid) {
+            $scope.login();
+        }
+    };
+
     $scope.login = function() {
       var rememberMe = this.rememberMe || false;
       var request = {

@@ -43,10 +43,10 @@
                                 	<label ng-show="loginForm.email.$error.required && loginForm.email.$dirty" class="control-label" for="loginEmail">Email is a mandatory credential</label>
                                 	<label ng-show="loginForm.email.$error.email && loginForm.email.$dirty" class="control-label" for="loginEmail">Provided email has an invalid format</label>
                                 	<label ng-show="loginForm.email.$error.credentials" class="control-label" for="loginEmail">Wrong email/password, please retry</label>
-                                    <input id="loginEmail" class="form-control" placeholder="E-mail" name="email" type="email" ng-model="email" required autofocus>
+                                    <input id="loginEmail" class="form-control" placeholder="E-mail" name="email" type="email" ng-model="email" ng-keydown="keyboardSubmitForm($event)" required autofocus>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control" placeholder="Password" name="password" type="password" ng-model="password" required>
+                                    <input class="form-control" placeholder="Password" name="password" type="password" ng-model="password" ng-keydown="keyboardSubmitForm($event)" required>
                                 </div>
                                 <div class="checkbox">
                                     <label>
