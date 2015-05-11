@@ -1,10 +1,10 @@
 package nxpense.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import nxpense.builder.TagDtoBuilder;
 import nxpense.dto.TagDTO;
 import nxpense.dto.TagResponseDTO;
 import org.dbunit.operation.DatabaseOperation;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.http.MediaType;
@@ -18,7 +18,10 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -80,5 +83,27 @@ public class TagControllerIntegrationTest extends AbstractIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(tagJson);
         mockMvc.perform(requestBuilder).andDo(print()).andReturn();
+    }
+
+    @Test
+    public void testGetCurrentUserTags() throws Exception {
+        DatabaseOperation.CLEAN_INSERT.execute(getDBConnection(), loadDataSet("dataset/expense-controller-integration-test-dataset.xml"));
+        mockAuthenticatedUser(3);
+
+        mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+        mockMvcBuilder.alwaysExpect(status().isOk());
+        mockMvc = mockMvcBuilder.build();
+
+        RequestBuilder requestBuilder = get("/tag/user")
+                .contentType(MediaType.APPLICATION_JSON);
+        MvcResult result = mockMvc.perform(requestBuilder).andDo(print()).andReturn();
+        String jsonResponse = result.getResponse().getContentAsString();
+        List<TagResponseDTO> tagResponseDtos = om.readValue(jsonResponse, new TypeReference<List<TagResponseDTO>>(){});
+
+        assertThat(tagResponseDtos).hasSize(4);
+        assertThat(tagResponseDtos.get(0).getName()).isEqualTo("Gas");
+        assertThat(tagResponseDtos.get(1).getName()).isEqualTo("Groceries");
+        assertThat(tagResponseDtos.get(2).getName()).isEqualTo("Internet subscription");
+        assertThat(tagResponseDtos.get(3).getName()).isEqualTo("Mobile phone");
     }
 }

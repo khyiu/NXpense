@@ -2,6 +2,7 @@
 <dataset>
     <usr id="1" email="test@test.com" password="$2a$10$yhcT2ndDG.SGVh43FVS3beio6sd48dLGY3wQ0AAzR58Fvu80dPKJK" remaining_logon_attempt="3" />
     <usr id="2" email="dummy@dummy.com" password="$2a$10$yhcT2ndDG.SGVh43FVS3beio6sd48dLGY3wQ0AAzR58Fvu80dPKJK" remaining_logon_attempt="3" />
+    <usr id="3" email="fake@fake.com" password="$2a$10$yhcT2ndDG.SGVh43FVS3beio6sd48dLGY3wQ0AAzR58Fvu80dPKJK" remaining_logon_attempt="3" />
 
     <expense id="1" expense_type="DEBIT" amount="-1.11" date="2015-01-01" description="Test expense 1" user_id="1" position="0" verified="false"/>
     <expense id="2" expense_type="DEBIT" amount="-2.22" date="2015-01-01" description="Test expense 2" user_id="1" position="1" verified="false"/>
@@ -12,4 +13,8 @@
     <expense id="6" expense_type="CREDIT" amount="-4.50" date="2015-03-01" description="Test expense (user 2)" user_id="2" position="2" verified="false"/>
 
     <tag id="1" name="Mobile phone" user_id="2" background_color="#000000" foreground_color="#FFFFFF"/>
+    <tag id="2" name="Mobile phone" user_id="3" background_color="#000000" foreground_color="#FFFFFF"/>
+    <tag id="3" name="Groceries" user_id="3" background_color="#000000" foreground_color="#FFFFFF"/>
+    <tag id="4" name="Gas" user_id="3" background_color="#000000" foreground_color="#FFFFFF"/>
+    <tag id="5" name="Internet subscription" user_id="3" background_color="#000000" foreground_color="#FFFFFF"/>
 </dataset>
