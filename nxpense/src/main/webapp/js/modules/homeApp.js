@@ -148,6 +148,7 @@
 
         $scope.reset = function() {
             $scope.newTag = angular.copy(defaultTag, {});
+            $scope.tagForm.$setPristine(true);
         };
 
         $scope.$watch('newTag.name', function() {
