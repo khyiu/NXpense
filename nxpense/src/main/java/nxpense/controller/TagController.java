@@ -48,6 +48,7 @@ public class TagController {
     }
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
+    @ResponseBody
     public ResponseEntity<List<TagResponseDTO>> getCurrentUserTags() {
         List<Tag> currentUserTags = tagService.getCurrentUserTags();
         List<TagResponseDTO> responseTags = new ArrayList<TagResponseDTO>();

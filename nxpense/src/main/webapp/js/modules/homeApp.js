@@ -138,7 +138,22 @@
     homeAppModule.controller('tagController', ['$rootScope', '$scope', 'Restangular', 'notificationHelper', function ($rootScope, $scope, Restangular, notificationHelper) {
         var tagDAO = Restangular.all('tag');
 
-        $scope.existingTags = tagDAO.customGET('user');
+        $scope.loadTags = function() {
+            notificationHelper.showServerInfo("Fetching tags...");
+            tagDAO.customGET('user').then(
+                function(tags) {
+                    notificationHelper.hideServerInfo();
+                    $scope.existingTags = tags;
+                },
+
+                function() {
+                    notificationHelper.hideServerInfo();
+                    notificationHelper.showOperationFailure("Failed fetching tags! Please retry later...")
+                }
+            );
+        };
+
+        $scope.loadTags();
 
         var defaultTag = {
             backgroundColor: '#8546EB',
@@ -162,6 +177,7 @@
                 notificationHelper.hideServerInfo();
                 notificationHelper.showOperationSuccess("Tag saved.");
                 $scope.reset();
+                $scope.loadTags();
             };
 
             var failureCallback = function (response) {
