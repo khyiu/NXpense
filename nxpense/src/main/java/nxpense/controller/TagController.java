@@ -3,6 +3,7 @@ package nxpense.controller;
 import nxpense.domain.Tag;
 import nxpense.dto.TagDTO;
 import nxpense.dto.TagResponseDTO;
+import nxpense.exception.BadRequestException;
 import nxpense.exception.RequestCannotCompleteException;
 import nxpense.helper.TagConverter;
 import nxpense.message.CustomResponseHeader;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Arrays;
 
@@ -30,6 +32,7 @@ public class TagController {
     private TagService tagService;
 
     @RequestMapping(method = RequestMethod.POST)
+    @ResponseBody
     public ResponseEntity<TagResponseDTO> createTag(@RequestBody TagDTO tagDto) {
 
         try {
@@ -41,7 +44,7 @@ public class TagController {
             HttpHeaders customHeaders = new HttpHeaders();
             customHeaders.put(CustomResponseHeader.SERVERSIDE_VALIDATION_ERROR_MSG.name(), Arrays.asList(taee.getMessage()));
             return new ResponseEntity<TagResponseDTO>(customHeaders, HttpStatus.CONFLICT);
-        } catch (Exception e) {
+        } catch (BadRequestException e) {
             LOGGER.error("Could not complete new tag creation", e);
             return new ResponseEntity<TagResponseDTO>(HttpStatus.BAD_REQUEST);
         }

@@ -28,6 +28,10 @@ public class User {
     @JoinColumn(name = "USER_ID", nullable = false, updatable = false)
     private Set<Tag> tags = new HashSet<Tag>();
 
+    public Integer getId() {
+        return this.id;
+    }
+
     public String getEmail() {
         return email;
     }

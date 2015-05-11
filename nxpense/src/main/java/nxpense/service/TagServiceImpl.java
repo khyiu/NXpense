@@ -9,7 +9,6 @@ import nxpense.exception.RequestCannotCompleteException;
 import nxpense.helper.SecurityPrincipalHelper;
 import nxpense.helper.TagConverter;
 import nxpense.repository.TagRepository;
-import nxpense.repository.UserRepository;
 import nxpense.service.api.TagService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +22,7 @@ public class TagServiceImpl implements TagService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TagServiceImpl.class);
 
     @Autowired
-    private UserRepository userRepository;
+    private SecurityPrincipalHelper securityPrincipalHelper;
 
     @Autowired
     private TagRepository tagRepository;
@@ -38,8 +37,7 @@ public class TagServiceImpl implements TagService {
             throw new BadRequestException("Cannot persist a NULL tag entity");
         }
 
-        User currentUser = SecurityPrincipalHelper.getCurrentUser();
-        currentUser = userRepository.save(currentUser);
+        User currentUser = securityPrincipalHelper.getCurrentUser();
 
         if (currentUser.ownTag(tag)) {
             LOGGER.warn("Attempt to create a tag with name [{}] that already exists for user [{}]", tag.getName(), currentUser);
