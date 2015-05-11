@@ -50,9 +50,9 @@
             <div id="existing-tag-previews" class="row">
                 <ul class="tags">
                     <li ng-repeat="tag in existingTags">
-                        <a style="background-color: #8546EB; border-right-color: #8546EB; opacity: ; color: #FFFF00">
-                            <span class="tag-label ng-binding" title="testeststststteststststs">testeststststteststststs</span>
-                            <span class="tag-remover glyphicon glyphicon-remove-circle" tabindex="0" title="Click to remove tag"></span>
+                        <a style="background-color: {{tag.backgroundColor}}; border-right-color: {{tag.backgroundColor}}; opacity: {{tagPreviewOpacity}}; color: {{tag.foregroundColor}}">
+                            <span class="tag-label" title="{{tag.name}}">{{tag.name || '&nbsp;'}}</span>
+                            <span class="tag-remover glyphicon glyphicon-remove-circle" tabindex="0" title="Click to delete tag (it will also be removed from all tagged expenses)"></span>
                         </a>
                     </li>
                 </ul>
