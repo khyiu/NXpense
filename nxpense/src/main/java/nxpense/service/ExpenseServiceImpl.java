@@ -9,7 +9,6 @@ import nxpense.helper.ExpenseConverter;
 import nxpense.helper.ExpenseHelper;
 import nxpense.helper.SecurityPrincipalHelper;
 import nxpense.repository.ExpenseRepository;
-import nxpense.repository.UserRepository;
 import nxpense.service.api.ExpenseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,9 +29,6 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Autowired
     private SecurityPrincipalHelper securityPrincipalHelper;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private ExpenseRepository expenseRepository;
