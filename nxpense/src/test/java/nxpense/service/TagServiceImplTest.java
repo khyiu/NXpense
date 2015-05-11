@@ -5,6 +5,7 @@ import nxpense.domain.Tag;
 import nxpense.dto.TagDTO;
 import nxpense.exception.BadRequestException;
 import nxpense.exception.RequestCannotCompleteException;
+import nxpense.helper.SecurityPrincipalHelper;
 import nxpense.repository.TagRepository;
 import nxpense.repository.UserRepository;
 import org.junit.Before;
@@ -22,6 +23,7 @@ import java.lang.reflect.Field;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TagServiceImplTest extends AbstractServiceTest {
@@ -40,7 +42,7 @@ public class TagServiceImplTest extends AbstractServiceTest {
 
     @Before
     public void initMocks() {
-        given(userRepository.save(mockUser)).willReturn(mockUser);
+        given(securityPrincipalHelper.getCurrentUser()).willReturn(mockUser);
 
         given(tagRepository.save(any(Tag.class))).will(new Answer<Tag>() {
             @Override
@@ -54,6 +56,9 @@ public class TagServiceImplTest extends AbstractServiceTest {
             }
         });
     }
+
+    @Mock
+    private SecurityPrincipalHelper securityPrincipalHelper;
 
     @Mock
     private UserRepository userRepository;

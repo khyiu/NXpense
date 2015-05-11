@@ -29,6 +29,9 @@ public class ExpenseServiceImpl implements ExpenseService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExpenseServiceImpl.class);
 
     @Autowired
+    private SecurityPrincipalHelper securityPrincipalHelper;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -43,11 +46,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             throw new BadRequestException("Cannot persist a NULL expense entity");
         }
 
-        User currentUser = SecurityPrincipalHelper.getCurrentUser();
-
-        // First, call save( ) on existing user, to merge the detached User instance associated to security context...
-        currentUser = userRepository.save(currentUser);
-
+        User currentUser = securityPrincipalHelper.getCurrentUser();
         int newExpensePosition = (int) expenseRepository.countByUserAndDate(currentUser, expense.getDate());
         LOGGER.debug("Position of new expense with date {} for user with email {} = {}", expense.getDate(), currentUser.getEmail(), newExpensePosition);
 
@@ -61,13 +60,13 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Transactional(readOnly = true)
     public Page<Expense> getPageExpenses(Integer pageNumber, Integer size, Sort.Direction direction, String[] properties) {
         PageRequest pageRequest = new PageRequest(pageNumber, size, direction, properties);
-        User currentUser = SecurityPrincipalHelper.getCurrentUser();
+        User currentUser = securityPrincipalHelper.getCurrentUser();
         return expenseRepository.findAllByUser(pageRequest, currentUser);
     }
 
     @Transactional(rollbackFor = {Exception.class})
     public Expense updateExpense(int id, ExpenseDTO expenseDTO) {
-        User currentUser = SecurityPrincipalHelper.getCurrentUser();
+        User currentUser = securityPrincipalHelper.getCurrentUser();
         Expense existingExpense = expenseRepository.findByIdAndUser(id, currentUser);
 
         if (existingExpense == null) {
@@ -94,7 +93,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             throw new RequestCannotCompleteException("Cannot proceed to expense deletion with a NULL list of IDs.");
         }
 
-        User currentUser = SecurityPrincipalHelper.getCurrentUser();
+        User currentUser = securityPrincipalHelper.getCurrentUser();
         expenseRepository.decrementSameDateHigherPosition(ids, currentUser);
         int numberDeletedItems = expenseRepository.deleteByIdInAndUser(currentUser, ids);
         LOGGER.info("User {} deleted {} item(s)", currentUser, numberDeletedItems);

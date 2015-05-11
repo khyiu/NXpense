@@ -8,7 +8,8 @@
 	<context:component-scan base-package="nxpense.security"/>
 	<context:component-scan base-package="nxpense.controller"/>
 	<context:component-scan base-package="nxpense.service"/> 
-		
+	<context:component-scan base-package="nxpense.helper"/>
+
 	<import resource="classpath:/spring/persistence-config.xml"/>
 	<import resource="classpath:/spring/security-config.xml"/>
 	<import resource="classpath:/spring/view-config.xml"/>

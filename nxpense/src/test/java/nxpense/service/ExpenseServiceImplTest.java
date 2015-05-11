@@ -10,6 +10,7 @@ import nxpense.dto.ExpenseSource;
 import nxpense.exception.BadRequestException;
 import nxpense.exception.RequestCannotCompleteException;
 import nxpense.exception.UnauthenticatedException;
+import nxpense.helper.SecurityPrincipalHelper;
 import nxpense.repository.ExpenseRepository;
 import nxpense.repository.UserRepository;
 import nxpense.security.CustomUserDetails;
@@ -52,6 +53,9 @@ public class ExpenseServiceImplTest extends AbstractServiceTest {
     @Mock
     private ExpenseRepository expenseRepository;
 
+    @Mock
+    private SecurityPrincipalHelper securityPrincipalHelper;
+
     @InjectMocks
     private ExpenseServiceImpl expenseService;
 
@@ -79,6 +83,8 @@ public class ExpenseServiceImplTest extends AbstractServiceTest {
         });
 
         given(expenseRepository.findByIdAndUser(EXPENSE_ID_UNEXISTING, mockUser)).willReturn(null);
+
+        given(securityPrincipalHelper.getCurrentUser()).willReturn(mockUser);
     }
 
     @Test
@@ -105,6 +111,7 @@ public class ExpenseServiceImplTest extends AbstractServiceTest {
 
     @Test(expected = UnauthenticatedException.class)
     public void testCreateNewExpense_unauthenticatedUser() {
+        given(securityPrincipalHelper.getCurrentUser()).willCallRealMethod();
         UserDetails userDetails = new CustomUserDetails(null);
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, USER_PASSWORD, Collections.<GrantedAuthority>emptyList());
         SecurityContextHolder.getContext().setAuthentication(authentication);
