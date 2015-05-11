@@ -28,7 +28,7 @@ public class Tag {
     @Column(name="FOREGROUND_COLOR", nullable = false, length = 7)
     private Color foregroundColor;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "parentTag")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "parentTag", fetch = FetchType.EAGER)
     private List<Tag> subTags = new ArrayList<Tag>();
 
     @ManyToOne
