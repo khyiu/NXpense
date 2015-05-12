@@ -14,10 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,5 +55,12 @@ public class TagController {
         }
 
         return new ResponseEntity(responseTags, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{tagId}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public ResponseEntity<Void> deleteTag(@PathVariable Integer tagId) {
+        tagService.deleteTag(tagId);
+        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 }

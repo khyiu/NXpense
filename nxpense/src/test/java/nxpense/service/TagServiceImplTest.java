@@ -28,6 +28,12 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class TagServiceImplTest extends AbstractServiceTest {
 
+    private static final Integer ID_NON_EXISTING_TAG = 11;
+    private static final Integer ID_NON_CURRENT_USER_TAG = 22;
+    private static final Integer ID_CURRENT_USER_TAG = 33;
+
+    private static final Tag TAG = buildTag();
+
     private static final String TAG_NAME_ROOT = "Bill";
     private static final String BACKGROUND_COLOR_ROOT = "#FF0000";
     private static final Color BACKGROUND_COLOR_ROOT_RGB = new Color(255, 0, 0);
@@ -39,6 +45,25 @@ public class TagServiceImplTest extends AbstractServiceTest {
             .setBackgroundColor(BACKGROUND_COLOR_ROOT)
             .setForegroundColor(FOREGROUND_COLOR_ROOT)
             .build();
+
+    private static Tag buildTag() {
+        Tag tag = new Tag();
+
+        try {
+            Field idField = tag.getClass().getDeclaredField("id");
+            idField.setAccessible(true);
+            idField.set(tag, ID_CURRENT_USER_TAG);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        tag.setName(TAG_NAME_ROOT);
+        tag.setBackgroundColor(BACKGROUND_COLOR_ROOT_RGB);
+        tag.setForegroundColor(FOREGROUND_COLOR_ROOT_RGB);
+        return tag;
+    }
 
     @Before
     public void initMocks() {
@@ -55,6 +80,10 @@ public class TagServiceImplTest extends AbstractServiceTest {
                 return tagToBeSaved;
             }
         });
+
+        given(tagRepository.findOne(ID_NON_EXISTING_TAG)).willReturn(null);
+        given(tagRepository.findOne(ID_CURRENT_USER_TAG)).willReturn(TAG);
+        given(tagRepository.findOne(ID_NON_CURRENT_USER_TAG)).willReturn(TAG);
     }
 
     @Mock
@@ -96,5 +125,27 @@ public class TagServiceImplTest extends AbstractServiceTest {
     public void testGetCurrentUserTags() {
         tagService.getCurrentUserTags();
         verify(tagRepository).findByUserOrderByName(mockUser);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testDeleteTag_nullId() {
+        tagService.deleteTag(null);
+    }
+
+    @Test(expected = RequestCannotCompleteException.class)
+    public void testDeleteTag_noTagWithId() {
+        tagService.deleteTag(ID_NON_EXISTING_TAG);
+    }
+
+    @Test(expected = RequestCannotCompleteException.class)
+    public void testDeleteTag_currentUserNotOwer() {
+        tagService.deleteTag(ID_NON_CURRENT_USER_TAG);
+    }
+
+    @Test
+    public void testDeleteTag() {
+        mockUser.addTag(TAG);
+        tagService.deleteTag(ID_CURRENT_USER_TAG);
+        verify(tagRepository).delete(TAG);
     }
 }

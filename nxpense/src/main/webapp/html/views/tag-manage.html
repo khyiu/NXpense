@@ -51,7 +51,8 @@
                     <li ng-repeat="tag in existingTags">
                         <a style="background-color: {{tag.backgroundColor}}; border-right-color: {{tag.backgroundColor}}; opacity: {{tagPreviewOpacity}}; color: {{tag.foregroundColor}}">
                             <span class="tag-label" title="{{tag.name}}">{{tag.name || '&nbsp;'}}</span>
-                            <span class="tag-remover glyphicon glyphicon-remove-circle" tabindex="0" title="Click to delete tag (it will also be removed from all tagged expenses)"></span>
+                            <span class="tag-remover glyphicon glyphicon-remove-circle" tabindex="0" title="Click to delete tag (it will also be removed from all tagged expenses)"
+                                    ng-click="remove(tag, null)" ng-keydown="remove(tag, $event)"></span>
                         </a>
                     </li>
                 </ul>

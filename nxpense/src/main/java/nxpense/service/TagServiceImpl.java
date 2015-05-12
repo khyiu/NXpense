@@ -59,4 +59,29 @@ public class TagServiceImpl implements TagService {
         LOGGER.debug("Number of tags retrieved for user [{}]: {}", currentUser, currentUserTags.size());
         return currentUserTags;
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteTag(Integer tagId) {
+        if(tagId == null) {
+            throw new IllegalArgumentException("Cannot delete tag with NULL ID!");
+        }
+
+        User currentUser = securityPrincipalHelper.getCurrentUser();
+        Tag tagToDelete = tagRepository.findOne(tagId);
+
+        if(tagToDelete == null) {
+            LOGGER.warn("Tag deletion: no tag found with ID [{}]", tagId);
+            throw new RequestCannotCompleteException("No tag found for specified ID");
+        }
+
+        // NOTE: several users may have tags with a same name. Given that Tag entity's identity is based on sole name, must perform an ID comparison too.
+        if(!currentUser.ownTag(tagToDelete) || !currentUser.getTag(tagToDelete.getName()).getId().equals(tagId)) {
+            LOGGER.warn("Trying to delete a tag [{}] that does not belong to current user [{}]!", tagId, currentUser);
+            throw new RequestCannotCompleteException("Cannot delete tag that does not belong to current user");
+        }
+
+        currentUser.removeTag(tagToDelete);
+        tagRepository.delete(tagToDelete);
+    }
 }

@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -29,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:/spring/application-test-config.xml")
 @WebAppConfiguration
-@Transactional(readOnly = true)
+@Transactional
 public class TagControllerIntegrationTest extends AbstractIntegrationTest {
 
     @Test
@@ -58,8 +59,8 @@ public class TagControllerIntegrationTest extends AbstractIntegrationTest {
         TagResponseDTO tagResponseDto = om.readValue(responseContent, TagResponseDTO.class);
         assertThat(tagResponseDto.getId()).isNotNull();
 
-        int numberOfExpenseUser2 = JdbcTestUtils.countRowsInTableWhere(new JdbcTemplate(datasource), "TAG", "user_id = 2");
-        assertThat(numberOfExpenseUser2).isEqualTo(1);
+        int numberOfTagUser2 = JdbcTestUtils.countRowsInTableWhere(new JdbcTemplate(datasource), "TAG", "user_id = 2");
+        assertThat(numberOfTagUser2).isEqualTo(1);
     }
 
     @Test
@@ -105,5 +106,50 @@ public class TagControllerIntegrationTest extends AbstractIntegrationTest {
         assertThat(tagResponseDtos.get(1).getName()).isEqualTo("Groceries");
         assertThat(tagResponseDtos.get(2).getName()).isEqualTo("Internet subscription");
         assertThat(tagResponseDtos.get(3).getName()).isEqualTo("Mobile phone");
+    }
+
+    @Test
+    public void testDeleteTag_nonExistingTag() throws Exception {
+        DatabaseOperation.CLEAN_INSERT.execute(getDBConnection(), loadDataSet("dataset/expense-controller-integration-test-dataset.xml"));
+        mockAuthenticatedUser(3);
+
+        mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+        mockMvcBuilder.alwaysExpect(status().isConflict());
+        mockMvc = mockMvcBuilder.build();
+
+        RequestBuilder requestBuilder = delete("/tag/999")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder);
+    }
+
+    @Test
+    public void testDeleteTag_nonCurrentUserTag() throws Exception {
+        DatabaseOperation.CLEAN_INSERT.execute(getDBConnection(), loadDataSet("dataset/expense-controller-integration-test-dataset.xml"));
+        mockAuthenticatedUser(3);
+
+        mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+        mockMvcBuilder.alwaysExpect(status().isConflict());
+        mockMvc = mockMvcBuilder.build();
+
+        RequestBuilder requestBuilder = delete("/tag/1")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder);
+    }
+
+    @Test
+    public void testDeleteTag() throws Exception {
+        DatabaseOperation.CLEAN_INSERT.execute(getDBConnection(), loadDataSet("dataset/expense-controller-integration-test-dataset.xml"));
+        mockAuthenticatedUser(3);
+
+        mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+        mockMvcBuilder.alwaysExpect(status().isNoContent());
+        mockMvc = mockMvcBuilder.build();
+
+        RequestBuilder requestBuilder = delete("/tag/5")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(requestBuilder);
     }
 }

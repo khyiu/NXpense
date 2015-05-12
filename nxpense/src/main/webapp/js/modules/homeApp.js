@@ -138,6 +138,7 @@
     homeAppModule.controller('tagController', ['$rootScope', '$scope', 'Restangular', 'notificationHelper', function ($rootScope, $scope, Restangular, notificationHelper) {
         var tagDAO = Restangular.all('tag');
 
+        // DISPLAY TAGS
         $scope.loadTags = function() {
             notificationHelper.showServerInfo("Fetching tags...");
             tagDAO.customGET('user').then(
@@ -148,13 +149,33 @@
 
                 function() {
                     notificationHelper.hideServerInfo();
-                    notificationHelper.showOperationFailure("Failed fetching tags! Please retry later...")
+                    notificationHelper.showOperationFailure("Failed fetching tags! Please retry later...");
                 }
             );
         };
 
         $scope.loadTags();
 
+        // TAG DELETION
+        $scope.remove = function(tag, $event) {
+            if(_.isNull($event) || ($event && $event.keyCode === 13)) {
+                notificationHelper.showServerInfo("Deleting tag...");
+
+                tagDAO.customDELETE(tag.id).then(
+                    function() {
+                        notificationHelper.hideServerInfo();
+                        $scope.loadTags();
+                    },
+
+                    function() {
+                        notificationHelper.hideServerInfo();
+                        notificationHelper.showOperationFailure("Failed deleting tag! Please retry later...");
+                    }
+                );
+            }
+        };
+
+        // TAG CREATION
         var defaultTag = {
             backgroundColor: '#8546EB',
             foregroundColor: '#FFFF00',
