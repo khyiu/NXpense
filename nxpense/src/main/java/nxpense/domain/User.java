@@ -88,6 +88,21 @@ public class User {
         return tag != null && this.tags.contains(tag);
     }
 
+    public Tag getTag(String tagName) {
+        Tag tag = null;
+
+        if(tagName != null) {
+            for(Tag t : tags) {
+                if(tagName.equals(t.getName())) {
+                    tag = t;
+                    break;
+                }
+            }
+        }
+
+        return tag;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
