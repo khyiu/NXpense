@@ -21,9 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -151,5 +149,79 @@ public class TagControllerIntegrationTest extends AbstractIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(requestBuilder);
+    }
+
+    @Test
+    public void testUpdateTag_nonExistingTag() throws Exception {
+        DatabaseOperation.CLEAN_INSERT.execute(getDBConnection(), loadDataSet("dataset/expense-controller-integration-test-dataset.xml"));
+        mockAuthenticatedUser(3);
+
+        TagDTO tagDto = new TagDtoBuilder()
+                .setName("Bill")
+                .setBackgroundColor("#00FF00")
+                .setForegroundColor("#FFFFFF")
+                .build();
+
+        mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+        mockMvcBuilder.alwaysExpect(status().isConflict());
+        mockMvc = mockMvcBuilder.build();
+
+        RequestBuilder requestBuilder = put("/tag/99")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(tagDto));
+
+        mockMvc.perform(requestBuilder);
+    }
+
+    @Test
+    public void testUpdateTag_nonCurrentUserTag() throws Exception {
+        DatabaseOperation.CLEAN_INSERT.execute(getDBConnection(), loadDataSet("dataset/expense-controller-integration-test-dataset.xml"));
+        mockAuthenticatedUser(3);
+
+        TagDTO tagDto = new TagDtoBuilder()
+                .setName("Bill")
+                .setBackgroundColor("#00FF00")
+                .setForegroundColor("#FFFFFF")
+                .build();
+
+        mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+        mockMvcBuilder.alwaysExpect(status().isForbidden());
+        mockMvc = mockMvcBuilder.build();
+
+        RequestBuilder requestBuilder = put("/tag/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(tagDto));
+
+        mockMvc.perform(requestBuilder);
+    }
+
+    @Test
+    public void testUpdateTag() throws Exception {
+        DatabaseOperation.CLEAN_INSERT.execute(getDBConnection(), loadDataSet("dataset/expense-controller-integration-test-dataset.xml"));
+        mockAuthenticatedUser(3);
+
+        TagDTO tagDto = new TagDtoBuilder()
+                .setName("Bill")
+                .setBackgroundColor("#123456")
+                .setForegroundColor("#654321")
+                .build();
+
+        mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+        mockMvcBuilder.alwaysExpect(status().isOk());
+        mockMvc = mockMvcBuilder.build();
+
+        RequestBuilder requestBuilder = put("/tag/5")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(tagDto));
+
+        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+        String responseJson = result.getResponse().getContentAsString();
+
+        TagResponseDTO tagResponseDTO = om.readValue(responseJson, TagResponseDTO.class);
+
+        assertThat(tagResponseDTO.getId()).isEqualTo(5);
+        assertThat(tagResponseDTO.getName()).isEqualTo("Bill");
+        assertThat(tagResponseDTO.getBackgroundColor()).isEqualToIgnoringCase("#123456");
+        assertThat(tagResponseDTO.getForegroundColor()).isEqualToIgnoringCase("#654321");
     }
 }
