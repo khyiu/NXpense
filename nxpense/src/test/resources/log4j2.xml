@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="ERROR" name="Nxpense">
+	<Appenders>
+		<Console name="CONSOLE" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+
+		<RollingFile name="ROLLING_FILE" append="true"
+			immediateFlush="true" fileName="${sys:user.home}\nxpense\logs\nxpense.log"
+			filePattern="${sys:user.home}\nxpense\logs\nxpense-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout>
+				<pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+				</pattern>
+			</PatternLayout>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="10 MB" />
+				<!-- In filepattern, the most fined-grained unit = dd, so, will rolled 
+					every day -->
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+			</Policies>
+			<!-- Maximum number of indexed rollover files -->
+			<DefaultRolloverStrategy max="5" />
+		</RollingFile>
+		<RollingFile name="ROLLING_FILE_SECURITY" append="true"
+			immediateFlush="true" fileName="${sys:user.home}\nxpense\logs\nxpense-security.log"
+			filePattern="${sys:user.home}\nxpense\logs\nxpense-security-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout>
+				<pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+				</pattern>
+			</PatternLayout>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="10 MB" />
+				<!-- In filepattern, the most fined-grained unit = dd, so, will rolled 
+					every day -->
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+			</Policies>
+			<!-- Maximum number of indexed rollover files -->
+			<DefaultRolloverStrategy max="5" />
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+		<Root level="OFF">
+			<AppenderRef ref="CONSOLE" />
+		</Root>
+		<logger name="nxpense.controller" level="INFO" additivity="false">
+			<AppenderRef ref="ROLLING_FILE" />
+		</logger>
+		<logger name="nxpense.service" level="DEBUG" additivity="false">
+			<AppenderRef ref="ROLLING_FILE" />
+			<AppenderRef ref="CONSOLE" />
+		</logger>
+		<logger name="nxpense.security" level="INFO" additivity="false">
+			<AppenderRef ref="ROLLING_FILE_SECURITY" />
+			<AppenderRef ref="CONSOLE"/>
+		</logger>
+		
+		<!-- Development loggers -->
+		<logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+			<AppenderRef ref="CONSOLE" />
+		</logger>
+		<logger name="org.hibernate.transaction" level="DEBUG" additivity="false">
+			<AppenderRef ref="CONSOLE"/>
+		</logger>
+		<logger name="org.springframework.transaction" level="TRACE" additivity="false">
+			<AppenderRef ref="CONSOLE"/>
+		</logger>
+	</Loggers>
+</Configuration>
