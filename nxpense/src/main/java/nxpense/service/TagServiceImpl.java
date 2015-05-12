@@ -5,6 +5,7 @@ import nxpense.domain.Tag;
 import nxpense.domain.User;
 import nxpense.dto.TagDTO;
 import nxpense.exception.BadRequestException;
+import nxpense.exception.ForbiddenActionException;
 import nxpense.exception.RequestCannotCompleteException;
 import nxpense.helper.SecurityPrincipalHelper;
 import nxpense.helper.TagConverter;
@@ -78,10 +79,38 @@ public class TagServiceImpl implements TagService {
         // NOTE: several users may have tags with a same name. Given that Tag entity's identity is based on sole name, must perform an ID comparison too.
         if(!currentUser.ownTag(tagToDelete) || !currentUser.getTag(tagToDelete.getName()).getId().equals(tagId)) {
             LOGGER.warn("Trying to delete a tag [{}] that does not belong to current user [{}]!", tagId, currentUser);
-            throw new RequestCannotCompleteException("Cannot delete tag that does not belong to current user");
+            throw new ForbiddenActionException("Cannot delete tag that does not belong to current user");
         }
 
         currentUser.removeTag(tagToDelete);
         tagRepository.delete(tagToDelete);
+    }
+
+    @Override
+    @Transactional(noRollbackFor = Exception.class)
+    public Tag updateTag(Integer tagId, TagDTO tagBody) {
+        if(tagId == null || tagBody == null) {
+            throw new IllegalArgumentException("Both tag ID and tag content must be provided");
+        }
+
+        User currentUser = securityPrincipalHelper.getCurrentUser();
+        Tag tagToUpdate = tagRepository.findOne(tagId);
+
+        if(tagToUpdate == null) {
+            LOGGER.warn("Tag update: no tag found with ID [{}]", tagId);
+            throw new RequestCannotCompleteException("No tag found with specified ID");
+        }
+
+        if(!currentUser.ownTag(tagToUpdate) || !currentUser.getTag(tagToUpdate.getName()).getId().equals(tagId)) {
+            LOGGER.warn("Trying to update a tag [{}] that does not belong to current user [{}]!", tagId, currentUser);
+            throw new ForbiddenActionException("Cannot update tag that does not belong to current user");
+        }
+
+        Tag newTagContent = TagConverter.dtoToEntity(tagBody);
+        tagToUpdate.setName(newTagContent.getName());
+        tagToUpdate.setBackgroundColor(newTagContent.getBackgroundColor());
+        tagToUpdate.setForegroundColor(newTagContent.getForegroundColor());
+
+        return tagToUpdate;
     }
 }

@@ -129,7 +129,7 @@ public class TagControllerIntegrationTest extends AbstractIntegrationTest {
         mockAuthenticatedUser(3);
 
         mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
-        mockMvcBuilder.alwaysExpect(status().isConflict());
+        mockMvcBuilder.alwaysExpect(status().isForbidden());
         mockMvc = mockMvcBuilder.build();
 
         RequestBuilder requestBuilder = delete("/tag/1")

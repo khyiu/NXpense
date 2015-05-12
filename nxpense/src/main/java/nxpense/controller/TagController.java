@@ -63,4 +63,12 @@ public class TagController {
         tagService.deleteTag(tagId);
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
+
+    @RequestMapping(value = "/{tagId}", method = RequestMethod.PUT)
+    @ResponseBody
+    public ResponseEntity<TagResponseDTO> updateTag(@PathVariable Integer tagId, @RequestBody TagDTO tagBody) {
+        Tag updatedTag = tagService.updateTag(tagId, tagBody);
+        TagResponseDTO tagResponseDTO = TagConverter.entityToResponseDto(updatedTag);
+        return new ResponseEntity(tagResponseDTO, HttpStatus.OK);
+    }
 }

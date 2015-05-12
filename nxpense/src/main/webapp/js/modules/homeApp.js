@@ -23,14 +23,14 @@
 
         // Routes configuration
         $routeProvider
-          .when('/expense/details', {
-              templateUrl: 'views/expense-details.html',
-              controller: 'expenseController'
-          })
-          .when('/tag/management', {
-              templateUrl: 'views/tag-manage.html',
-              controller: 'tagController'
-          });
+            .when('/expense/details', {
+                templateUrl: 'views/expense-details.html',
+                controller: 'expenseController'
+            })
+            .when('/tag/management', {
+                templateUrl: 'views/tag-manage.html',
+                controller: 'tagController'
+            });
     });
 
     homeAppModule.directive('nxExpenseTableFooter', ['Restangular', '$modal', 'notificationHelper', function (Restangular, $modal, notificationHelper) {
@@ -38,38 +38,38 @@
             restrict: 'E',
             transclude: true,
             templateUrl: 'pagination/expense-table-footer.html',
-            controller: function($scope, $rootScope) {
+            controller: function ($scope, $rootScope) {
                 // open modal for expense creation
                 $scope.openNewExpenseModal = function () {
                     $modal.open({
                         templateUrl: 'modal/new-expense-modal.html',
                         controller: 'modalController',
                         resolve: {
-                            selectedExpense: function() {
+                            selectedExpense: function () {
                                 return null;
                             }
                         }
                     });
                 };
 
-                $scope.editSelectedExpense = function() {
+                $scope.editSelectedExpense = function () {
                     $modal.open({
                         templateUrl: 'modal/new-expense-modal.html',
                         controller: 'modalController',
                         resolve: {
-                            selectedExpense: function() {
+                            selectedExpense: function () {
                                 return _.findWhere($scope.expenses, {selected: true});
                             }
                         }
                     });
                 };
 
-                $scope.disableEditButton = function() {
-                  var hasOnlyOneSelectedExpense = $scope.expenses && _.where($scope.expenses, {selected: true}).length === 1;
-                  return !hasOnlyOneSelectedExpense;
+                $scope.disableEditButton = function () {
+                    var hasOnlyOneSelectedExpense = $scope.expenses && _.where($scope.expenses, {selected: true}).length === 1;
+                    return !hasOnlyOneSelectedExpense;
                 };
 
-                $scope.deleteSelected = function() {
+                $scope.deleteSelected = function () {
                     var idsToDelete = _.where($scope.expenses, {selected: true});
                     idsToDelete = _.pluck(idsToDelete, 'id');
 
@@ -79,40 +79,40 @@
                     };
 
                     expenseDao.remove(queryParameters).then(
-                      function() {
-                          notificationHelper.showOperationSuccess("Expense(s) deleted.");
+                        function () {
+                            notificationHelper.showOperationSuccess("Expense(s) deleted.");
 
-                          // send event to trigger reloading of current item page
-                          $rootScope.$broadcast('expense:reloadPage');
-                      },
+                            // send event to trigger reloading of current item page
+                            $rootScope.$broadcast('expense:reloadPage');
+                        },
 
-                      function() {
-                          notificationHelper.hideServerInfo();
-                          notificationHelper.showOperationFailure("Failed deleting expenses! Please retry later...");
-                      }
+                        function () {
+                            notificationHelper.hideServerInfo();
+                            notificationHelper.showOperationFailure("Failed deleting expenses! Please retry later...");
+                        }
                     );
                 };
 
-                $scope.disableDeleteButton = function() {
-                  var hasSelectedItems = $scope.expenses && _.findWhere($scope.expenses, {selected: true});
-                  return !hasSelectedItems;
+                $scope.disableDeleteButton = function () {
+                    var hasSelectedItems = $scope.expenses && _.findWhere($scope.expenses, {selected: true});
+                    return !hasSelectedItems;
                 };
 
-                $scope.getPageFirstItem = function() {
+                $scope.getPageFirstItem = function () {
                     return $rootScope.page + (($rootScope.page - 1) * ($rootScope.pageSize - 1));
                 };
 
-                $scope.getPageLastItem = function() {
+                $scope.getPageLastItem = function () {
                     return $rootScope.page * $rootScope.pageSize;
                 };
 
                 // bound to expense-table-footer.html with getterSetter option...
-                $scope.page = function(newSelectedPage) {
+                $scope.page = function (newSelectedPage) {
                     var newSelectPageIndex;
                     if (newSelectedPage) {
                         newSelectPageIndex = parseInt(newSelectedPage, 10);
 
-                        if(!isNaN(newSelectPageIndex) && newSelectedPage > 0 && newSelectedPage <= $rootScope.totalNumberOfPage) {
+                        if (!isNaN(newSelectPageIndex) && newSelectedPage > 0 && newSelectedPage <= $rootScope.totalNumberOfPage) {
                             $rootScope.page = parseInt(newSelectedPage, 10);
                             $rootScope.$broadcast('expense:reloadPage');
                         }
@@ -121,7 +121,7 @@
                     return $rootScope.page;
                 };
 
-                $scope.goToNextPage = function($event, step) {
+                $scope.goToNextPage = function ($event, step) {
                     $event.preventDefault();
                     $scope.page($rootScope.page + step);
                 };
@@ -137,17 +137,34 @@
 
     homeAppModule.controller('tagController', ['$rootScope', '$scope', 'Restangular', 'notificationHelper', function ($rootScope, $scope, Restangular, notificationHelper) {
         var tagDAO = Restangular.all('tag');
+        var defaultMode = 'Create';
+        var existingTagPreviousState;
+        var defaultTag = {
+            backgroundColor: '#8546EB',
+            foregroundColor: '#FFFF00',
+            name: null
+        };
+
+        // reverting the existing tag whose edition was in progress to its initial state
+        var discardEditionInProgress = function() {
+            if(existingTagPreviousState) {
+                angular.copy(existingTagPreviousState, $scope.currentTag);
+                existingTagPreviousState = null;
+            }
+        };
+
+        $scope.mode = defaultMode;
 
         // DISPLAY TAGS
-        $scope.loadTags = function() {
+        $scope.loadTags = function () {
             notificationHelper.showServerInfo("Fetching tags...");
             tagDAO.customGET('user').then(
-                function(tags) {
+                function (tags) {
                     notificationHelper.hideServerInfo();
                     $scope.existingTags = tags;
                 },
 
-                function() {
+                function () {
                     notificationHelper.hideServerInfo();
                     notificationHelper.showOperationFailure("Failed fetching tags! Please retry later...");
                 }
@@ -157,43 +174,54 @@
         $scope.loadTags();
 
         // TAG DELETION
-        $scope.remove = function(tag, $event) {
-            if(_.isNull($event) || ($event && $event.keyCode === 13)) {
+        $scope.remove = function (tag, $event) {
+            if (tag && (_.isUndefined($event.keyCode) || $event.keyCode === 13)) {
                 notificationHelper.showServerInfo("Deleting tag...");
 
                 tagDAO.customDELETE(tag.id).then(
-                    function() {
+                    function () {
                         notificationHelper.hideServerInfo();
                         $scope.loadTags();
                     },
 
-                    function() {
+                    function () {
                         notificationHelper.hideServerInfo();
                         notificationHelper.showOperationFailure("Failed deleting tag! Please retry later...");
                     }
                 );
             }
+
+            $event.stopPropagation();
         };
 
         // TAG CREATION
-        var defaultTag = {
-            backgroundColor: '#8546EB',
-            foregroundColor: '#FFFF00',
-            name: null
-        };
+        $scope.currentTag = angular.copy(defaultTag, {});
 
-        $scope.newTag = angular.copy(defaultTag, {});
+        $scope.reset = function () {
+            $scope.mode = defaultMode;
 
-        $scope.reset = function() {
-            $scope.newTag = angular.copy(defaultTag, {});
+            discardEditionInProgress();
+            $scope.currentTag = angular.copy(defaultTag, {});
             $scope.tagForm.$setPristine(true);
         };
 
-        $scope.$watch('newTag.name', function() {
+        $scope.$watch('newTag.name', function () {
             $scope.tagForm.tagName.$setValidity('alreadyExists', true);
         });
 
-        $scope.saveTag = function() {
+        // TAG EDITION
+        $scope.editTag = function (tag, $event) {
+            if (tag && (_.isUndefined($event.keyCode) || $event.keyCode === 13)) {
+                discardEditionInProgress();
+                $scope.mode = 'Edit';
+                existingTagPreviousState = angular.copy(tag, {});
+                $scope.currentTag = tag;
+                $event.preventDefault();
+            }
+        };
+
+        // SAVING TAG CREATION/MODIFICATION
+        $scope.saveTag = function () {
             var successCallback = function () {
                 notificationHelper.hideServerInfo();
                 notificationHelper.showOperationSuccess("Tag saved.");
@@ -206,12 +234,16 @@
                 notificationHelper.hideServerInfo();
                 notificationHelper.showOperationFailure("Failed saving tag!");
 
-                if(serverSideValidationMsg) {
+                if (serverSideValidationMsg) {
                     $scope.tagForm.tagName.$setValidity('alreadyExists', false);
                 }
             };
 
-            tagDAO.customPOST(this.newTag).then(successCallback, failureCallback);
+            if (this.currentTag.id) {
+                tagDAO.one(this.currentTag.id.toString()).customPUT(this.currentTag).then(successCallback, failureCallback);
+            } else {
+                tagDAO.customPOST(this.currentTag).then(successCallback, failureCallback);
+            }
         };
     }]);
 
@@ -219,13 +251,13 @@
         $scope.sortProp = 'date';
         $scope.sortAsc = true;
 
-        $scope.updatePageSize = function(newPageSize) {
+        $scope.updatePageSize = function (newPageSize) {
             var newPageSizeInt;
 
-            if(newPageSize) {
+            if (newPageSize) {
                 newPageSizeInt = parseInt(newPageSize, 10);
 
-                if(!isNaN(newPageSizeInt)) {
+                if (!isNaN(newPageSizeInt)) {
                     $rootScope.pageSize = newPageSize;
                     $rootScope.page = 1;
                     $scope.reloadPage();
@@ -265,7 +297,7 @@
 
         $scope.$watch('pageSize', $scope.updatePageSize);
 
-        $scope.$on('expense:reloadPage', function() {
+        $scope.$on('expense:reloadPage', function () {
             $scope.reloadPage();
             $scope.selectedAll = false;
         });
@@ -275,9 +307,9 @@
         // The $event parameter may be:
         // - undefined --> event initiated by mouse
         // - defined --> event initiated by keyboard
-        $scope.toggleSelectAll = function($event) {
-            if($event) {
-                if($event.keyCode === 13) {
+        $scope.toggleSelectAll = function ($event) {
+            if ($event) {
+                if ($event.keyCode === 13) {
                     $scope.selectedAll = !$scope.selectedAll;
                     $event.preventDefault();
                 } else {
@@ -285,23 +317,23 @@
                 }
             }
 
-            _.each($scope.expenses, function(expense) {
+            _.each($scope.expenses, function (expense) {
                 expense.selected = $scope.selectedAll;
             });
         };
 
-        $scope.toggleItemSelection = function($event, expense) {
+        $scope.toggleItemSelection = function ($event, expense) {
             var numberOfSelectedItem;
 
             // if $event provided -> event triggered by keyboard --> check that pressed key = ENTER
             // if $event == undefined -> event triggered by mouse
-            if(_.isUndefined($event) || $event.keyCode === 13) {
+            if (_.isUndefined($event) || $event.keyCode === 13) {
                 expense.selected = !expense.selected;
 
                 // Update 'selectedAll' attribute accordingly only if its value will change --> prevent $digest loop to run if not actually necessary
                 numberOfSelectedItem = _.where($scope.expenses, {selected: true}).length;
 
-                if(numberOfSelectedItem < $scope.expenses.length && $scope.selectedAll) {
+                if (numberOfSelectedItem < $scope.expenses.length && $scope.selectedAll) {
                     $scope.selectedAll = false;
                 } else if (numberOfSelectedItem === $scope.expenses.length && !$scope.selectedAll) {
                     $scope.selectedAll = true;
@@ -311,9 +343,9 @@
 
         // Function to handle changing sort criteria (property/direction).
         // If $event is provided, the event is triggered by keyboard --> restrict on key = ENTER
-        $scope.updateSort = function($event, sortProp) {
-            if(_.isUndefined($event) || $event.keyCode === 13) {
-                if($scope.sortProp === sortProp) {
+        $scope.updateSort = function ($event, sortProp) {
+            if (_.isUndefined($event) || $event.keyCode === 13) {
+                if ($scope.sortProp === sortProp) {
                     $scope.sortAsc = !$scope.sortAsc;
                 } else {
                     $scope.sortProp = sortProp;
@@ -329,7 +361,7 @@
         function ($rootScope, $scope, $modalInstance, Restangular, $filter, notificationHelper, selectedExpense) {
             var expenseDAO = Restangular.one('expense');
 
-            if(selectedExpense) {
+            if (selectedExpense) {
                 $scope.expense = _.extend({}, selectedExpense);
             } else {
                 $scope.expense = {source: 'DEBIT_CARD'};
@@ -352,9 +384,9 @@
                 $modalInstance.close();
                 notificationHelper.showServerInfo('Saving...');
 
-                if(this.expense.id) {
+                if (this.expense.id) {
                     expenseDAO.customPUT(this.expense, this.expense.id).then(successCallback, failureCallback);
-                }else {
+                } else {
                     expenseDAO.customPOST(this.expense).then(successCallback, failureCallback);
                 }
             };

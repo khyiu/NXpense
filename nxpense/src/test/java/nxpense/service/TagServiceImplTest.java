@@ -4,6 +4,7 @@ import nxpense.builder.TagDtoBuilder;
 import nxpense.domain.Tag;
 import nxpense.dto.TagDTO;
 import nxpense.exception.BadRequestException;
+import nxpense.exception.ForbiddenActionException;
 import nxpense.exception.RequestCannotCompleteException;
 import nxpense.helper.SecurityPrincipalHelper;
 import nxpense.repository.TagRepository;
@@ -35,6 +36,7 @@ public class TagServiceImplTest extends AbstractServiceTest {
     private static final Tag TAG = buildTag();
 
     private static final String TAG_NAME_ROOT = "Bill";
+    private static final String TAG_NAME_ROOT_UPDATED = "Bill (updated)";
     private static final String BACKGROUND_COLOR_ROOT = "#FF0000";
     private static final Color BACKGROUND_COLOR_ROOT_RGB = new Color(255, 0, 0);
     private static final String FOREGROUND_COLOR_ROOT = "#FFFFFF";
@@ -42,6 +44,12 @@ public class TagServiceImplTest extends AbstractServiceTest {
 
     private static final TagDTO TAG_DTO = new TagDtoBuilder()
             .setName(TAG_NAME_ROOT)
+            .setBackgroundColor(BACKGROUND_COLOR_ROOT)
+            .setForegroundColor(FOREGROUND_COLOR_ROOT)
+            .build();
+
+    private static final TagDTO TAG_DTO_FOR_UPDATE = new TagDtoBuilder()
+            .setName(TAG_NAME_ROOT_UPDATED)
             .setBackgroundColor(BACKGROUND_COLOR_ROOT)
             .setForegroundColor(FOREGROUND_COLOR_ROOT)
             .build();
@@ -137,8 +145,8 @@ public class TagServiceImplTest extends AbstractServiceTest {
         tagService.deleteTag(ID_NON_EXISTING_TAG);
     }
 
-    @Test(expected = RequestCannotCompleteException.class)
-    public void testDeleteTag_currentUserNotOwer() {
+    @Test(expected = ForbiddenActionException.class)
+    public void testDeleteTag_currentUserNotOwner() {
         tagService.deleteTag(ID_NON_CURRENT_USER_TAG);
     }
 
@@ -147,5 +155,32 @@ public class TagServiceImplTest extends AbstractServiceTest {
         mockUser.addTag(TAG);
         tagService.deleteTag(ID_CURRENT_USER_TAG);
         verify(tagRepository).delete(TAG);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testUpdateTag_nullId() {
+        tagService.updateTag(null, TAG_DTO);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testUpdateTag_nullBody() {
+        tagService.updateTag(ID_CURRENT_USER_TAG, null);
+    }
+
+    @Test(expected = RequestCannotCompleteException.class)
+    public void testUpdateTag_nonExistingTag() {
+        tagService.updateTag(ID_NON_EXISTING_TAG, TAG_DTO);
+    }
+
+    @Test(expected = ForbiddenActionException.class)
+    public void testUpdateTag_nonCurrentUserTag() {
+        tagService.updateTag(ID_NON_CURRENT_USER_TAG, TAG_DTO);
+    }
+
+    @Test
+    public void testUpdateTag() {
+        mockUser.addTag(TAG);
+        Tag updatedTag = tagService.updateTag(ID_CURRENT_USER_TAG, TAG_DTO_FOR_UPDATE);
+        assertThat(updatedTag.getName()).isEqualTo(TAG_NAME_ROOT_UPDATED);
     }
 }
