@@ -10,7 +10,9 @@
             transclude: true,
             templateUrl: 'navigation/side-menu.html',
             controller: function ($scope, $rootScope) {
-                // todo implement drag and drop logic here?
+                $scope.logout = function () {
+                    window.location.assign('/' + $scope.WEB_CONTEXT + '/logout');
+                };
             }
         };
     }]);

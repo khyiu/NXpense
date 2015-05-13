@@ -33,12 +33,6 @@
             });
     });
 
-    homeAppModule.controller('userController', ['$scope', function ($scope) {
-        $scope.logout = function () {
-            window.location.assign('/' + $scope.WEB_CONTEXT + '/logout');
-        };
-    }]);
-
     homeAppModule.controller('tagController', ['$rootScope', '$scope', 'Restangular', 'notificationHelper', function ($rootScope, $scope, Restangular, notificationHelper) {
         var tagDAO = Restangular.all('tag');
         var defaultMode = 'Create';
