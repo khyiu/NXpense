@@ -47,6 +47,7 @@
 <script src="../js/plugins/ui-bootstrap/ui-bootstrap-0.12.0.js"></script>
 <!-- Custom Angular module -->
 <script src="../js/helper/notificationHelper.js"></script>
+<script src="../js/modules/homeApp.directive.js"></script>
 <script src="../js/modules/homeApp.js"></script>
 <!-- jquery.autosize plugin -->
 <script src="../js/plugins/jquery-autosize/jquery.autosize.js"></script>
@@ -104,6 +105,8 @@
         </ul>
         <!-- /.navbar-top-links -->
         <div class="navbar-default sidebar" role="navigation">
+            <!-- todo -->
+            <!--
             <div class="sidebar-nav navbar-collapse">
                 <ul class="nav" id="side-menu">
                     <li>
@@ -117,7 +120,6 @@
                                 <a href="#expense/details">Details</a>
                             </li>
                         </ul>
-                        <!-- /.nav-second-level -->
                     </li>
                     <li>
                         <a href="#">
@@ -130,10 +132,12 @@
                                 <a href="#tag/management" title="Open tags management interface">Management</a>
                             </li>
                         </ul>
-                        <!-- /.nav-third-level -->
                     </li>
                 </ul>
             </div>
+            -->
+            <!-- /.sidebar-collapse -->
+            <side-menu></side-menu>
             <!-- /.sidebar-collapse -->
         </div>
         <!-- /.navbar-static-side -->
