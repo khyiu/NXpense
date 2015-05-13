@@ -1,6 +1,41 @@
 <div id="expense-table" class="table-responsive">
     <div id="dataTables-example_wrapper" class="dataTables_wrapper form-inline">
-        <div id="pagination-header" class="row">
+        <fieldset class="fieldset-border">
+            <legend class="fieldset-border ng-binding">Balances</legend>
+            <div class="row table-header-row">
+                <div class="col-sm-4">
+                    <label for="balance-verified">Verified</label>
+
+                    <div class="input-group">
+                    <span class="input-group-addon">
+                        <i class="fa fa-eur"></i>
+                    </span>
+                        <input id="balance-verified" type="text" class="form-control balance" readonly value="{{balance.verified}}">
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <label for="balance-not-verified">Not verified</label>
+
+                    <div class="input-group">
+                    <span class="input-group-addon">
+                        <i class="fa fa-eur"></i>
+                    </span>
+                        <input id="balance-not-verified" type="text" class="form-control balance" readonly value="{{balance.nonVerified}}">
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <label for="balance-global">Global</label>
+
+                    <div class="input-group">
+                    <span class="input-group-addon">
+                        <i class="fa fa-eur"></i>
+                    </span>
+                        <input id="balance-global" type="text" class="form-control balance" readonly value="{{balance.global}}">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <div class="row table-header-row">
             <div class="col-sm-6">
                 <div class="dataTables_length" id="dataTables-example_length">
                     <label for="pagination-size">

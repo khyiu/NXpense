@@ -45,8 +45,8 @@
     width: 38px;
 }
 
-/* Pagination elements */
-#pagination-header {
+/* Table header elements */
+.table-header-row {
     margin-bottom: 10px;
 }
 
@@ -73,6 +73,12 @@
 
 .page-btn {
     font-weight: bold;
+}
+
+input.balance {
+    width: 100px !important;
+    text-align: center;
+    font-weight: 600;
 }
 
 /* New expense modal */
