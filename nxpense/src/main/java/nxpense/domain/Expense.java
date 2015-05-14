@@ -41,6 +41,8 @@ public abstract class Expense {
             })
     private Set<Tag> tags;
 
+    private boolean verified;
+
     public Integer getId() {
         return this.id;
     }
@@ -83,6 +85,14 @@ public abstract class Expense {
 
     public void setPosition(Integer position) {
         this.position = position;
+    }
+
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
     }
 
     @Override
