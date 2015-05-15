@@ -4,12 +4,13 @@
     var homeAppDirectiveModule = angular.module('homeApp.directive', ['ui.bootstrap', 'restangular', 'notificationHelperModule']);
 
 
-    homeAppDirectiveModule.directive('sideMenu', ['Restangular', function (Restangular) {
+    homeAppDirectiveModule.directive('sideMenu', ['Restangular', '$rootScope', function (Restangular, $rootScope) {
         return {
             restrict: 'E',
             transclude: true,
             templateUrl: 'navigation/side-menu.html',
-            scope: {},
+            scope: {
+            },
             controller: function ($scope, $rootScope) {
                 $scope.logout = function () {
                     window.location.assign('/' + $rootScope.WEB_CONTEXT + '/logout');

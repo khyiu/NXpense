@@ -10,6 +10,17 @@
                 <li>
                     <a href="#expense/details">Details</a>
                 </li>
+                <li>
+                    <a href="#">
+                        <i class="fa fa-tags">Available tags</i>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-third-level collapse " ng-repeat="tag in $root.existingTags">
+                        <li>
+                            <a>{{tag.name}}</a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </li>
         <li>

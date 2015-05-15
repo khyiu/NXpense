@@ -5,7 +5,7 @@
 
     // Run block to initialize attributes to be used across controllers that are not necessarily nested in each other
     // --> cannot benefit from scope hierarchy...
-    homeAppModule.run(function ($rootScope) {
+    homeAppModule.run(function ($rootScope, Restangular, notificationHelper) {
         // Deducing the current application's web context from the path to access the current page
         $rootScope.WEB_CONTEXT = window.location.pathname.split('/')[1];
 
@@ -14,6 +14,23 @@
 
         // Page number selected by default = 1
         $rootScope.page = 1;
+
+        $rootScope.loadTags = function () {
+            notificationHelper.showServerInfo("Fetching tags...");
+            Restangular.all('tag').customGET('user').then(
+                function (tags) {
+                    notificationHelper.hideServerInfo();
+                    $rootScope.existingTags = tags;
+                },
+
+                function () {
+                    notificationHelper.hideServerInfo();
+                    notificationHelper.showOperationFailure("Failed fetching tags! Please retry later...");
+                }
+            );
+        };
+
+        $rootScope.loadTags();
     });
 
     homeAppModule.config(function (RestangularProvider, $routeProvider) {
@@ -54,21 +71,6 @@
         $scope.mode = defaultMode;
 
         // DISPLAY TAGS
-        $scope.loadTags = function () {
-            notificationHelper.showServerInfo("Fetching tags...");
-            tagDAO.customGET('user').then(
-                function (tags) {
-                    notificationHelper.hideServerInfo();
-                    $scope.existingTags = tags;
-                },
-
-                function () {
-                    notificationHelper.hideServerInfo();
-                    notificationHelper.showOperationFailure("Failed fetching tags! Please retry later...");
-                }
-            );
-        };
-
         $scope.loadTags();
 
         // TAG DELETION
