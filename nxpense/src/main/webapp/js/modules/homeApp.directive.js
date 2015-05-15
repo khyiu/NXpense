@@ -9,9 +9,10 @@
             restrict: 'E',
             transclude: true,
             templateUrl: 'navigation/side-menu.html',
+            scope: {},
             controller: function ($scope, $rootScope) {
                 $scope.logout = function () {
-                    window.location.assign('/' + $scope.WEB_CONTEXT + '/logout');
+                    window.location.assign('/' + $rootScope.WEB_CONTEXT + '/logout');
                 };
             }
         };
