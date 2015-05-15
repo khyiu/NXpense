@@ -10,6 +10,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -75,4 +76,13 @@ public interface ExpenseRepository extends PagingAndSortingRepository<Expense, I
      * @return The expense with the specified ID and belonging to the specified user
      */
     public Expense findByIdAndUser(int id, User user);
+
+    /**
+     * Computes the sum of the specified user's expense filtered out by their verification status.
+     * @param user Owner of the expenses to be taken into account in the sum calculation
+     * @param verified Status of the expenses to be taken into account in the sum calculation
+     * @return sum of expenses that belong to {@code user} and whose verification status is equal to {@code verified}
+     */
+    @Query("select sum(e.amount) from Expense e where e.user = :owner and e.verified = :verificationStatus")
+    public BigDecimal sumExpenseByVerificationStatus(@Param("owner")User user, @Param("verificationStatus") boolean verified);
 }

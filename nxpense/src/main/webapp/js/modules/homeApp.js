@@ -172,6 +172,18 @@
                 properties: [$scope.sortProp, 'position']
             };
 
+            // load balance info
+            expenseDAO.customGET('balance').then(
+                function(balance) {
+                    $scope.balance = balance;
+                },
+
+                function() {
+                    notificationHelper.showOperationFailure("Failed fetching balance!");
+                }
+            );
+
+            // load expense items
             notificationHelper.showServerInfo("Fetching expenses...");
             expenseDAO.one('page').get(queryParameters).then(
                 function (response) {

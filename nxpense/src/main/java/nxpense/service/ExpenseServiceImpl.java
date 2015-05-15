@@ -2,6 +2,7 @@ package nxpense.service;
 
 import nxpense.domain.Expense;
 import nxpense.domain.User;
+import nxpense.dto.BalanceInfoDTO;
 import nxpense.dto.ExpenseDTO;
 import nxpense.exception.BadRequestException;
 import nxpense.exception.RequestCannotCompleteException;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -93,5 +95,17 @@ public class ExpenseServiceImpl implements ExpenseService {
         expenseRepository.decrementSameDateHigherPosition(ids, currentUser);
         int numberDeletedItems = expenseRepository.deleteByIdInAndUser(currentUser, ids);
         LOGGER.info("User {} deleted {} item(s)", currentUser, numberDeletedItems);
+    }
+
+    @Transactional(readOnly = true)
+    public BalanceInfoDTO getBalanceInfo() {
+        User currentUser = securityPrincipalHelper.getCurrentUser();
+        BigDecimal sumVerified = expenseRepository.sumExpenseByVerificationStatus(currentUser, true);
+        BigDecimal sumNonVerified = expenseRepository.sumExpenseByVerificationStatus(currentUser, false);
+
+        sumVerified = sumVerified == null ? BigDecimal.ZERO : sumVerified;
+        sumNonVerified = sumNonVerified == null ? BigDecimal.ZERO : sumNonVerified;
+
+        return new BalanceInfoDTO(sumVerified, sumNonVerified, sumVerified.add(sumNonVerified));
     }
 }

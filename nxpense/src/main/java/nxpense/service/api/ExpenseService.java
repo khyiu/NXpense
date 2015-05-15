@@ -1,6 +1,7 @@
 package nxpense.service.api;
 
 import nxpense.domain.Expense;
+import nxpense.dto.BalanceInfoDTO;
 import nxpense.dto.ExpenseDTO;
 import nxpense.exception.RequestCannotCompleteException;
 import org.springframework.data.domain.Page;
@@ -49,4 +50,10 @@ public interface ExpenseService {
      * @throws RequestCannotCompleteException if the specified list of ID is null
      */
     public void deleteExpense(List<Integer> ids) throws RequestCannotCompleteException;
+
+    /**
+     * Retrieves the balance information related to the current user.
+     * @return Object containing balance information such as the sum of verified expenses and the sum of non-verified expenses
+     */
+    public BalanceInfoDTO getBalanceInfo();
 }

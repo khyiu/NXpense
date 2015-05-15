@@ -1,6 +1,7 @@
 package nxpense.controller;
 
 import nxpense.domain.Expense;
+import nxpense.dto.BalanceInfoDTO;
 import nxpense.dto.ExpenseDTO;
 import nxpense.dto.ExpenseResponseDTO;
 import nxpense.dto.PageDTO;
@@ -73,4 +74,10 @@ public class ExpenseController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/balance", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<BalanceInfoDTO> getBalance() {
+        BalanceInfoDTO balance = expenseService.getBalanceInfo();
+        return new ResponseEntity<BalanceInfoDTO>(balance, HttpStatus.OK);
+    }
 }
