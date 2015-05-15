@@ -1,10 +1,7 @@
 package nxpense.controller;
 
 import nxpense.builder.ExpenseDtoBuilder;
-import nxpense.dto.ExpenseDTO;
-import nxpense.dto.ExpenseResponseDTO;
-import nxpense.dto.ExpenseSource;
-import nxpense.dto.PageDTO;
+import nxpense.dto.*;
 import nxpense.security.CustomUserDetails;
 import org.dbunit.operation.DatabaseOperation;
 import org.joda.time.LocalDate;
@@ -168,7 +165,7 @@ public class ExpenseControllerIntegrationTest extends AbstractIntegrationTest {
         mockMvc.perform(requestBuilder).andDo(print());
 
         int numberOfExpenseRow = JdbcTestUtils.countRowsInTable(new JdbcTemplate(datasource), "EXPENSE");
-        assertThat(numberOfExpenseRow).isEqualTo(6);
+        assertThat(numberOfExpenseRow).isEqualTo(12);
     }
 
     @Test
@@ -233,5 +230,25 @@ public class ExpenseControllerIntegrationTest extends AbstractIntegrationTest {
         assertThat(responseDto.getAmount()).isEqualTo(newAmount);
         assertThat(responseDto.getDescription()).isEqualTo(newDescription);
         assertThat(responseDto.getDate()).isEqualTo(newDate);
+    }
+
+    @Test
+    public void testGetBalance() throws Exception {
+        mockAuthenticatedUser(4);
+
+        mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+        mockMvcBuilder.alwaysExpect(status().isOk());
+        mockMvc = mockMvcBuilder.build();
+
+        RequestBuilder requestBuilder = get("/expense/balance")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+        String jsonResponse = result.getResponse().getContentAsString();
+        BalanceInfoDTO balance = om.readValue(jsonResponse, BalanceInfoDTO.class);
+
+        assertThat(balance.getNonVerified()).isEqualTo(new BigDecimal("-8.05"));
+        assertThat(balance.getVerified()).isEqualTo(new BigDecimal("1508.45"));
+        assertThat(balance.getGlobal()).isEqualTo(new BigDecimal("1500.40"));
     }
 }

@@ -12,6 +12,10 @@ public class BalanceInfoDTO implements Serializable {
     private BigDecimal nonVerified;
     private BigDecimal global;
 
+    public BalanceInfoDTO() {
+
+    }
+
     public BalanceInfoDTO(BigDecimal verified, BigDecimal nonVerified, BigDecimal global) {
         this.verified = verified;
         this.nonVerified = nonVerified;
