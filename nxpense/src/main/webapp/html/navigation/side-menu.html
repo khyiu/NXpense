@@ -15,9 +15,9 @@
                         <i class="fa fa-tags">Available tags</i>
                         <span class="fa arrow"></span>
                     </a>
-                    <ul class="nav nav-third-level collapse " ng-repeat="tag in $root.existingTags">
-                        <li>
-                            <a href="#" tag-id="{{tag.id}}">{{tag.name}}</a>
+                    <ul class="tags nav nav-third-level collapse">
+                        <li ng-repeat="tag in $root.existingTags">
+                            <a href="#" tag-id="{{tag.id}}" class="tag-menu-item">{{tag.name}}</a>
                         </li>
                     </ul>
                 </li>
