@@ -17,7 +17,10 @@
                     </a>
                     <ul class="tags nav nav-third-level collapse">
                         <li ng-repeat="tag in $root.existingTags">
-                            <a href="#" tag-id="{{tag.id}}" class="tag-menu-item">{{tag.name}}</a>
+                            <a href="#" tag-id="{{tag.id}}" class="tag-menu-item" title="{{tag.name}}"
+                               style="background-color: {{tag.backgroundColor}}; border-right-color: {{tag.backgroundColor}}; color: {{tag.foregroundColor}}">
+                                <span class="tag-label">{{tag.name}}</span>
+                            </a>
                         </li>
                     </ul>
                 </li>

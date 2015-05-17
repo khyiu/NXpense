@@ -3651,8 +3651,8 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   display: block;
   padding: 10px 15px;
 }
-.nav > li > a:hover,
-.nav > li > a:focus {
+.nav > li > a:not(.tag-menu-item):hover,
+.nav > li > a:not(.tag-menu-item):focus {
   text-decoration: none;
   background-color: #eee;
 }
@@ -6329,4 +6329,3 @@ button.close {
     display: none !important;
   }
 }
-/*# sourceMappingURL=bootstrap.css.map */
