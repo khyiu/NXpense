@@ -8,6 +8,9 @@ import org.joda.time.LocalDate;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ExpenseDTO implements Serializable {
 
@@ -23,6 +26,8 @@ public class ExpenseDTO implements Serializable {
     private String description;
 
     private Integer position;
+
+    private List<TagResponseDTO> tags = new ArrayList<TagResponseDTO>();
 
     public LocalDate getDate() {
         return date;
@@ -62,5 +67,14 @@ public class ExpenseDTO implements Serializable {
 
     public void setPosition(Integer position) {
         this.position = position;
+    }
+
+    public boolean addTags(TagResponseDTO tag) {
+        return this.tags.add(tag);
+    }
+
+    public List<TagResponseDTO> getTags() {
+        Collections.sort(this.tags);
+        return this.tags;
     }
 }

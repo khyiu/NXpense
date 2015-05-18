@@ -3,7 +3,10 @@ package nxpense.dto;
 import java.io.Serializable;
 import java.util.List;
 
-public class TagDTO implements Serializable {
+public class TagDTO implements Serializable, Comparable<TagDTO>{
+
+    private static final long serialVersionUID = 7213250656506744049L;
+
     private String name;
     private String backgroundColor;
     private String foregroundColor;
@@ -40,5 +43,14 @@ public class TagDTO implements Serializable {
 
     public void setSubTags(List<TagDTO> subTags) {
         this.subTags = subTags;
+    }
+
+    @Override
+    public int compareTo(TagDTO otherTag) {
+        if(otherTag == null) {
+            return 1;
+        }
+
+        return this.name.compareTo(otherTag.getName());
     }
 }
