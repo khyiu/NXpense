@@ -1,7 +1,10 @@
 package nxpense.controller;
 
 import nxpense.domain.Expense;
-import nxpense.dto.*;
+import nxpense.dto.BalanceInfoDTO;
+import nxpense.dto.ExpenseDTO;
+import nxpense.dto.ExpenseResponseDTO;
+import nxpense.dto.PageDTO;
 import nxpense.helper.ExpenseConverter;
 import nxpense.service.api.ExpenseService;
 import org.slf4j.Logger;
@@ -78,6 +81,8 @@ public class ExpenseController {
     @RequestMapping(value = "/{expenseId}/tag", method = RequestMethod.PUT)
     @ResponseBody
     public ResponseEntity<ExpenseResponseDTO> addTagToExpense(@PathVariable Integer expenseId, @RequestParam(required = true, value = "id") Integer tagId) {
-        return null;
+        Expense updatedExpense = expenseService.associateTagToExpense(expenseId, tagId);
+        ExpenseResponseDTO responseDto = ExpenseConverter.entityToResponseDto(updatedExpense);
+        return new ResponseEntity<ExpenseResponseDTO>(responseDto, HttpStatus.OK);
     }
 }

@@ -107,13 +107,13 @@ public abstract class Expense {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Expense)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Expense expense = (Expense) o;
 
         if (!amount.equals(expense.amount)) return false;
         if (!date.equals(expense.date)) return false;
-        if (description != null ? !description.equals(expense.description) : expense.description != null) return false;
+        if (!description.equals(expense.description)) return false;
         if (!user.equals(expense.user)) return false;
 
         return true;
@@ -124,7 +124,7 @@ public abstract class Expense {
         int result = user.hashCode();
         result = 31 * result + date.hashCode();
         result = 31 * result + amount.hashCode();
-        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + description.hashCode();
         return result;
     }
 }

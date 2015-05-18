@@ -61,8 +61,9 @@ public interface ExpenseService {
      * Associates the Tag identified by {@code tagId} to the expense identified by {@code expenseId}
      * @param expenseId ID of the expense to which the tag with ID = {@code tagId} is to be associated with
      * @param tagId ID of the tag to be associated with the target expense item
+     * @return the updated expense
      * @throws nxpense.exception.BadRequestException if no expense found for {@code expenseId} or no tag found for {@code tagId}
      * @throws nxpense.exception.ForbiddenActionException if specified expense or specified tag does not belong to current user
      */
-    public void associateTagToExpense(int expenseId, int tagId);
+    public Expense associateTagToExpense(int expenseId, int tagId);
 }

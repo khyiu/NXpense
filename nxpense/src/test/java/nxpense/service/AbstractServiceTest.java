@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.lang.reflect.Field;
 import java.util.Collections;
 
 public class AbstractServiceTest {
@@ -19,10 +20,16 @@ public class AbstractServiceTest {
     protected User mockUser;
 
     @Before
-    public void initAuthenticationMock() {
+    public void initAuthenticationMock() throws NoSuchFieldException, IllegalAccessException {
         mockUser = new User();
         mockUser.setEmail(USER_EMAIL);
         mockUser.setPassword(USER_PASSWORD.toCharArray());
+
+        Field idField = User.class.getDeclaredField("id");
+        idField.setAccessible(true);
+        idField.set(mockUser, Integer.parseInt("1"));
+
+
 
         UserDetails userDetails = new CustomUserDetails(mockUser);
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, USER_PASSWORD, Collections.<GrantedAuthority>emptyList());

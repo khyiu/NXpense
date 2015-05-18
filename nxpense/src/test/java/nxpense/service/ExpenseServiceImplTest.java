@@ -4,6 +4,7 @@ package nxpense.service;
 import nxpense.builder.ExpenseDtoBuilder;
 import nxpense.domain.DebitExpense;
 import nxpense.domain.Expense;
+import nxpense.domain.Tag;
 import nxpense.domain.User;
 import nxpense.dto.ExpenseDTO;
 import nxpense.dto.ExpenseSource;
@@ -13,10 +14,9 @@ import nxpense.exception.RequestCannotCompleteException;
 import nxpense.exception.UnauthenticatedException;
 import nxpense.helper.SecurityPrincipalHelper;
 import nxpense.repository.ExpenseRepository;
+import nxpense.repository.TagRepository;
 import nxpense.repository.UserRepository;
 import nxpense.security.CustomUserDetails;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,9 +37,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -57,6 +59,9 @@ public class ExpenseServiceImplTest extends AbstractServiceTest {
     private ExpenseRepository expenseRepository;
 
     @Mock
+    private TagRepository tagRepository;
+
+    @Mock
     private SecurityPrincipalHelper securityPrincipalHelper;
 
     @InjectMocks
@@ -67,6 +72,7 @@ public class ExpenseServiceImplTest extends AbstractServiceTest {
     private static final String DESCRIPTION = "Some DESCRIPTION";
 
     private static final List<Integer> EXPENSE_IDS = Arrays.asList(1, 2, 3);
+    private static final Integer EXPENSE_ID = 1;
     private static final Integer EXPENSE_ID_UNEXISTING = 10;
     private static final Integer EXPENSE_ID_NOT_CURRENT_USER = 100;
     private static final Integer TAG_ID = 1;
@@ -92,7 +98,72 @@ public class ExpenseServiceImplTest extends AbstractServiceTest {
 
         given(expenseRepository.findByIdAndUser(EXPENSE_ID_UNEXISTING, mockUser)).willReturn(null);
 
+        given(expenseRepository.findOne(EXPENSE_ID)).willAnswer(new Answer<Expense>() {
+
+            @Override
+            public Expense answer(InvocationOnMock invocation) throws Throwable {
+                Expense expense = new DebitExpense();
+                Field idField = expense.getClass().getSuperclass().getDeclaredField("id");
+                idField.setAccessible(true);
+                idField.set(expense, EXPENSE_ID);
+                expense.setUser(mockUser);
+                expense.setDate(DATE.toDate());
+                expense.setAmount(AMOUNT);
+                expense.setDescription(DESCRIPTION);
+                mockUser.addExpense(expense);
+                return expense;
+            }
+        });
+
+        given(expenseRepository.findOne(EXPENSE_ID_NOT_CURRENT_USER)).willAnswer(new Answer<Expense>() {
+
+            @Override
+            public Expense answer(InvocationOnMock invocation) throws Throwable {
+                Expense expense = new DebitExpense();
+                Field idField = expense.getClass().getSuperclass().getDeclaredField("id");
+                idField.setAccessible(true);
+                idField.set(expense, EXPENSE_ID_NOT_CURRENT_USER);
+
+                User notCurrentUser = new User();
+                idField = User.class.getDeclaredField("id");
+                idField.setAccessible(true);
+                idField.set(notCurrentUser, Integer.parseInt("9999"));
+                expense.setUser(notCurrentUser);
+                notCurrentUser.addExpense(expense);
+
+                return expense;
+            }
+        });
+
         given(securityPrincipalHelper.getCurrentUser()).willReturn(mockUser);
+
+        given(tagRepository.findOne(TAG_ID_UNEXISTING)).willReturn(null);
+
+        given(tagRepository.findOne(TAG_ID_NOT_CURRENT_USER)).willAnswer(new Answer<Tag>() {
+
+            @Override
+            public Tag answer(InvocationOnMock invocation) throws Throwable {
+                Tag tag = new Tag();
+                Field idField = Tag.class.getDeclaredField("id");
+                idField.setAccessible(true);
+                idField.set(tag, TAG_ID_NOT_CURRENT_USER);
+                return tag;
+            }
+        });
+
+        given(tagRepository.findOne(TAG_ID)).willAnswer(new Answer<Tag>() {
+
+            @Override
+            public Tag answer(InvocationOnMock invocation) throws Throwable {
+                Tag tag = new Tag();
+                tag.setName(TAG_NAME);
+                Field idField = Tag.class.getDeclaredField("id");
+                idField.setAccessible(true);
+                idField.set(tag, TAG_ID);
+                mockUser.addTag(tag);
+                return tag;
+            }
+        });
     }
 
     @Test
@@ -176,7 +247,7 @@ public class ExpenseServiceImplTest extends AbstractServiceTest {
 
     @Test(expected = BadRequestException.class)
     public void testAssociateTagToExpense_unexistingTag() {
-        expenseService.associateTagToExpense(1, TAG_ID_UNEXISTING);
+        expenseService.associateTagToExpense(EXPENSE_ID, TAG_ID_UNEXISTING);
     }
 
     @Test(expected = ForbiddenActionException.class)
@@ -186,20 +257,13 @@ public class ExpenseServiceImplTest extends AbstractServiceTest {
 
     @Test(expected = ForbiddenActionException.class)
     public void testAssociateTagToExpense_nonCurrentUserTag() {
-        expenseService.associateTagToExpense(1, TAG_ID_NOT_CURRENT_USER);
+        expenseService.associateTagToExpense(EXPENSE_ID, TAG_ID_NOT_CURRENT_USER);
     }
 
     @Test
     public void testAssociateTagToExpense() {
-        expenseService.associateTagToExpense(1, TAG_ID);
-        Expense updatedExpense = (Expense) CollectionUtils.find(mockUser.getExpenses(), new Predicate() {
-            @Override
-            public boolean evaluate(Object o) {
-                return ((Expense) o).getId() == 1;
-            }
-        });
+        Expense updatedExpense = expenseService.associateTagToExpense(EXPENSE_ID, TAG_ID);
 
-        assertThat(updatedExpense).isNotNull();
         assertThat(updatedExpense.getTags()).hasSize(1);
         assertThat(updatedExpense.getTags().iterator().next().getName()).isEqualTo(TAG_NAME);
     }

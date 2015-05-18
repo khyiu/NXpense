@@ -6,6 +6,7 @@ import nxpense.helper.ColorConverter;
 import javax.persistence.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -36,7 +37,7 @@ public class Tag {
     private Tag parentTag;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "tags")
-    private Set<Expense> expenses;
+    private Set<Expense> expenses = new HashSet<Expense>();
 
     public Integer getId() {
         return id;
@@ -75,7 +76,7 @@ public class Tag {
         return subTags.add(subTag);
     }
 
-    public boolean removeTag(Tag subTag) {
+    public boolean removeSubTag(Tag subTag) {
         subTag.setParentTag(null);
         return subTags.remove(subTag);
     }
@@ -86,6 +87,14 @@ public class Tag {
 
     private void setParentTag(Tag parentTag) {
         this.parentTag = parentTag;
+    }
+
+    public boolean addExpense(Expense expense) {
+        return this.expenses.add(expense);
+    }
+
+    public boolean removeExpense(Expense expense) {
+        return this.expenses.remove(expense);
     }
 
     @Override

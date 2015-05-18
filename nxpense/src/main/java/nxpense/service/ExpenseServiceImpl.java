@@ -1,15 +1,18 @@
 package nxpense.service;
 
 import nxpense.domain.Expense;
+import nxpense.domain.Tag;
 import nxpense.domain.User;
 import nxpense.dto.BalanceInfoDTO;
 import nxpense.dto.ExpenseDTO;
 import nxpense.exception.BadRequestException;
+import nxpense.exception.ForbiddenActionException;
 import nxpense.exception.RequestCannotCompleteException;
 import nxpense.helper.ExpenseConverter;
 import nxpense.helper.ExpenseHelper;
 import nxpense.helper.SecurityPrincipalHelper;
 import nxpense.repository.ExpenseRepository;
+import nxpense.repository.TagRepository;
 import nxpense.service.api.ExpenseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +37,9 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Autowired
     private ExpenseRepository expenseRepository;
+
+    @Autowired
+    private TagRepository tagRepository;
 
     @Transactional(rollbackFor = {Exception.class})
     public Expense createNewExpense(ExpenseDTO expenseDTO) {
@@ -109,8 +115,36 @@ public class ExpenseServiceImpl implements ExpenseService {
         return new BalanceInfoDTO(sumVerified, sumNonVerified, sumVerified.add(sumNonVerified));
     }
 
+    @Transactional
     @Override
-    public void associateTagToExpense(int expenseId, int tagId) {
+    public Expense associateTagToExpense(int expenseId, int tagId) {
+        User currentUser = securityPrincipalHelper.getCurrentUser();
+        Expense expense = expenseRepository.findOne(expenseId);
 
+        if(expense == null) {
+            LOGGER.warn("Attempt to add tag to an expense that wasn't found (ID={})", expenseId);
+            throw new BadRequestException("No expense found for tag association");
+        }
+
+        Tag tag = tagRepository.findOne(tagId);
+
+        if(tag == null) {
+            LOGGER.warn("Attempt to add a tag that wasn't found (ID={})", tagId);
+            throw new BadRequestException("No tag found for tag association");
+        }
+
+        if(!expense.getUser().getId().equals(currentUser.getId())) {
+            LOGGER.warn("Attempt to update an expense that does not belong to current user (ID={})", expenseId);
+            throw new ForbiddenActionException("Cannot update expense that does not belong to current user");
+        }
+
+        if(!currentUser.ownTag(tag)) {
+            LOGGER.warn("Attempt to associate a tag that does not belong to current user (ID={})", tagId);
+            throw new ForbiddenActionException("Cannot associate a tag that does not belong to current user");
+        }
+
+        expense.addTag(tag);
+        tag.addExpense(expense);
+        return expense;
     }
 }
