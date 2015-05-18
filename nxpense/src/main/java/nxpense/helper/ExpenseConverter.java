@@ -4,6 +4,7 @@ import nxpense.builder.PageDtoBuilder;
 import nxpense.domain.CreditExpense;
 import nxpense.domain.DebitExpense;
 import nxpense.domain.Expense;
+import nxpense.domain.Tag;
 import nxpense.dto.ExpenseDTO;
 import nxpense.dto.ExpenseResponseDTO;
 import nxpense.dto.ExpenseSource;
@@ -47,7 +48,9 @@ public class ExpenseConverter {
         if (expense != null) {
             expenseDto = new ExpenseResponseDTO();
             expenseDto.setId(expense.getId());
+
             copyAttributeValues(expenseDto, expense);
+            copyTags(expenseDto, expense);
         }
 
         return expenseDto;
@@ -97,6 +100,14 @@ public class ExpenseConverter {
                 targetDto.setSource(ExpenseSource.CREDIT_CARD);
             } else {
                 throw new UnsupportedOperationException("Value copy from entity to DTO object is not yet supported for entity of type: " + sourceEntity.getClass());
+            }
+        }
+    }
+
+    private static void copyTags(ExpenseDTO targetDto, Expense sourceEntity) {
+        if (targetDto != null && sourceEntity != null && sourceEntity.getTags() != null) {
+            for(Tag tag : sourceEntity.getTags()) {
+                targetDto.addTags(TagConverter.entityToResponseDto(tag));
             }
         }
     }

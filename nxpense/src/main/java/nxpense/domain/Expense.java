@@ -3,6 +3,7 @@ package nxpense.domain;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -39,7 +40,7 @@ public abstract class Expense {
             inverseJoinColumns = {
                     @JoinColumn(name = "TAG_ID", nullable = false, updatable = false)
             })
-    private Set<Tag> tags;
+    private Set<Tag> tags = new HashSet<Tag>();
 
     private boolean verified;
 
@@ -93,6 +94,14 @@ public abstract class Expense {
 
     public void setVerified(boolean verified) {
         this.verified = verified;
+    }
+
+    public boolean addTag(Tag tag) {
+        return this.tags.add(tag);
+    }
+
+    public Set<Tag> getTags() {
+        return this.tags;
     }
 
     @Override

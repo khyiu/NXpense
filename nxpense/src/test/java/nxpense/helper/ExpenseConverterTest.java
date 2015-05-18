@@ -1,14 +1,14 @@
-package helper;
+package nxpense.helper;
 
 import nxpense.builder.ExpenseDtoBuilder;
 import nxpense.domain.CreditExpense;
 import nxpense.domain.DebitExpense;
 import nxpense.domain.Expense;
+import nxpense.domain.Tag;
 import nxpense.dto.ExpenseDTO;
 import nxpense.dto.ExpenseResponseDTO;
 import nxpense.dto.ExpenseSource;
 import nxpense.dto.PageDTO;
-import nxpense.helper.ExpenseConverter;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.springframework.data.domain.Page;
@@ -31,6 +31,17 @@ public class ExpenseConverterTest {
     private static final BigDecimal EXPENSE_AMOUNT = new BigDecimal(49.95);
     private static final LocalDate EXPENSE_DATE = new LocalDate(2015, 3, 1);
     private static final int EXPENSE_POSITION = 15;
+
+    private static final String TAG_NAME_1 = "Bill";
+    private static final String TAG_NAME_2 = "Mobile phone";
+    private static final Tag TAG1 = createTag(TAG_NAME_1);
+    private static final Tag TAG2 = createTag(TAG_NAME_2);
+
+    private static Tag createTag(String name) {
+        Tag tag = new Tag();
+        tag.setName(name);
+        return tag;
+    }
 
     @Test
     public void testDtoToEntity_DebitExpense() {
@@ -92,11 +103,16 @@ public class ExpenseConverterTest {
         expense.setDate(EXPENSE_DATE.toDate());
         expense.setAmount(EXPENSE_AMOUNT);
         expense.setDescription(EXPENSE_DESCRIPTION);
+        expense.addTag(TAG1);
+        expense.addTag(TAG2);
 
         ExpenseResponseDTO expenseDto = ExpenseConverter.entityToResponseDto(expense);
         assertThat(expenseDto.getId()).isEqualTo(5);
         assertThat(expenseDto.getAmount()).isEqualTo(EXPENSE_AMOUNT);
         assertThat(expenseDto.getSource()).isEqualTo(ExpenseSource.CREDIT_CARD);
+        assertThat(expenseDto.getTags()).hasSize(2);
+        assertThat(expenseDto.getTags().get(0).getName()).isEqualTo(TAG_NAME_1);
+        assertThat(expenseDto.getTags().get(1).getName()).isEqualTo(TAG_NAME_2);
     }
 
     @Test
