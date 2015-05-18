@@ -108,4 +108,9 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         return new BalanceInfoDTO(sumVerified, sumNonVerified, sumVerified.add(sumNonVerified));
     }
+
+    @Override
+    public void associateTagToExpense(int expenseId, int tagId) {
+
+    }
 }

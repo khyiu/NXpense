@@ -148,12 +148,23 @@
     }]);
 
     homeAppModule.controller('expenseController', ['$rootScope', '$scope', 'Restangular', 'notificationHelper', function ($rootScope, $scope, Restangular, notificationHelper) {
+        var expenseDAO = Restangular.one('expense');
         $scope.sortProp = 'date';
         $scope.sortAsc = true;
 
         // todo
-        $scope.dropCompleted = function(expenseId, $data, $event) {
-            alert('>>> dropped item');
+        $scope.dropCompleted = function (expenseId, $tag, $event) {
+            expenseDAO.one(expenseId.toString()).one('tag').put({
+                id: $tag.id
+            }).then(
+                function () {
+                    alert('successfully added tag to expense');
+                },
+
+                function () {
+                    alert('failed to add tag to expense');
+                }
+            )
         };
 
         $scope.updatePageSize = function (newPageSize) {
@@ -171,7 +182,6 @@
         };
 
         $scope.reloadPage = function () {
-            var expenseDAO = Restangular.one('expense');
             var queryParameters = {
                 page: $rootScope.page,
                 size: $rootScope.pageSize,

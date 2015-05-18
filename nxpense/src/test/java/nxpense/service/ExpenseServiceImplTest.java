@@ -8,12 +8,15 @@ import nxpense.domain.User;
 import nxpense.dto.ExpenseDTO;
 import nxpense.dto.ExpenseSource;
 import nxpense.exception.BadRequestException;
+import nxpense.exception.ForbiddenActionException;
 import nxpense.exception.RequestCannotCompleteException;
 import nxpense.exception.UnauthenticatedException;
 import nxpense.helper.SecurityPrincipalHelper;
 import nxpense.repository.ExpenseRepository;
 import nxpense.repository.UserRepository;
 import nxpense.security.CustomUserDetails;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,7 +67,12 @@ public class ExpenseServiceImplTest extends AbstractServiceTest {
     private static final String DESCRIPTION = "Some DESCRIPTION";
 
     private static final List<Integer> EXPENSE_IDS = Arrays.asList(1, 2, 3);
-    private static final Integer EXPENSE_ID_UNEXISTING = 100;
+    private static final Integer EXPENSE_ID_UNEXISTING = 10;
+    private static final Integer EXPENSE_ID_NOT_CURRENT_USER = 100;
+    private static final Integer TAG_ID = 1;
+    private static final String TAG_NAME=  "Electricity bill";
+    private static final Integer TAG_ID_UNEXISTING = 10;
+    private static final Integer TAG_ID_NOT_CURRENT_USER = 100;
 
     private static final ExpenseDTO EXPENSE_DTO = new ExpenseDtoBuilder()
             .setSource(ExpenseSource.DEBIT_CARD)
@@ -159,5 +167,40 @@ public class ExpenseServiceImplTest extends AbstractServiceTest {
     @Test(expected = RequestCannotCompleteException.class)
     public void testUpdateExpense_unexisting() {
         expenseService.updateExpense(EXPENSE_ID_UNEXISTING, EXPENSE_DTO);
+    }
+
+    @Test(expected = BadRequestException.class)
+    public void testAssociateTagToExpense_unexistingExpense() {
+        expenseService.associateTagToExpense(EXPENSE_ID_UNEXISTING, TAG_ID_UNEXISTING);
+    }
+
+    @Test(expected = BadRequestException.class)
+    public void testAssociateTagToExpense_unexistingTag() {
+        expenseService.associateTagToExpense(1, TAG_ID_UNEXISTING);
+    }
+
+    @Test(expected = ForbiddenActionException.class)
+    public void testAssociateTagToExpense_nonCurrentUserExpense() {
+        expenseService.associateTagToExpense(EXPENSE_ID_NOT_CURRENT_USER, TAG_ID);
+    }
+
+    @Test(expected = ForbiddenActionException.class)
+    public void testAssociateTagToExpense_nonCurrentUserTag() {
+        expenseService.associateTagToExpense(1, TAG_ID_NOT_CURRENT_USER);
+    }
+
+    @Test
+    public void testAssociateTagToExpense() {
+        expenseService.associateTagToExpense(1, TAG_ID);
+        Expense updatedExpense = (Expense) CollectionUtils.find(mockUser.getExpenses(), new Predicate() {
+            @Override
+            public boolean evaluate(Object o) {
+                return ((Expense) o).getId() == 1;
+            }
+        });
+
+        assertThat(updatedExpense).isNotNull();
+        assertThat(updatedExpense.getTags()).hasSize(1);
+        assertThat(updatedExpense.getTags().iterator().next().getName()).isEqualTo(TAG_NAME);
     }
 }

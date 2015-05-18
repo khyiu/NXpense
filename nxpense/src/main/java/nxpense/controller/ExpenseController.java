@@ -1,10 +1,7 @@
 package nxpense.controller;
 
 import nxpense.domain.Expense;
-import nxpense.dto.BalanceInfoDTO;
-import nxpense.dto.ExpenseDTO;
-import nxpense.dto.ExpenseResponseDTO;
-import nxpense.dto.PageDTO;
+import nxpense.dto.*;
 import nxpense.helper.ExpenseConverter;
 import nxpense.service.api.ExpenseService;
 import org.slf4j.Logger;
@@ -19,9 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Created by Kro on 20/02/15.
- */
 @Controller
 @RequestMapping("/expense")
 
@@ -79,5 +73,11 @@ public class ExpenseController {
     public ResponseEntity<BalanceInfoDTO> getBalance() {
         BalanceInfoDTO balance = expenseService.getBalanceInfo();
         return new ResponseEntity<BalanceInfoDTO>(balance, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{expenseId}/tag", method = RequestMethod.PUT)
+    @ResponseBody
+    public ResponseEntity<ExpenseResponseDTO> addTagToExpense(@PathVariable Integer expenseId, @RequestParam(required = true, value = "id") Integer tagId) {
+        return null;
     }
 }

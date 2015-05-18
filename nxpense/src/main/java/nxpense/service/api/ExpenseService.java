@@ -3,6 +3,7 @@ package nxpense.service.api;
 import nxpense.domain.Expense;
 import nxpense.dto.BalanceInfoDTO;
 import nxpense.dto.ExpenseDTO;
+import nxpense.dto.TagDTO;
 import nxpense.exception.RequestCannotCompleteException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -56,4 +57,13 @@ public interface ExpenseService {
      * @return Object containing balance information such as the sum of verified expenses and the sum of non-verified expenses
      */
     public BalanceInfoDTO getBalanceInfo();
+
+    /**
+     * Associates the Tag identified by {@code tagId} to the expense identified by {@code expenseId}
+     * @param expenseId ID of the expense to which the tag with ID = {@code tagId} is to be associated with
+     * @param tagId ID of the tag to be associated with the target expense item
+     * @throws nxpense.exception.BadRequestException if no expense found for {@code expenseId} or no tag found for {@code tagId}
+     * @throws nxpense.exception.ForbiddenActionException if specified expense or specified tag does not belong to current user
+     */
+    public void associateTagToExpense(int expenseId, int tagId);
 }
