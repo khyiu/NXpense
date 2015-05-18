@@ -3,6 +3,7 @@
     padding-bottom: 0px !important;
     padding-left: 15px !important;
     margin-left: 60px !important;
+    cursor: move;
 }
 
 a.tag-menu-item span.tag-label {
