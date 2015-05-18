@@ -152,17 +152,17 @@
         $scope.sortProp = 'date';
         $scope.sortAsc = true;
 
-        // todo
         $scope.dropCompleted = function (expenseId, $tag, $event) {
             expenseDAO.one(expenseId.toString()).one('tag').put({
                 id: $tag.id
             }).then(
-                function () {
-                    alert('successfully added tag to expense');
+                function (targetExpenseTags) {
+                    var updatedExpense = _.findWhere($scope.expenses, {id: expenseId});
+                    updatedExpense.tags = targetExpenseTags;
                 },
 
                 function () {
-                    alert('failed to add tag to expense');
+                    notificationHelper.showOperationFailure("Failed adding tag! Please retry later...");
                 }
             )
         };

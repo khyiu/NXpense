@@ -251,4 +251,10 @@ public class ExpenseControllerIntegrationTest extends AbstractIntegrationTest {
         assertThat(balance.getVerified()).isEqualTo(new BigDecimal("1508.45"));
         assertThat(balance.getGlobal()).isEqualTo(new BigDecimal("1500.40"));
     }
+
+    @Test
+    public void testAddTagToExpense() throws Exception {
+        // todo
+        throw new UnsupportedOperationException("Integration test not yet implemented!");
+    }
 }
