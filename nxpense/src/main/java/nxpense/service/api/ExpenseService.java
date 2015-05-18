@@ -3,7 +3,6 @@ package nxpense.service.api;
 import nxpense.domain.Expense;
 import nxpense.dto.BalanceInfoDTO;
 import nxpense.dto.ExpenseDTO;
-import nxpense.dto.TagDTO;
 import nxpense.exception.RequestCannotCompleteException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
