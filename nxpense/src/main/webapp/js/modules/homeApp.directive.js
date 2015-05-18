@@ -1,7 +1,7 @@
 (function(angular) {
     'use strict';
 
-    var homeAppDirectiveModule = angular.module('homeApp.directive', ['ui.bootstrap', 'restangular', 'notificationHelperModule']);
+    var homeAppDirectiveModule = angular.module('homeApp.directive', ['ui.bootstrap', 'restangular', 'notificationHelperModule', 'ngDraggable']);
 
 
     homeAppDirectiveModule.directive('sideMenu', ['Restangular', '$rootScope', function (Restangular, $rootScope) {

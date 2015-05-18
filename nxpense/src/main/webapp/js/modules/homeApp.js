@@ -151,6 +151,11 @@
         $scope.sortProp = 'date';
         $scope.sortAsc = true;
 
+        // todo
+        $scope.dropCompleted = function(expenseId, $data, $event) {
+            alert('>>> dropped item');
+        };
+
         $scope.updatePageSize = function (newPageSize) {
             var newPageSizeInt;
 

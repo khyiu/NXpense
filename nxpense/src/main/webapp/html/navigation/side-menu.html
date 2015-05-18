@@ -16,8 +16,8 @@
                         <span class="fa arrow"></span>
                     </a>
                     <ul class="tags nav nav-third-level collapse">
-                        <li ng-repeat="tag in $root.existingTags">
-                            <a href="#" tag-id="{{tag.id}}" class="tag-menu-item" title="{{tag.name}}"
+                        <li ng-repeat="tag in $root.existingTags" ng-drag="true" ng-drag-data="tag" ng-center-anchor="false">
+                            <a tag-id="{{tag.id}}" class="tag-menu-item" title="{{tag.name}}"
                                style="background-color: {{tag.backgroundColor}}; border-right-color: {{tag.backgroundColor}}; color: {{tag.foregroundColor}}">
                                 <span class="tag-label">{{tag.name}}</span>
                             </a>
