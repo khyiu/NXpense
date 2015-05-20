@@ -1,5 +1,6 @@
 package nxpense.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import nxpense.builder.ExpenseDtoBuilder;
 import nxpense.dto.*;
 import nxpense.security.CustomUserDetails;
@@ -27,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -254,7 +256,21 @@ public class ExpenseControllerIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testAddTagToExpense() throws Exception {
-        // todo
-        throw new UnsupportedOperationException("Integration test not yet implemented!");
+        mockAuthenticatedUser(2);
+
+        mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+        mockMvcBuilder.alwaysExpect(status().isOk());
+        mockMvc = mockMvcBuilder.build();
+
+        RequestBuilder requestBuilder = put("/expense/6/tag")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("id", "1");
+
+        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+        String jsonResponse = result.getResponse().getContentAsString();
+        List<TagResponseDTO> tags = om.readValue(jsonResponse, new TypeReference<List<TagResponseDTO>>(){});
+
+        assertThat(tags).isNotNull().hasSize(1);
+        assertThat(tags.get(0).getName()).isEqualTo("Mobile phone");
     }
 }
