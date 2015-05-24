@@ -152,7 +152,7 @@
         $scope.sortProp = 'date';
         $scope.sortAsc = true;
 
-        $scope.dropCompleted = function (expenseId, $tag, $event) {
+        $scope.dropCompleted = function (expenseId, $tag) {
             expenseDAO.one(expenseId.toString()).one('tag').put({
                 id: $tag.id
             }).then(
