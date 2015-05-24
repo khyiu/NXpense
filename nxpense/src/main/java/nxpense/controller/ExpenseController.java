@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,6 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/expense")
-
 public class ExpenseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExpenseController.class);
@@ -81,5 +81,11 @@ public class ExpenseController {
         Expense updatedExpense = expenseService.associateTagToExpense(expenseId, tagId);
         ExpenseResponseDTO responseDto = ExpenseConverter.entityToResponseDto(updatedExpense);
         return new ResponseEntity<List<TagResponseDTO>>(responseDto.getTags(), HttpStatus.OK);
+    }
+
+    @ExceptionHandler(value = ObjectOptimisticLockingFailureException.class)
+    public ResponseEntity<String> translateException() {
+        String errorMsg = "The expense item you working on has been updated/deleted by another session. Please reload the expense details and retry...";
+        return new ResponseEntity<String>(errorMsg, HttpStatus.CONFLICT);
     }
 }

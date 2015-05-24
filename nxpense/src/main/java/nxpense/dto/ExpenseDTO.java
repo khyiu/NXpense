@@ -14,6 +14,7 @@ import java.util.List;
 
 public class ExpenseDTO implements Serializable {
 
+    protected Integer version;
 
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     @JsonDeserialize(using = CustomLocalDateDeserializer.class)
@@ -31,6 +32,14 @@ public class ExpenseDTO implements Serializable {
 
     public LocalDate getDate() {
         return date;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public Integer getVersion() {
+        return this.version;
     }
 
     public void setDate(LocalDate date) {

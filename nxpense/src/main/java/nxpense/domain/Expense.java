@@ -17,6 +17,9 @@ public abstract class Expense {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EXPENSE_SEQ")
     private Integer id;
 
+    @Version
+    private Integer version;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "USER_ID", nullable = false, updatable = false)
     private User user;
@@ -46,6 +49,14 @@ public abstract class Expense {
 
     public Integer getId() {
         return this.id;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     public User getUser() {

@@ -1,0 +1,1 @@
+alter table expense add version integer not null default 0;

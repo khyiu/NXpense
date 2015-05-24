@@ -303,9 +303,15 @@
                     $rootScope.$broadcast('expense:reloadPage');
                 };
 
-                var failureCallback = function () {
+                var failureCallback = function (errorMsg) {
+                    var msgToDisplay = "Failed saving expense!";
+
+                    if(errorMsg && errorMsg.data) {
+                        msgToDisplay = errorMsg.data;
+                    }
+
                     notificationHelper.hideServerInfo();
-                    notificationHelper.showOperationFailure("Failed saving expense!");
+                    notificationHelper.showOperationFailure(msgToDisplay);
                 };
 
                 $modalInstance.close();

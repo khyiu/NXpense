@@ -48,6 +48,7 @@ public class ExpenseConverter {
         if (expense != null) {
             expenseDto = new ExpenseResponseDTO();
             expenseDto.setId(expense.getId());
+            expenseDto.setVersion(expense.getVersion());
 
             copyAttributeValues(expenseDto, expense);
             copyTags(expenseDto, expense);

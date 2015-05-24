@@ -77,6 +77,9 @@ public class ExpenseServiceImpl implements ExpenseService {
             throw new RequestCannotCompleteException("Expense [" + id + "] either does not exist, or does not belong to user [" + currentUser + "]");
         }
 
+        // synchronizing the version number with the one sent back by client
+        existingExpense.setVersion(expenseDTO.getVersion());
+
         // date didn't change --> updating the existing expense's content
         if (existingExpense.getDate().equals(expenseDTO.getDate().toDate())) {
             LOGGER.debug("Updating expense [{}] -> update", id);
