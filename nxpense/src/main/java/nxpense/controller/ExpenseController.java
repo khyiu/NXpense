@@ -2,6 +2,7 @@ package nxpense.controller;
 
 import nxpense.domain.Expense;
 import nxpense.dto.*;
+import nxpense.exception.CustomErrorCode;
 import nxpense.helper.ExpenseConverter;
 import nxpense.service.api.ExpenseService;
 import org.slf4j.Logger;
@@ -15,6 +16,9 @@ import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 @Controller
@@ -84,8 +88,16 @@ public class ExpenseController {
     }
 
     @ExceptionHandler(value = ObjectOptimisticLockingFailureException.class)
-    public ResponseEntity<String> translateException() {
-        String errorMsg = "The expense item you working on has been updated/deleted by another session. Please reload the expense details and retry...";
-        return new ResponseEntity<String>(errorMsg, HttpStatus.CONFLICT);
+    public void translateException(HttpServletResponse response) {
+        response.setStatus(CustomErrorCode.ENTITY_OUT_OF_SYNC.getHttpStatus());
+
+        try {
+            PrintWriter writer = response.getWriter()
+                    .append("The expense item you working on has been updated/deleted by another session. Please reload the expense details and retry...");
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            LOGGER.error("An error occurred when writing custom HTTP error code to HTTP response");
+        }
     }
 }

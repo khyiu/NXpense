@@ -303,11 +303,11 @@
                     $rootScope.$broadcast('expense:reloadPage');
                 };
 
-                var failureCallback = function (errorMsg) {
+                var failureCallback = function (error) {
                     var msgToDisplay = "Failed saving expense!";
 
-                    if(errorMsg && errorMsg.data) {
-                        msgToDisplay = errorMsg.data;
+                    if(error && error.status === '499' && error.data) {
+                        msgToDisplay = error.data;
                     }
 
                     notificationHelper.hideServerInfo();
