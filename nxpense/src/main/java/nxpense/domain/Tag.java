@@ -1,7 +1,7 @@
 package nxpense.domain;
 
 import com.google.common.collect.ImmutableList;
-import nxpense.helper.ColorConverter;
+import nxpense.domain.converter.ColorConverter;
 
 import javax.persistence.*;
 import java.awt.*;
@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "TAG")
-@SequenceGenerator(name = "TAG_SEQ", sequenceName = "tag_seq")
+@SequenceGenerator(name = "TAG_SEQ", sequenceName = "tag_seq", allocationSize = 1, initialValue = 1)
 public class Tag {
 
     @Id

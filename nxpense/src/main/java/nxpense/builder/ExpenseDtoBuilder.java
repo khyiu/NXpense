@@ -13,6 +13,7 @@ public class ExpenseDtoBuilder {
     private String description;
     private ExpenseSource source;
     private Integer position;
+    private Integer version;
 
     public ExpenseDtoBuilder setDate(LocalDate date) {
         this.date = date;
@@ -39,6 +40,11 @@ public class ExpenseDtoBuilder {
         return this;
     }
 
+    public ExpenseDtoBuilder setVersion(Integer version) {
+        this.version = version;
+        return this;
+    }
+
     public ExpenseDTO build() {
         ExpenseDTO expenseDto = new ExpenseDTO();
 
@@ -47,6 +53,7 @@ public class ExpenseDtoBuilder {
         expenseDto.setDescription(description);
         expenseDto.setSource(source);
         expenseDto.setPosition(position);
+        expenseDto.setVersion(version);
 
         return expenseDto;
     }

@@ -10,7 +10,7 @@ import java.util.Set;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "EXPENSE_TYPE")
 @Table(name = "EXPENSE")
-@SequenceGenerator(name = "EXPENSE_SEQ", sequenceName = "expense_seq")
+@SequenceGenerator(name = "EXPENSE_SEQ", sequenceName = "expense_seq", initialValue = 1, allocationSize = 1)
 public abstract class Expense {
 
     @Id

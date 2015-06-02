@@ -1,12 +1,9 @@
 package security;
 
-import static org.mockito.BDDMockito.*;
-import static org.assertj.core.api.Assertions.assertThat;
 import nxpense.domain.User;
 import nxpense.exception.BadCredentialsException;
 import nxpense.repository.UserRepository;
 import nxpense.security.CustomUserDetailsService;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +11,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CustomUserDetailsServiceTest {

@@ -1,6 +1,7 @@
 package nxpense.helper;
 
 import nxpense.domain.Tag;
+import nxpense.domain.converter.ColorConverter;
 import nxpense.dto.TagDTO;
 import nxpense.dto.TagResponseDTO;
 import org.springframework.util.CollectionUtils;

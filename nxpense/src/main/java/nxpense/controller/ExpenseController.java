@@ -12,7 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.orm.jpa.JpaOptimisticLockingFailureException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -87,8 +87,9 @@ public class ExpenseController {
         return new ResponseEntity<List<TagResponseDTO>>(responseDto.getTags(), HttpStatus.OK);
     }
 
-    @ExceptionHandler(value = ObjectOptimisticLockingFailureException.class)
-    public void translateException(HttpServletResponse response) {
+    // Exception handler to intercept OptimisticLockingException thrown by Spring-Data JPA using Eclipselink as vendor
+    @ExceptionHandler(value = {JpaOptimisticLockingFailureException.class})
+    public void translateExceptionFromEclipseLink(HttpServletResponse response, Exception exception) {
         response.setStatus(CustomErrorCode.ENTITY_OUT_OF_SYNC.getHttpStatus());
 
         try {
@@ -100,4 +101,21 @@ public class ExpenseController {
             LOGGER.error("An error occurred when writing custom HTTP error code to HTTP response");
         }
     }
+
+    /*
+    // Exception handler to intercept OptimisticLockingException thrown by Spring-Data JPA using Hibernate as vendor
+    @ExceptionHandler(value = {ObjectOptimisticLockingFailureException.class})
+    public void translateExceptionFromHibernate(HttpServletResponse response) {
+        response.setStatus(CustomErrorCode.ENTITY_OUT_OF_SYNC.getHttpStatus());
+
+        try {
+            PrintWriter writer = response.getWriter()
+                    .append("The expense item you working on has been updated/deleted by another session. Please reload the expense details and retry...");
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            LOGGER.error("An error occurred when writing custom HTTP error code to HTTP response");
+        }
+    }
+    */
 }

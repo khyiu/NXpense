@@ -306,7 +306,7 @@
                 var failureCallback = function (error) {
                     var msgToDisplay = "Failed saving expense!";
 
-                    if(error && error.status === '499' && error.data) {
+                    if(error && error.status === 499 && error.data) {
                         msgToDisplay = error.data;
                     }
 

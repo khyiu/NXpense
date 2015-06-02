@@ -1,16 +1,18 @@
-package nxpense.helper;
+package nxpense.domain.converter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 import java.awt.*;
 
 /**
  * The {@code ColorConverter} class is used to convert {@link java.awt.Color} objects to their corresponding hexadecimal representation.
  * This class is intended to be used when persisting/retrieving entities with attributes of type {@code Color}, in the database.
  */
+@Converter
 public class ColorConverter implements AttributeConverter<Color, String> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ColorConverter.class);

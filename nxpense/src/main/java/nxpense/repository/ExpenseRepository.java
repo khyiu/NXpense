@@ -34,7 +34,7 @@ public interface ExpenseRepository extends PagingAndSortingRepository<Expense, I
      */
     @Transactional
     @Modifying
-    @Query("delete Expense e where e.user = :owner and e.id in :ids")
+    @Query("delete from Expense e where e.user = :owner and e.id in :ids")
     public int deleteByIdInAndUser(@Param("owner") User owner, @Param("ids") List<Integer> ids);
 
     /**

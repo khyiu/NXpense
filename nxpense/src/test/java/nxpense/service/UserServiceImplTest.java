@@ -1,10 +1,8 @@
 package nxpense.service;
 
-import static org.mockito.BDDMockito.*;
 import nxpense.domain.User;
 import nxpense.exception.RequestCannotCompleteException;
 import nxpense.repository.UserRepository;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +11,8 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import static org.mockito.BDDMockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceImplTest {

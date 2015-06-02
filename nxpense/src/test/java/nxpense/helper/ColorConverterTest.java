@@ -1,7 +1,7 @@
-package helper;
+package nxpense.helper;
 
 
-import nxpense.helper.ColorConverter;
+import nxpense.domain.converter.ColorConverter;
 import org.junit.Test;
 
 import java.awt.*;

@@ -187,6 +187,7 @@ public class ExpenseControllerIntegrationTest extends AbstractIntegrationTest {
                 .setAmount(newAmount)
                 .setDate(newDate)
                 .setSource(ExpenseSource.DEBIT_CARD)
+                .setVersion(1)
                 .build();
 
         RequestBuilder requestBuilder = put("/expense/1")
@@ -200,6 +201,33 @@ public class ExpenseControllerIntegrationTest extends AbstractIntegrationTest {
         assertThat(responseDto.getAmount()).isEqualTo(newAmount);
         assertThat(responseDto.getDescription()).isEqualTo(newDescription);
         assertThat(responseDto.getDate()).isEqualTo(newDate);
+    }
+
+    @Test
+    public void testUpdateExpense_OutOfSync() throws Exception {
+        mockAuthenticatedUser(1);
+
+        mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+        mockMvcBuilder.alwaysExpect(status().is(499));
+        mockMvc = mockMvcBuilder.build();
+
+        BigDecimal newAmount = new BigDecimal(88.88);
+        String newDescription = "Description updated in integration test";
+        LocalDate newDate = new LocalDate(2016, 1, 1);
+
+        ExpenseDTO expenseDto = new ExpenseDtoBuilder()
+                .setDescription(newDescription)
+                .setAmount(newAmount)
+                .setDate(newDate)
+                .setSource(ExpenseSource.DEBIT_CARD)
+                .setVersion(0)
+                .build();
+
+        RequestBuilder requestBuilder = put("/expense/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(expenseDto));
+
+        mockMvc.perform(requestBuilder).andDo(print()).andReturn();
     }
 
     @Test

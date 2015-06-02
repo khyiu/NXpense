@@ -5,7 +5,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "USR")
-@SequenceGenerator(name = "USER_SEQ", sequenceName = "user_seq")
+@SequenceGenerator(name = "USER_SEQ", sequenceName = "user_seq", allocationSize = 1, initialValue = 1)
 public class User {
 
     @Id
