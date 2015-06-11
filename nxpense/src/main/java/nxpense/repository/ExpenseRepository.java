@@ -27,17 +27,6 @@ public interface ExpenseRepository extends PagingAndSortingRepository<Expense, I
     public long countByUserAndDate(@Param("owner") User owner, @Param("date") Date date);
 
     /**
-     * Deletes {@link nxpense.domain.Expense} items whose ID is in the given list and that belong to the specified user
-     * @param owner User to which the items to be deleted belong to
-     * @param ids List of ID from the items to be deleted
-     * @long number of item deleted from the DB
-     */
-    @Transactional
-    @Modifying
-    @Query("delete from Expense e where e.user = :owner and e.id in :ids")
-    public int deleteByIdInAndUser(@Param("owner") User owner, @Param("ids") List<Integer> ids);
-
-    /**
      * Increments the {@code position} attribute of the {@link nxpense.domain.Expense} items: <br/>
      * <ul>
      *      <li>that belong to the specified {@code User}</li>
@@ -76,6 +65,14 @@ public interface ExpenseRepository extends PagingAndSortingRepository<Expense, I
      * @return The expense with the specified ID and belonging to the specified user
      */
     public Expense findByIdAndUser(int id, User user);
+
+    /**
+     * Retrieves the {@link nxpense.domain.Expense} items with specified IDs and belonging to the specified {@code user}.
+     * @param ids list of ID from the expenses to be retrieved
+     * @param user owner of the expenses to be retrieved
+     * @return List of expenses whose ID is in the {@code ids} list and belonging to the {@code user} User.
+     */
+    public List<Expense> findByIdInAndUser(List<Integer> ids, User user);
 
     /**
      * Computes the sum of the specified user's expense filtered out by their verification status.

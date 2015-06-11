@@ -19,7 +19,7 @@
         };
     }]);
 
-    homeAppDirectiveModule.directive('nxExpenseTableFooter', ['Restangular', '$modal', 'notificationHelper', function (Restangular, $modal, notificationHelper) {
+    homeAppDirectiveModule.directive('nxExpenseTableFooter', ['Restangular', '$modal', 'notificationHelper', '$http', function (Restangular, $modal, notificationHelper, $http) {
         return {
             restrict: 'E',
             transclude: true,
@@ -56,15 +56,24 @@
                 };
 
                 $scope.deleteSelected = function () {
-                    var idsToDelete = _.where($scope.expenses, {selected: true});
-                    idsToDelete = _.pluck(idsToDelete, 'id');
-
-                    var expenseDao = Restangular.all('expense');
-                    var queryParameters = {
-                        ids: idsToDelete
+                    var expensesToDelete = _.where($scope.expenses, {selected: true});
+                    var deleteRequest = {
+                        method: 'DELETE',
+                        url: '/' + $scope.WEB_CONTEXT + '/expense',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        data: []
                     };
 
-                    expenseDao.remove(queryParameters).then(
+                    _.each(expensesToDelete, function(expenseToDelete) {
+                        deleteRequest.data.push({
+                            id: expenseToDelete.id,
+                            version: expenseToDelete.version
+                        });
+                    });
+
+                    $http(deleteRequest).then(
                         function () {
                             notificationHelper.showOperationSuccess("Expense(s) deleted.");
 
@@ -72,9 +81,15 @@
                             $rootScope.$broadcast('expense:reloadPage');
                         },
 
-                        function () {
+                        function (error) {
+                            var msgToDisplay = "Failed deleting expenses! Please retry later...";
+
+                            if(error && error.status === 499 && error.data) {
+                                msgToDisplay = error.data;
+                            }
+
                             notificationHelper.hideServerInfo();
-                            notificationHelper.showOperationFailure("Failed deleting expenses! Please retry later...");
+                            notificationHelper.showOperationFailure(msgToDisplay);
                         }
                     );
                 };

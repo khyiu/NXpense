@@ -5,6 +5,7 @@ import nxpense.domain.Tag;
 import nxpense.domain.User;
 import nxpense.dto.BalanceInfoDTO;
 import nxpense.dto.ExpenseDTO;
+import nxpense.dto.VersionedSelectionItem;
 import nxpense.exception.BadRequestException;
 import nxpense.exception.ForbiddenActionException;
 import nxpense.exception.RequestCannotCompleteException;
@@ -24,8 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Service("expenseService")
 public class ExpenseServiceImpl implements ExpenseService {
@@ -89,21 +89,36 @@ public class ExpenseServiceImpl implements ExpenseService {
             // date did change --> delete existing one + creating new one by using existing service method in order
             // properly handle the 'position' attribute
             LOGGER.debug("Updating expense [{}] -> delete + update", id);
-            deleteExpense(Arrays.asList(id));
+            VersionedSelectionItem item = new VersionedSelectionItem(id, expenseDTO.getVersion());
+            deleteExpense(Arrays.asList(item));
             return createNewExpense(expenseDTO);
         }
     }
 
     @Transactional(rollbackFor = {Exception.class})
-    public void deleteExpense(List<Integer> ids) throws RequestCannotCompleteException {
-        if (ids == null) {
-            throw new RequestCannotCompleteException("Cannot proceed to expense deletion with a NULL list of IDs.");
+    public void deleteExpense(List<VersionedSelectionItem> selection) throws RequestCannotCompleteException {
+        if (selection == null) {
+            throw new RequestCannotCompleteException("Cannot proceed to expense deletion with a NULL selection");
         }
 
         User currentUser = securityPrincipalHelper.getCurrentUser();
+        Map<Integer, Integer> expenseIdVersions = new HashMap<Integer, Integer>();
+
+        for(VersionedSelectionItem item : selection) {
+            expenseIdVersions.put(item.getId(), item.getVersion());
+        }
+
+        List<Integer> ids = new ArrayList<Integer>(expenseIdVersions.keySet());
         expenseRepository.decrementSameDateHigherPosition(ids, currentUser);
-        int numberDeletedItems = expenseRepository.deleteByIdInAndUser(currentUser, ids);
-        LOGGER.info("User {} deleted {} item(s)", currentUser, numberDeletedItems);
+        List<Expense> expensesToDelete = expenseRepository.findByIdInAndUser(ids, currentUser);
+
+        for(Expense expense : expensesToDelete) {
+            // sync expense item version with the one sent by the client
+            expense.setVersion(expenseIdVersions.get(expense.getId()));
+            expenseRepository.delete(expense);
+        }
+
+        LOGGER.debug("User {} deleted {} item(s)", currentUser, expensesToDelete.size());
     }
 
     @Transactional(readOnly = true)

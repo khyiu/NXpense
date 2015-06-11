@@ -3,6 +3,7 @@ package nxpense.service.api;
 import nxpense.domain.Expense;
 import nxpense.dto.BalanceInfoDTO;
 import nxpense.dto.ExpenseDTO;
+import nxpense.dto.VersionedSelectionItem;
 import nxpense.exception.RequestCannotCompleteException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -45,11 +46,11 @@ public interface ExpenseService {
     public Expense updateExpense(int id, ExpenseDTO expenseDTO);
 
     /**
-     * Deletes the {@link nxpense.domain.Expense} items whose ID is is the specified list of ID from the DB.
-     * @param ids List of ID of the {@link nxpense.domain.Expense} items that must be deleted from DB
+     * Deletes the {@link nxpense.domain.Expense} items from DB, whose ID is contained in the specified selection.
+     * @param selection list of identifier and version number of the expense items to delete
      * @throws RequestCannotCompleteException if the specified list of ID is null
      */
-    public void deleteExpense(List<Integer> ids) throws RequestCannotCompleteException;
+    public void deleteExpense(List<VersionedSelectionItem> selection) throws RequestCannotCompleteException;
 
     /**
      * Retrieves the balance information related to the current user.

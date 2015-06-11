@@ -67,8 +67,8 @@ public class ExpenseController {
 
     @RequestMapping(method = RequestMethod.DELETE)
     @ResponseBody
-    public ResponseEntity<Void> deleteExpense(@RequestParam List<Integer> ids)  {
-        expenseService.deleteExpense(ids);
+    public ResponseEntity<Void> deleteExpense(@RequestBody List<VersionedSelectionItem> selection) {
+        expenseService.deleteExpense(selection);
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
@@ -89,7 +89,7 @@ public class ExpenseController {
 
     // Exception handler to intercept OptimisticLockingException thrown by Spring-Data JPA using Eclipselink as vendor
     @ExceptionHandler(value = {JpaOptimisticLockingFailureException.class})
-    public void translateExceptionFromEclipseLink(HttpServletResponse response, Exception exception) {
+    public void translateExceptionFromEclipseLink(HttpServletResponse response) {
         response.setStatus(CustomErrorCode.ENTITY_OUT_OF_SYNC.getHttpStatus());
 
         try {

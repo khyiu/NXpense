@@ -8,6 +8,7 @@ import nxpense.domain.Tag;
 import nxpense.domain.User;
 import nxpense.dto.ExpenseDTO;
 import nxpense.dto.ExpenseSource;
+import nxpense.dto.VersionedSelectionItem;
 import nxpense.exception.BadRequestException;
 import nxpense.exception.ForbiddenActionException;
 import nxpense.exception.RequestCannotCompleteException;
@@ -39,6 +40,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -70,7 +72,8 @@ public class ExpenseServiceImplTest extends AbstractServiceTest {
     private static final LocalDate DATE = new LocalDate();
     private static final String DESCRIPTION = "Some DESCRIPTION";
 
-    private static final List<Integer> EXPENSE_IDS = Arrays.asList(1, 2, 3);
+    private static final List<Integer> EXPENSE_IDS = Arrays.asList(1);
+    private static final List<VersionedSelectionItem> EXPENSE_SELECTION = Arrays.asList(new VersionedSelectionItem(1, 1));
     private static final Integer EXPENSE_ID = 1;
     private static final Integer EXPENSE_ID_UNEXISTING = 10;
     private static final Integer EXPENSE_ID_NOT_CURRENT_USER = 100;
@@ -131,6 +134,17 @@ public class ExpenseServiceImplTest extends AbstractServiceTest {
                 notCurrentUser.addExpense(expense);
 
                 return expense;
+            }
+        });
+
+        given(expenseRepository.findByIdInAndUser(EXPENSE_IDS, mockUser)).willAnswer(new Answer<List<Expense>>() {
+            @Override
+            public List<Expense> answer(InvocationOnMock invocation) throws Throwable {
+                List<Expense> expenses = new ArrayList<Expense>();
+                Expense expense = new DebitExpense();
+                expense.setDescription("Dummy Debit Expense");
+                expenses.add(expense);
+                return expenses;
             }
         });
 
@@ -228,10 +242,11 @@ public class ExpenseServiceImplTest extends AbstractServiceTest {
 
     @Test
     public void testDeleteExpense() {
-        expenseService.deleteExpense(EXPENSE_IDS);
+        ArgumentCaptor<Expense> expenseArgument = ArgumentCaptor.forClass(Expense.class);
+        expenseService.deleteExpense(EXPENSE_SELECTION);
 
-        verify(expenseRepository).decrementSameDateHigherPosition(EXPENSE_IDS, mockUser);
-        verify(expenseRepository).deleteByIdInAndUser(mockUser, EXPENSE_IDS);
+        Mockito.<CrudRepository>verify(expenseRepository).delete(expenseArgument.capture());
+        assertThat(expenseArgument.getValue().getDescription()).isEqualTo("Dummy Debit Expense");
     }
 
     @Test(expected = RequestCannotCompleteException.class)

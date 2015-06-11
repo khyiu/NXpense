@@ -3,15 +3,16 @@ package nxpense.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import nxpense.builder.ExpenseDtoBuilder;
 import nxpense.dto.*;
+import nxpense.repository.ExpenseRepository;
 import nxpense.security.CustomUserDetails;
 import org.dbunit.operation.DatabaseOperation;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,7 +21,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -45,12 +45,14 @@ public class ExpenseControllerIntegrationTest extends AbstractIntegrationTest {
     private static final String PARAM_SIZE = "size";
     private static final String PARAM_DIRECTION = "direction";
     private static final String PARAM_PROPERTIES = "properties";
-    private static final String PARAM_IDS = "ids";
 
     private static final Integer PAGE = 1;
     private static final Integer PAGE_SIZE = 25;
     private static final Sort.Direction SORT_DIRECTION = Sort.Direction.DESC;
     private static final String[] SORT_PROPS = {"amount"};
+
+    @Autowired
+    private ExpenseRepository expenseRepository;
 
     @Before
     public void setUp() throws Exception {
@@ -125,7 +127,7 @@ public class ExpenseControllerIntegrationTest extends AbstractIntegrationTest {
                 .param(PARAM_PROPERTIES, SORT_PROPS[0]);
 
         MvcResult result = mockMvc.perform(requestBuilder).andDo(print()).andReturn();
-        PageDTO<ExpenseResponseDTO> responsePage = om.readValue(result.getResponse().getContentAsString(), PageDTO.class);
+        PageDTO responsePage = om.readValue(result.getResponse().getContentAsString(), PageDTO.class);
 
         assertThat(responsePage.getPageSize()).isEqualTo(PAGE_SIZE);
         assertThat(responsePage.getSortProperty()).isEqualTo(SORT_PROPS[0]);
@@ -144,12 +146,10 @@ public class ExpenseControllerIntegrationTest extends AbstractIntegrationTest {
 
         RequestBuilder requestBuilder = delete("/expense")
                 .contentType(MediaType.APPLICATION_JSON)
-                .param(PARAM_IDS, "6");
+                .content("[{\"id\": 6,\"version\": 1}]");
 
         mockMvc.perform(requestBuilder).andDo(print());
-
-        int numberOfExpenseUser2 = JdbcTestUtils.countRowsInTableWhere(new JdbcTemplate(datasource), "EXPENSE", "user_id = 2");
-        assertThat(numberOfExpenseUser2).isEqualTo(2);
+        assertThat(expenseRepository.findOne(6)).isNull();
     }
 
     @Test
@@ -162,12 +162,10 @@ public class ExpenseControllerIntegrationTest extends AbstractIntegrationTest {
 
         RequestBuilder requestBuilder = delete("/expense")
                 .contentType(MediaType.APPLICATION_JSON)
-                .param(PARAM_IDS, "6");
+                .content("[{\"id\": 6,\"version\": 1}]");
 
         mockMvc.perform(requestBuilder).andDo(print());
-
-        int numberOfExpenseRow = JdbcTestUtils.countRowsInTable(new JdbcTemplate(datasource), "EXPENSE");
-        assertThat(numberOfExpenseRow).isEqualTo(12);
+        assertThat(expenseRepository.findOne(6)).isNotNull();
     }
 
     @Test
