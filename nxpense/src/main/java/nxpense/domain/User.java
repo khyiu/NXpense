@@ -78,6 +78,7 @@ public class User {
 
     public void addTag(Tag tag) {
         this.tags.add(tag);
+        tag.setUser(this);
     }
 
     public void removeTag(Tag tag) {

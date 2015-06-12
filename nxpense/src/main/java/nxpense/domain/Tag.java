@@ -39,6 +39,9 @@ public class Tag {
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "tags")
     private Set<Expense> expenses = new HashSet<Expense>();
 
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private User user;
+
     public Integer getId() {
         return id;
     }
@@ -95,6 +98,14 @@ public class Tag {
 
     public boolean removeExpense(Expense expense) {
         return this.expenses.remove(expense);
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
