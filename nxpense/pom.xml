@@ -85,7 +85,14 @@
 		</dependency>
 
 
-		<!-- Persistence Provider -->
+        <!-- Bean validation provider -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>5.1.3.Final</version>
+        </dependency>
+
+        <!-- Persistence Provider -->
         <!--
        	<dependency>
 			<groupId>org.hibernate</groupId>
