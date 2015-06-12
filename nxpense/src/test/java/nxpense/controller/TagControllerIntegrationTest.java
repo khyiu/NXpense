@@ -5,6 +5,7 @@ import nxpense.builder.TagDtoBuilder;
 import nxpense.dto.TagDTO;
 import nxpense.dto.TagResponseDTO;
 import org.dbunit.operation.DatabaseOperation;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.http.MediaType;
@@ -30,6 +31,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @Transactional
 public class TagControllerIntegrationTest extends AbstractIntegrationTest {
+
+    @Before
+    public void setUp() throws Exception {
+        DatabaseOperation.CLEAN_INSERT.execute(getDBConnection(), loadDataSet("dataset/expense-controller-integration-test-dataset.xml"));
+    }
 
     @Test
     public void testCreateTag() throws Exception {
