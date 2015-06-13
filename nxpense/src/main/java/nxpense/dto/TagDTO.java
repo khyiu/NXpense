@@ -7,11 +7,20 @@ public class TagDTO implements Serializable, Comparable<TagDTO>{
 
     private static final long serialVersionUID = 7213250656506744049L;
 
+    private Integer version;
     private String name;
     private String backgroundColor;
     private String foregroundColor;
 
     private List<TagDTO> subTags;
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
 
     public String getName() {
         return name;

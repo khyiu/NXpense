@@ -51,6 +51,7 @@ public class TagConverter {
 
     private static void copyValues(TagResponseDTO dst, Tag src) {
         dst.setId(src.getId());
+        dst.setVersion(src.getVersion());
         dst.setName(src.getName());
         dst.setBackgroundColor(COLOR_CONVERTER.convertToDatabaseColumn(src.getBackgroundColor()));
         dst.setForegroundColor(COLOR_CONVERTER.convertToDatabaseColumn(src.getForegroundColor()));

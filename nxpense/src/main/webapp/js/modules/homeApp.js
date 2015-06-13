@@ -105,7 +105,7 @@
             $scope.tagForm.$setPristine(true);
         };
 
-        $scope.$watch('newTag.name', function () {
+        $scope.$watch('currentTag.name', function () {
             $scope.tagForm.tagName.$setValidity('alreadyExists', true);
         });
 
@@ -130,9 +130,15 @@
             };
 
             var failureCallback = function (response) {
+                var msgToDisplay = 'Failed saving tag!';
                 var serverSideValidationMsg = response.headers('SERVERSIDE_VALIDATION_ERROR_MSG');
+
+                if(response && response.status === 499 && response.data) {
+                    msgToDisplay = response.data;
+                }
+
                 notificationHelper.hideServerInfo();
-                notificationHelper.showOperationFailure("Failed saving tag!");
+                notificationHelper.showOperationFailure(msgToDisplay);
 
                 if (serverSideValidationMsg) {
                     $scope.tagForm.tagName.$setValidity('alreadyExists', false);

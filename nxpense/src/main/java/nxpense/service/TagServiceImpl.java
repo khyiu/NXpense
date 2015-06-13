@@ -107,6 +107,7 @@ public class TagServiceImpl implements TagService {
         }
 
         Tag newTagContent = TagConverter.dtoToEntity(tagBody);
+        tagToUpdate.setVersion(tagBody.getVersion());
         tagToUpdate.setName(newTagContent.getName());
         tagToUpdate.setBackgroundColor(newTagContent.getBackgroundColor());
         tagToUpdate.setForegroundColor(newTagContent.getForegroundColor());

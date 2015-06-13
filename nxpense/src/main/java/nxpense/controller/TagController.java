@@ -3,6 +3,7 @@ package nxpense.controller;
 import nxpense.domain.Tag;
 import nxpense.dto.TagDTO;
 import nxpense.dto.TagResponseDTO;
+import nxpense.exception.CustomErrorCode;
 import nxpense.exception.RequestCannotCompleteException;
 import nxpense.helper.TagConverter;
 import nxpense.message.CustomResponseHeader;
@@ -13,9 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.jpa.JpaOptimisticLockingFailureException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -70,5 +75,19 @@ public class TagController {
         Tag updatedTag = tagService.updateTag(tagId, tagBody);
         TagResponseDTO tagResponseDTO = TagConverter.entityToResponseDto(updatedTag);
         return new ResponseEntity(tagResponseDTO, HttpStatus.OK);
+    }
+
+    @ExceptionHandler(value = {JpaOptimisticLockingFailureException.class})
+    public void translateExceptionFromEclipseLink(HttpServletResponse response) {
+        response.setStatus(CustomErrorCode.ENTITY_OUT_OF_SYNC.getHttpStatus());
+
+        try {
+            PrintWriter writer = response.getWriter()
+                    .append("The tag item you working on has been updated/deleted by another session. Please reload tags and retry...");
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            LOGGER.error("An error occurred when writing custom HTTP error code to HTTP response");
+        }
     }
 }

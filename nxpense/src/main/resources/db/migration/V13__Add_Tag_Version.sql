@@ -1,0 +1,1 @@
+alter table tag add version integer not null default 0;

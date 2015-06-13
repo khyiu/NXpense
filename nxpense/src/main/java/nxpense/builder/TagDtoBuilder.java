@@ -6,10 +6,16 @@ import java.util.List;
 
 public class TagDtoBuilder {
 
+    private Integer version;
     private String name;
     private String backgroundColor;
     private String foregroundColor;
     private List<TagDTO> subTags;
+
+    public TagDtoBuilder setVersion(Integer version) {
+        this.version = version;
+        return this;
+    }
 
     public TagDtoBuilder setName(String name) {
         this.name = name;
@@ -33,6 +39,7 @@ public class TagDtoBuilder {
 
     public TagDTO build() {
         TagDTO tagDto = new TagDTO();
+        tagDto.setVersion(version);
         tagDto.setName(name);
         tagDto.setBackgroundColor(backgroundColor);
         tagDto.setForegroundColor(foregroundColor);

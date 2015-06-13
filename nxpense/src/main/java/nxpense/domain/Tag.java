@@ -19,6 +19,9 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TAG_SEQ")
     private Integer id;
 
+    @Version
+    private Integer version;
+
     private String name;
 
     @Convert(converter = ColorConverter.class)
@@ -44,6 +47,14 @@ public class Tag {
 
     public Integer getId() {
         return id;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     public String getName() {
