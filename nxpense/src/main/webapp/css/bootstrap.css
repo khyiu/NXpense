@@ -883,6 +883,15 @@ th {
 .glyphicon-tree-deciduous:before {
   content: "\e200";
 }
+
+.glyphicon-text-color:before {
+    content: "\e242";
+}
+
+.glyphicon-text-background:before {
+    content: "\e243";
+}
+
 * {
   -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;
