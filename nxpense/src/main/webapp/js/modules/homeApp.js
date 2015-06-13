@@ -39,15 +39,15 @@
         RestangularProvider.setBaseUrl('/' + webContext);
 
         // Routes configuration
-        $routeProvider
-            .when('/expense/details', {
-                templateUrl: 'views/expense-details.html',
-                controller: 'expenseController'
-            })
-            .when('/tag/management', {
-                templateUrl: 'views/tag-manage.html',
-                controller: 'tagController'
-            });
+        $routeProvider.when('/expense/details', {
+            templateUrl: 'views/expense-details.html',
+            controller: 'expenseController'
+        }).when('/tag/management', {
+            templateUrl: 'views/tag-manage.html',
+            controller: 'tagController'
+        }).otherwise({
+            redirectTo: '/expense/details'
+        });
     });
 
     homeAppModule.controller('tagController', ['$rootScope', '$scope', 'Restangular', 'notificationHelper', function ($rootScope, $scope, Restangular, notificationHelper) {
