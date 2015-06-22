@@ -30,6 +30,7 @@
         <class>nxpense.domain.Tag</class>
         <class>nxpense.domain.User</class>
         <class>nxpense.domain.converter.ColorConverter</class>
+        <class>nxpense.domain.Attachment</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:migration-test"/>

@@ -4,9 +4,9 @@ import nxpense.domain.Expense;
 import nxpense.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 @Transactional(readOnly = true)
-public interface ExpenseRepository extends PagingAndSortingRepository<Expense, Integer> {
+public interface ExpenseRepository extends JpaRepository<Expense, Integer> {
 
     /**
      * Counts the number of {@link nxpense.domain.Expense} items belonging to the specified user and whose date

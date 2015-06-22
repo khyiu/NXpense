@@ -23,6 +23,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -42,12 +43,18 @@ public class ExpenseServiceImpl implements ExpenseService {
     private TagRepository tagRepository;
 
     @Transactional(rollbackFor = {Exception.class})
-    public Expense createNewExpense(ExpenseDTO expenseDTO) {
+    public Expense createNewExpense(ExpenseDTO expenseDTO, List<MultipartFile> attachments) {
         Expense expense = ExpenseConverter.dtoToEntity(expenseDTO);
 
         if (expense == null) {
             LOGGER.warn("Attempt to create a NULL expense!");
             throw new BadRequestException("Cannot persist a NULL expense entity");
+        }
+
+        try {
+            ExpenseHelper.associateFilesToExpense(expense, attachments);
+        } catch (IllegalArgumentException iae) {
+            throw new RequestCannotCompleteException(iae.getMessage());
         }
 
         User currentUser = securityPrincipalHelper.getCurrentUser();
@@ -69,7 +76,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Transactional(rollbackFor = {Exception.class})
-    public Expense updateExpense(int id, ExpenseDTO expenseDTO) {
+    public Expense updateExpense(int id, ExpenseDTO expenseDTO, List<MultipartFile> attachments) {
         User currentUser = securityPrincipalHelper.getCurrentUser();
         Expense existingExpense = expenseRepository.findByIdAndUser(id, currentUser);
 
@@ -84,6 +91,13 @@ public class ExpenseServiceImpl implements ExpenseService {
         if (existingExpense.getDate().equals(expenseDTO.getDate().toDate())) {
             LOGGER.debug("Updating expense [{}] -> update", id);
             ExpenseHelper.overwriteFields(ExpenseConverter.dtoToEntity(expenseDTO), existingExpense);
+
+            try {
+                ExpenseHelper.associateFilesToExpense(existingExpense, attachments);
+            } catch (IllegalArgumentException iae) {
+                throw new RequestCannotCompleteException(iae.getMessage());
+            }
+
             return expenseRepository.save(existingExpense);
         } else {
             // date did change --> delete existing one + creating new one by using existing service method in order
@@ -91,7 +105,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             LOGGER.debug("Updating expense [{}] -> delete + update", id);
             VersionedSelectionItem item = new VersionedSelectionItem(id, expenseDTO.getVersion());
             deleteExpense(Arrays.asList(item));
-            return createNewExpense(expenseDTO);
+            return createNewExpense(expenseDTO, attachments);
         }
     }
 

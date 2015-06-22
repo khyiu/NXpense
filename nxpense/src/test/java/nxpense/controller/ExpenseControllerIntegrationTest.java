@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,6 +24,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,6 +53,11 @@ public class ExpenseControllerIntegrationTest extends AbstractIntegrationTest {
     private static final Sort.Direction SORT_DIRECTION = Sort.Direction.DESC;
     private static final String[] SORT_PROPS = {"amount"};
 
+    private static final String ATTACHMENT_FILENAME_1 = "file1.txt";
+    private static final String ATTACHMENT_FILENAME_2 = "file2.txt";
+    private static final MockMultipartFile attachmentsPart1 = new MockMultipartFile("attachments", ATTACHMENT_FILENAME_1, "", new byte[]{});
+    private static final MockMultipartFile attachmentsPart2 = new MockMultipartFile("attachments", ATTACHMENT_FILENAME_2, "", new byte[]{});
+
     @Autowired
     private ExpenseRepository expenseRepository;
 
@@ -75,9 +82,15 @@ public class ExpenseControllerIntegrationTest extends AbstractIntegrationTest {
                 .build();
         String expenseJson = om.writeValueAsString(expense);
 
-        RequestBuilder requestBuilder = post("/expense")
-                .contentType(MediaType.APPLICATION_JSON)
+        MockMultipartFile expenseJsonPart = new MockMultipartFile("expense", "", "application/json", expenseJson.getBytes());
+
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.fileUpload("/expense")
+                .file(expenseJsonPart)
+                .file(attachmentsPart1)
+                .file(attachmentsPart2)
                 .content(expenseJson);
+
         MvcResult result = mockMvc.perform(requestBuilder).andDo(print()).andReturn();
         String responseContent = result.getResponse().getContentAsString();
 
@@ -102,11 +115,14 @@ public class ExpenseControllerIntegrationTest extends AbstractIntegrationTest {
                 .setSource(ExpenseSource.DEBIT_CARD)
                 .build();
         String expenseJson = om.writeValueAsString(expense);
+        MockMultipartFile expenseJsonPart = new MockMultipartFile("expense", "", "application/json", expenseJson.getBytes());
 
-        RequestBuilder requestBuilder = post("/expense")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(expenseJson);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.fileUpload("/expense")
+                .file(expenseJsonPart)
+                .file(attachmentsPart1)
+                .file(attachmentsPart2);
         MvcResult result = mockMvc.perform(requestBuilder).andDo(print()).andReturn();
+
         String responseContent = result.getResponse().getContentAsString();
         assertThat(responseContent).isEmpty();
     }
@@ -188,9 +204,11 @@ public class ExpenseControllerIntegrationTest extends AbstractIntegrationTest {
                 .setVersion(1)
                 .build();
 
-        RequestBuilder requestBuilder = put("/expense/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsString(expenseDto));
+        MockMultipartFile expenseJsonPart = new MockMultipartFile("expense", "", "application/json", om.writeValueAsString(expenseDto).getBytes());
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.fileUpload("/expense/1")
+                .file(expenseJsonPart)
+                .file(attachmentsPart1)
+                .file(attachmentsPart2);
 
         MvcResult result = mockMvc.perform(requestBuilder).andDo(print()).andReturn();
         String jsonResponse = result.getResponse().getContentAsString();
@@ -221,9 +239,11 @@ public class ExpenseControllerIntegrationTest extends AbstractIntegrationTest {
                 .setVersion(0)
                 .build();
 
-        RequestBuilder requestBuilder = put("/expense/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsString(expenseDto));
+        MockMultipartFile expenseJsonPart = new MockMultipartFile("expense", "", "application/json", om.writeValueAsString(expenseDto).getBytes());
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.fileUpload("/expense/1")
+                .file(expenseJsonPart)
+                .file(attachmentsPart1)
+                .file(attachmentsPart2);
 
         mockMvc.perform(requestBuilder).andDo(print()).andReturn();
     }
@@ -247,9 +267,11 @@ public class ExpenseControllerIntegrationTest extends AbstractIntegrationTest {
                 .setSource(ExpenseSource.DEBIT_CARD)
                 .build();
 
-        RequestBuilder requestBuilder = put("/expense/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsString(expenseDto));
+        MockMultipartFile expenseJsonPart = new MockMultipartFile("expense", "", "application/json", om.writeValueAsString(expenseDto).getBytes());
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.fileUpload("/expense/1")
+                .file(expenseJsonPart)
+                .file(attachmentsPart1)
+                .file(attachmentsPart2);
 
         MvcResult result = mockMvc.perform(requestBuilder).andDo(print()).andReturn();
         String jsonResponse = result.getResponse().getContentAsString();

@@ -2,9 +2,7 @@ package nxpense.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -44,6 +42,12 @@ public abstract class Expense {
                     @JoinColumn(name = "TAG_ID", nullable = false, updatable = false)
             })
     private Set<Tag> tags = new HashSet<Tag>();
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "EXPENSE_ATTACHMENT", joinColumns = {
+            @JoinColumn(name = "EXPENSE_ID")
+    })
+    private List<Attachment> attachments = new ArrayList<Attachment>();
 
     private boolean verified;
 
@@ -113,6 +117,14 @@ public abstract class Expense {
 
     public Set<Tag> getTags() {
         return this.tags;
+    }
+
+    public List<Attachment> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<Attachment> attachments) {
+        this.attachments = attachments;
     }
 
     @Override

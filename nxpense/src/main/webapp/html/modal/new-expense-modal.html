@@ -46,9 +46,12 @@
                 </label>
             </div>
         </fieldset>
-        <div id="description">
+        <fieldset id="description">
             <textarea placeholder="Description (optional)" class="form-control" ng-model="expense.description"></textarea>
-        </div>
+        </fieldset>
+        <fieldset id="attachments">
+            <input type="file" name="expense-attachments" multiple attachment-model="attachments">
+        </fieldset>
     </form>
 </div>
 <div class="modal-footer" ng-keydown=processKey($event)>

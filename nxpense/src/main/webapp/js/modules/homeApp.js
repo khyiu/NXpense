@@ -290,9 +290,8 @@
         };
     }]);
 
-    homeAppModule.controller('modalController', ['$rootScope', '$scope', '$modalInstance', 'Restangular', '$filter', 'notificationHelper', 'selectedExpense',
-        function ($rootScope, $scope, $modalInstance, Restangular, $filter, notificationHelper, selectedExpense) {
-            var expenseDAO = Restangular.one('expense');
+    homeAppModule.controller('modalController', ['$rootScope', '$scope', '$modalInstance', 'Restangular', '$filter', 'notificationHelper', 'selectedExpense', '$http',
+        function ($rootScope, $scope, $modalInstance, Restangular, $filter, notificationHelper, selectedExpense, $http) {
 
             if (selectedExpense) {
                 $scope.expense = _.extend({}, selectedExpense);
@@ -301,33 +300,54 @@
             }
 
             $scope.ok = function () {
-                var successCallback = function () {
-                    notificationHelper.hideServerInfo();
-                    notificationHelper.showOperationSuccess("Expense saved.");
-
-                    // send event to trigger reloading of current item page
-                    $rootScope.$broadcast('expense:reloadPage');
-                };
-
-                var failureCallback = function (error) {
-                    var msgToDisplay = "Failed saving expense!";
-
-                    if(error && error.status === 499 && error.data) {
-                        msgToDisplay = error.data;
-                    }
-
-                    notificationHelper.hideServerInfo();
-                    notificationHelper.showOperationFailure(msgToDisplay);
-                };
+                var expenseAttachments = [];
+                var formData = new FormData();
+                var request;
+                var requestUrl;
 
                 $modalInstance.close();
                 notificationHelper.showServerInfo('Saving...');
 
+                _.each(this.attachments, function (attachment) {
+                    expenseAttachments.push(attachment);
+                    formData.append('attachments', attachment);
+                });
+
+                //formData.append('attachments', expenseAttachments);
+                formData.append('expense', new Blob([JSON.stringify(this.expense)], {type: 'application/json'}));
+
                 if (this.expense.id) {
-                    expenseDAO.customPUT(this.expense, this.expense.id).then(successCallback, failureCallback);
+                    requestUrl = '/' + $scope.WEB_CONTEXT + '/expense/' + this.expense.id;
                 } else {
-                    expenseDAO.customPOST(this.expense).then(successCallback, failureCallback);
+                    requestUrl = '/' + $scope.WEB_CONTEXT + '/expense';
                 }
+
+                request = {
+                    method: 'POST',
+                    url: requestUrl,
+                    headers: {
+                        'Content-Type': undefined
+                    },
+                    data: formData
+                };
+
+                $http(request)
+                    .success(function(data, status, headers, config) {
+                        notificationHelper.hideServerInfo();
+                        notificationHelper.showOperationSuccess("Expense saved.");
+
+                        // send event to trigger reloading of current item page
+                        $rootScope.$broadcast('expense:reloadPage');
+                    }).error(function(data, status, headers, config) {
+                        var msgToDisplay = "Failed saving expense!";
+
+                        if (status === 499 && data) {
+                            msgToDisplay = data;
+                        }
+
+                        notificationHelper.hideServerInfo();
+                        notificationHelper.showOperationFailure(msgToDisplay);
+                    });
             };
 
             $scope.cancel = function () {

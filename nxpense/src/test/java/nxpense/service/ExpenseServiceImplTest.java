@@ -32,11 +32,13 @@ import org.mockito.stubbing.Answer;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -81,6 +83,13 @@ public class ExpenseServiceImplTest extends AbstractServiceTest {
     private static final String TAG_NAME=  "Electricity bill";
     private static final Integer TAG_ID_UNEXISTING = 10;
     private static final Integer TAG_ID_NOT_CURRENT_USER = 100;
+
+    private static final String ATTACHMENT_FILENAME_1 = "file1.txt";
+    private static final String ATTACHMENT_FILENAME_2 = "file2.txt";
+    private static final List<MultipartFile> ATTACHMENTS = Arrays.asList(
+            (MultipartFile) new MockMultipartFile(ATTACHMENT_FILENAME_1, new byte[0]),
+            (MultipartFile) new MockMultipartFile(ATTACHMENT_FILENAME_2, new byte[0])
+    );
 
     private static final ExpenseDTO EXPENSE_DTO = new ExpenseDtoBuilder()
             .setSource(ExpenseSource.DEBIT_CARD)
@@ -189,16 +198,17 @@ public class ExpenseServiceImplTest extends AbstractServiceTest {
         expense.setDescription(DESCRIPTION);
         expense.setUser(mockUser);
 
-        expenseService.createNewExpense(EXPENSE_DTO);
+        expenseService.createNewExpense(EXPENSE_DTO, ATTACHMENTS);
         Mockito.<CrudRepository>verify(expenseRepository).save(expenseArgument.capture());
 
         assertThat(expenseArgument.getValue()).isEqualTo(expense);
         assertThat(expenseArgument.getValue().getUser().getExpenses()).contains(expense);
+        assertThat(expenseArgument.getValue().getAttachments()).hasSize(2);
     }
 
     @Test(expected = BadRequestException.class)
     public void testCreateNewExpense_nullInputValue() {
-        expenseService.createNewExpense(null);
+        expenseService.createNewExpense(null, ATTACHMENTS);
     }
 
     @Test(expected = UnauthenticatedException.class)
@@ -208,7 +218,7 @@ public class ExpenseServiceImplTest extends AbstractServiceTest {
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, USER_PASSWORD, Collections.<GrantedAuthority>emptyList());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        expenseService.createNewExpense(EXPENSE_DTO);
+        expenseService.createNewExpense(EXPENSE_DTO, ATTACHMENTS);
     }
 
     @Test
@@ -251,7 +261,7 @@ public class ExpenseServiceImplTest extends AbstractServiceTest {
 
     @Test(expected = RequestCannotCompleteException.class)
     public void testUpdateExpense_unexisting() {
-        expenseService.updateExpense(EXPENSE_ID_UNEXISTING, EXPENSE_DTO);
+        expenseService.updateExpense(EXPENSE_ID_UNEXISTING, EXPENSE_DTO, ATTACHMENTS);
     }
 
     @Test(expected = BadRequestException.class)

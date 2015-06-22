@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.orm.jpa.JpaOptimisticLockingFailureException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -30,11 +31,11 @@ public class ExpenseController {
     @Autowired
     private ExpenseService expenseService;
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<ExpenseResponseDTO> createExpense(@RequestBody ExpenseDTO newExpenseDTO) {
+    @RequestMapping(method = RequestMethod.POST, consumes = {"multipart/form-data"})
+    public ResponseEntity<ExpenseResponseDTO> createExpense(@RequestPart("expense") ExpenseDTO newExpenseDTO, @RequestPart("attachments") List<MultipartFile> attachments) {
 
         try {
-            Expense createdExpense = expenseService.createNewExpense(newExpenseDTO);
+            Expense createdExpense = expenseService.createNewExpense(newExpenseDTO, attachments);
             ExpenseResponseDTO responseDto = ExpenseConverter.entityToResponseDto(createdExpense);
             return new ResponseEntity<ExpenseResponseDTO>(responseDto, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -59,9 +60,11 @@ public class ExpenseController {
         return new ResponseEntity<PageDTO<ExpenseResponseDTO>>(pageDto, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{expenseId}", method = RequestMethod.PUT)
-    public ResponseEntity<ExpenseResponseDTO> updateExpense(@PathVariable int expenseId, @RequestBody ExpenseDTO expenseDto) {
-        Expense updatedExpense = expenseService.updateExpense(expenseId, expenseDto);
+    @RequestMapping(value = "/{expenseId}", method = RequestMethod.POST, consumes = {"multipart/form-data"})
+    public ResponseEntity<ExpenseResponseDTO> updateExpense(@PathVariable int expenseId,
+                                                                          @RequestPart("expense") ExpenseDTO expenseDto,
+                                                                          @RequestPart("attachments") List<MultipartFile> attachments) {
+        Expense updatedExpense = expenseService.updateExpense(expenseId, expenseDto, attachments);
         return new ResponseEntity<ExpenseResponseDTO>(ExpenseConverter.entityToResponseDto(updatedExpense), HttpStatus.OK);
     }
 
