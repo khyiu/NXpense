@@ -1,8 +1,6 @@
 package nxpense.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.Lob;
+import javax.persistence.*;
 
 @Embeddable
 public class Attachment {
@@ -10,6 +8,7 @@ public class Attachment {
 
     @Lob
     @Column(name = "CONTENT")
+    @Basic(fetch = FetchType.LAZY)
     private byte[] byteContent;
 
     public Attachment() {

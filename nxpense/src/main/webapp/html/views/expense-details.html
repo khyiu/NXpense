@@ -61,8 +61,7 @@
                     <input id="select-all-row" type="checkbox" ng-model="selectedAll"/>
                     <label for="select-all-row"></label>
                 </th>
-                <!-- todo delete column once not necessary-->
-                <th class="col-position" tabindex="0" rowspan="1" colspan="1">#</th>
+                <th class="col-attachments" tabindex="0" rowspan="1" colspan="1"><span class="glyphicon glyphicon-paperclip"></span></th>
                 <th class="col-date" tabindex="0" rowspan="1" colspan="1"
                     ng-class="{'sorting': sortProp !== 'date', 'sorting_asc': sortProp === 'date' && sortAsc, 'sorting_desc': sortProp === 'date' && !sortAsc}"
                     ng-dblclick="updateSort(undefined, 'date')" ng-keydown="updateSort($event, 'date')">
@@ -84,7 +83,7 @@
                     <input id="select-row-{{expense.id}}" type="checkbox" ng-model="expense.selected"/>
                     <label for="select-row-{{expense.id}}"></label>
                 </td>
-                <td>{{expense.position}}</td>
+                <td>{{expense.nbAttachment}}</td>
                 <td>{{expense.date}}</td>
                 <td>€{{expense.amount}}</td>
                 <td>{{expense.description}}</td>
