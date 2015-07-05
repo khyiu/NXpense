@@ -8,16 +8,37 @@
 	<jpa:repositories base-package="nxpense.repository" />
 
 	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-		<property name="packagesToScan" value="nxpense.domain" />
+		<property name="packagesToScan" value="nxpense.domain,nxpense.domain.converter" />
 		<property name="dataSource" ref="datasource" />
-		<!-- Specifies the persistence provider to use -->
+        <property name="jpaPropertyMap">
+            <map>
+                <entry key="eclipselink.weaving" value="false"/>
+                <entry key="eclipselink.logging.logger" value="ServerLogger"/>
+                <entry key="eclipselink.logging.level" value="FINE"/>
+                <entry key="eclipselink.logging.level.sql" value="FINE"/>
+                <entry key="eclipselink.logging.parameters" value="true"/>
+            </map>
+        </property>
 		<property name="jpaVendorAdapter">
-			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
-		</property>
-		<property name="jpaProperties">
-			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
-			</props>
+			<bean class="org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter" />
 		</property>
 	</bean>
+
+    <!--
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="packagesToScan" value="nxpense.domain" />
+        <property name="dataSource" ref="datasource" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+        </property>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.use_sql_comments">true</prop>
+            </props>
+        </property>
+    </bean>
+    -->
 </beans>
