@@ -90,6 +90,13 @@ public class ExpenseController {
         return new ResponseEntity<List<TagResponseDTO>>(responseDto.getTags(), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/{expenseId}/tag/{tagName}", method = RequestMethod.DELETE)
+    public ResponseEntity<ExpenseResponseDTO> removeTagFromExpense(@PathVariable Integer expenseId, @PathVariable String tagName) {
+        Expense updatedExpense = expenseService.removeTagFromExpense(expenseId, tagName);
+        ExpenseResponseDTO responseDto = ExpenseConverter.entityToResponseDto(updatedExpense);
+        return new ResponseEntity<ExpenseResponseDTO>(responseDto, HttpStatus.OK);
+    }
+
     // Exception handler to intercept OptimisticLockingException thrown by Spring-Data JPA using Eclipselink as vendor
     @ExceptionHandler(value = {JpaOptimisticLockingFailureException.class})
     public void translateExceptionFromEclipseLink(HttpServletResponse response) {

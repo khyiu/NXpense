@@ -72,4 +72,12 @@ public interface ExpenseService {
      * @throws nxpense.exception.ForbiddenActionException if specified expense or specified tag does not belong to current user
      */
     public Expense associateTagToExpense(int expenseId, int tagId);
+
+    /**
+     * Removes the specified tag from the expense item whose ID is specified.
+     * @param expenseId Target expense item
+     * @param tagName Tag to be removed
+     * @return Updated Expense item
+     */
+    public Expense removeTagFromExpense(int expenseId, String tagName);
 }

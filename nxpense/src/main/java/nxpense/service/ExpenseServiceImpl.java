@@ -1,5 +1,7 @@
 package nxpense.service;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import nxpense.domain.Expense;
 import nxpense.domain.Tag;
 import nxpense.domain.User;
@@ -23,6 +25,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
@@ -147,8 +150,8 @@ public class ExpenseServiceImpl implements ExpenseService {
         return new BalanceInfoDTO(sumVerified, sumNonVerified, sumVerified.add(sumNonVerified));
     }
 
-    @Transactional
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public Expense associateTagToExpense(int expenseId, int tagId) {
         User currentUser = securityPrincipalHelper.getCurrentUser();
         Expense expense = expenseRepository.findOne(expenseId);
@@ -178,5 +181,31 @@ public class ExpenseServiceImpl implements ExpenseService {
         expense.addTag(tag);
         tag.addExpense(expense);
         return expense;
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public Expense removeTagFromExpense(int expenseId, final String tagName) {
+        Expense expense = expenseRepository.findOne(expenseId);
+
+        if(expense == null) {
+            LOGGER.debug("No expense item found for ID = {}", expenseId);
+            throw new RequestCannotCompleteException("No expense item found for specified ID");
+        }
+
+        if(StringUtils.isEmpty(tagName)) {
+            LOGGER.debug("Cannot remove empty or null tag from expense item");
+            throw new RequestCannotCompleteException("No tag value specified!");
+        }
+
+        Tag targetTag = Iterables.find(expense.getTags(), new Predicate<Tag>() {
+            @Override
+            public boolean apply(Tag tag) {
+                return tag != null && tagName.equals(tag.getName());
+            }
+        });
+
+        expense.getTags().remove(targetTag);
+        return expenseRepository.save(expense);
     }
 }

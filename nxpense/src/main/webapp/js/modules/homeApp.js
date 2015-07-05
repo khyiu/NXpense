@@ -16,7 +16,7 @@
         $rootScope.page = 1;
 
         $rootScope.loadTags = function () {
-            notificationHelper.showServerInfo("Fetching tags...");
+            notificationHelper.showServerInfo('Fetching tags...');
             Restangular.all('tag').customGET('user').then(
                 function (tags) {
                     notificationHelper.hideServerInfo();
@@ -25,7 +25,7 @@
 
                 function () {
                     notificationHelper.hideServerInfo();
-                    notificationHelper.showOperationFailure("Failed fetching tags! Please retry later...");
+                    notificationHelper.showOperationFailure('Failed fetching tags! Please retry later...');
                 }
             );
         };
@@ -76,7 +76,7 @@
         // TAG DELETION
         $scope.remove = function (tag, $event) {
             if (tag && (_.isUndefined($event.keyCode) || $event.keyCode === 13)) {
-                notificationHelper.showServerInfo("Deleting tag...");
+                notificationHelper.showServerInfo('Deleting tag...');
 
                 tagDAO.customDELETE(tag.id).then(
                     function () {
@@ -86,7 +86,7 @@
 
                     function () {
                         notificationHelper.hideServerInfo();
-                        notificationHelper.showOperationFailure("Failed deleting tag! Please retry later...");
+                        notificationHelper.showOperationFailure('Failed deleting tag! Please retry later...');
                     }
                 );
             }
@@ -124,7 +124,7 @@
         $scope.saveTag = function () {
             var successCallback = function () {
                 notificationHelper.hideServerInfo();
-                notificationHelper.showOperationSuccess("Tag saved.");
+                notificationHelper.showOperationSuccess('Tag saved.');
                 $scope.reset();
                 $scope.loadTags();
             };
@@ -168,7 +168,7 @@
                 },
 
                 function () {
-                    notificationHelper.showOperationFailure("Failed adding tag! Please retry later...");
+                    notificationHelper.showOperationFailure('Failed adding tag! Please retry later...');
                 }
             )
         };
@@ -202,12 +202,12 @@
                 },
 
                 function() {
-                    notificationHelper.showOperationFailure("Failed fetching balance!");
+                    notificationHelper.showOperationFailure('Failed fetching balance!');
                 }
             );
 
             // load expense items
-            notificationHelper.showServerInfo("Fetching expenses...");
+            notificationHelper.showServerInfo('Fetching expenses...');
             expenseDAO.one('page').get(queryParameters).then(
                 function (response) {
                     notificationHelper.hideServerInfo();
@@ -223,7 +223,7 @@
 
                 function () {
                     notificationHelper.hideServerInfo();
-                    notificationHelper.showOperationFailure("Failed fetching expenses! Please retry later...");
+                    notificationHelper.showOperationFailure('Failed fetching expenses! Please retry later...');
                 }
             );
         };
@@ -288,6 +288,25 @@
                 $scope.reloadPage();
             }
         };
+
+        // Removal of tag from expense item
+        $scope.removeTag = function($event, expense, tagName) {
+            $event.preventDefault();
+            notificationHelper.showServerInfo('Removing tag...');
+
+            expenseDAO.one(expense.id.toString()).one('tag').customDELETE(tagName).then(
+                function(updatedExpense) {
+                    notificationHelper.hideServerInfo();
+                    expense.tags = updatedExpense.tags;
+                },
+
+                function() {
+                    notificationHelper.hideServerInfo();
+                    notificationHelper.showOperationFailure('Failed removing tag from expense! Please retry later...');
+                }
+            );
+
+        };
     }]);
 
     homeAppModule.controller('modalController', ['$rootScope', '$scope', '$modalInstance', 'Restangular', '$filter', 'notificationHelper', 'selectedExpense', '$http',
@@ -334,12 +353,12 @@
                 $http(request)
                     .success(function(data, status, headers, config) {
                         notificationHelper.hideServerInfo();
-                        notificationHelper.showOperationSuccess("Expense saved.");
+                        notificationHelper.showOperationSuccess('Expense saved.');
 
                         // send event to trigger reloading of current item page
                         $rootScope.$broadcast('expense:reloadPage');
                     }).error(function(data, status, headers, config) {
-                        var msgToDisplay = "Failed saving expense!";
+                        var msgToDisplay = 'Failed saving expense!';
 
                         if (status === 499 && data) {
                             msgToDisplay = data;
