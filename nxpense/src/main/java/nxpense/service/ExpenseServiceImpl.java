@@ -193,19 +193,22 @@ public class ExpenseServiceImpl implements ExpenseService {
             throw new RequestCannotCompleteException("No expense item found for specified ID");
         }
 
-        if(StringUtils.isEmpty(tagName)) {
-            LOGGER.debug("Cannot remove empty or null tag from expense item");
-            throw new RequestCannotCompleteException("No tag value specified!");
+        if(!StringUtils.isEmpty(tagName)) {
+            try {
+                Tag targetTag = Iterables.find(expense.getTags(), new Predicate<Tag>() {
+                    @Override
+                    public boolean apply(Tag tag) {
+                        return tag != null && tagName.equals(tag.getName());
+                    }
+                });
+
+                expense.getTags().remove(targetTag);
+            } catch (NoSuchElementException e) {
+                LOGGER.debug("Could not find tag with name {} to remove from expense with id {}", tagName, expenseId);
+                throw new RequestCannotCompleteException("No corresponding tag found!");
+            }
         }
 
-        Tag targetTag = Iterables.find(expense.getTags(), new Predicate<Tag>() {
-            @Override
-            public boolean apply(Tag tag) {
-                return tag != null && tagName.equals(tag.getName());
-            }
-        });
-
-        expense.getTags().remove(targetTag);
         return expenseRepository.save(expense);
     }
 }

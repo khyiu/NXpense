@@ -121,6 +121,12 @@ public class ExpenseServiceImplTest extends AbstractServiceTest {
                 expense.setDate(DATE.toDate());
                 expense.setAmount(AMOUNT);
                 expense.setDescription(DESCRIPTION);
+
+                Tag tag = new Tag();
+                tag.setName(TAG_NAME);
+                tag.addExpense(expense);
+                expense.getTags().add(tag);
+
                 mockUser.addExpense(expense);
                 return expense;
             }
@@ -154,6 +160,13 @@ public class ExpenseServiceImplTest extends AbstractServiceTest {
                 expense.setDescription("Dummy Debit Expense");
                 expenses.add(expense);
                 return expenses;
+            }
+        });
+
+        given(expenseRepository.save(any(Expense.class))).willAnswer(new Answer<Expense>() {
+            @Override
+            public Expense answer(InvocationOnMock invocation) throws Throwable {
+                return invocation.getArgumentAt(0, Expense.class);
             }
         });
 
@@ -290,5 +303,21 @@ public class ExpenseServiceImplTest extends AbstractServiceTest {
 
         assertThat(updatedExpense.getTags()).hasSize(1);
         assertThat(updatedExpense.getTags().iterator().next().getName()).isEqualTo(TAG_NAME);
+    }
+
+    @Test(expected = RequestCannotCompleteException.class)
+    public void testRemoveTagFromExpense_nonExistingExpense() {
+        expenseService.removeTagFromExpense(EXPENSE_ID_UNEXISTING, TAG_NAME);
+    }
+
+    @Test(expected = RequestCannotCompleteException.class)
+    public void testRemoveTagFromExpense_nonExistingTag() {
+        expenseService.removeTagFromExpense(EXPENSE_ID, "a non associated tag name");
+    }
+
+    @Test
+    public void testRemoveTagFromExpense() {
+        Expense updatedExpense = expenseService.removeTagFromExpense(EXPENSE_ID, TAG_NAME);
+        assertThat(updatedExpense.getTags()).hasSize(0);
     }
 }
