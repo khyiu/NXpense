@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:/spring/application-test-config.xml")
 @WebAppConfiguration
-@Transactional
+@Transactional(readOnly = true)
 public class TagControllerIntegrationTest extends AbstractIntegrationTest {
 
     @Before
@@ -229,5 +229,26 @@ public class TagControllerIntegrationTest extends AbstractIntegrationTest {
         assertThat(tagResponseDTO.getName()).isEqualTo("Bill");
         assertThat(tagResponseDTO.getBackgroundColor()).isEqualToIgnoringCase("#123456");
         assertThat(tagResponseDTO.getForegroundColor()).isEqualToIgnoringCase("#654321");
+    }
+
+    @Test
+    public void testUpdateTag_outOfSync() throws Exception {
+        DatabaseOperation.CLEAN_INSERT.execute(getDBConnection(), loadDataSet("dataset/expense-controller-integration-test-dataset.xml"));
+        mockAuthenticatedUser(3);
+
+        TagDTO tagDto = new TagDtoBuilder()
+                .setName("Bill")
+                .setBackgroundColor("#123456")
+                .setForegroundColor("#654321")
+                .setVersion(0)
+                .build();
+
+        mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+        mockMvcBuilder.alwaysExpect(status().is(499));
+        mockMvc = mockMvcBuilder.build();
+
+        RequestBuilder requestBuilder = put("/tag/5")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(tagDto));
     }
 }
