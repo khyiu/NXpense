@@ -76,18 +76,23 @@ public class TagServiceImplTest extends AbstractServiceTest {
     @Before
     public void initMocks() {
         given(securityPrincipalHelper.getCurrentUser()).willReturn(mockUser);
-
-        given(tagRepository.save(any(Tag.class))).will(new Answer<Tag>() {
+        Answer<Tag> saveTagAnswer = new Answer<Tag>() {
             @Override
             public Tag answer(InvocationOnMock invocation) throws Throwable {
                 // Set a dummy ID to simulate the ID generation during save process
                 Tag tagToBeSaved = invocation.getArgumentAt(0, Tag.class);
                 Field fieldId = tagToBeSaved.getClass().getDeclaredField("id");
                 fieldId.setAccessible(true);
-                fieldId.set(tagToBeSaved, 88);
+
+                if(tagToBeSaved.getId() == null) {
+                    fieldId.set(tagToBeSaved, 88);
+                }
                 return tagToBeSaved;
             }
-        });
+        };
+
+        given(tagRepository.save(any(Tag.class))).will(saveTagAnswer);
+        given(tagRepository.saveAndFlush(any(Tag.class))).will(saveTagAnswer);
 
         given(tagRepository.findOne(ID_NON_EXISTING_TAG)).willReturn(null);
         given(tagRepository.findOne(ID_CURRENT_USER_TAG)).willReturn(TAG);

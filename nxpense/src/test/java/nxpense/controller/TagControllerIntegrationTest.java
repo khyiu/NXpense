@@ -210,6 +210,7 @@ public class TagControllerIntegrationTest extends AbstractIntegrationTest {
                 .setName("Bill")
                 .setBackgroundColor("#123456")
                 .setForegroundColor("#654321")
+                .setVersion(1)
                 .build();
 
         mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
@@ -250,5 +251,7 @@ public class TagControllerIntegrationTest extends AbstractIntegrationTest {
         RequestBuilder requestBuilder = put("/tag/5")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(tagDto));
+
+        mockMvc.perform(requestBuilder).andReturn();
     }
 }

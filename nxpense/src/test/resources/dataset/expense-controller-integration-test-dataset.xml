@@ -20,9 +20,9 @@
     <expense id="11" expense_type="DEBIT" amount="2010.95" date="2015-03-01" description="Test expense (user 4)" user_id="4" position="1" verified="true" version="1"/>
     <expense id="12" expense_type="CREDIT" amount="-499.95" date="2015-03-01" description="Test expense (user 4)" user_id="4" position="2" verified="true" version="1"/>
 
-    <tag id="1" name="Mobile phone" user_id="2" background_color="#000000" foreground_color="#FFFFFF"/>
-    <tag id="2" name="Mobile phone" user_id="3" background_color="#000000" foreground_color="#FFFFFF"/>
-    <tag id="3" name="Groceries" user_id="3" background_color="#000000" foreground_color="#FFFFFF"/>
-    <tag id="4" name="Gas" user_id="3" background_color="#000000" foreground_color="#FFFFFF"/>
-    <tag id="5" name="Internet subscription" user_id="3" background_color="#000000" foreground_color="#FFFFFF"/>
+    <tag id="1" name="Mobile phone" user_id="2" background_color="#000000" foreground_color="#FFFFFF" version="1"/>
+    <tag id="2" name="Mobile phone" user_id="3" background_color="#000000" foreground_color="#FFFFFF" version="1"/>
+    <tag id="3" name="Groceries" user_id="3" background_color="#000000" foreground_color="#FFFFFF" version="1"/>
+    <tag id="4" name="Gas" user_id="3" background_color="#000000" foreground_color="#FFFFFF" version="1"/>
+    <tag id="5" name="Internet subscription" user_id="3" background_color="#000000" foreground_color="#FFFFFF" version="1"/>
 </dataset>

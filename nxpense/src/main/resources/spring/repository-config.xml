@@ -14,7 +14,7 @@
             <map>
                 <entry key="eclipselink.weaving" value="false"/>
                 <entry key="eclipselink.logging.logger" value="ServerLogger"/>
-                <entry key="eclipselink.logging.level" value="FINE"/>
+                <entry key="eclipselink.logging.level" value="FINER"/>
                 <entry key="eclipselink.logging.level.sql" value="FINE"/>
                 <entry key="eclipselink.logging.parameters" value="true"/>
             </map>

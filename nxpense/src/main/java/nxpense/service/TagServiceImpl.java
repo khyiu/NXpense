@@ -87,7 +87,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    @Transactional(noRollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public Tag updateTag(Integer tagId, TagDTO tagBody) {
         if(tagId == null || tagBody == null) {
             throw new IllegalArgumentException("Both tag ID and tag content must be provided");
@@ -111,7 +111,6 @@ public class TagServiceImpl implements TagService {
         tagToUpdate.setName(newTagContent.getName());
         tagToUpdate.setBackgroundColor(newTagContent.getBackgroundColor());
         tagToUpdate.setForegroundColor(newTagContent.getForegroundColor());
-
-        return tagToUpdate;
+        return tagRepository.saveAndFlush(tagToUpdate);
     }
 }
