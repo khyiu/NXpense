@@ -255,13 +255,16 @@
             });
         };
 
-        $scope.toggleItemSelection = function ($event, expense) {
+        $scope.toggleItemSelection = function($event, expense) {
+            expense.selected = !expense.selected;
+            this.updateGlobalItemSelection($event, expense);
+        }
+
+        $scope.updateGlobalItemSelection = function ($event) {
             var numberOfSelectedItem;
 
-            // if $event provided -> event triggered by keyboard --> check that pressed key = ENTER
-            // if $event == undefined -> event triggered by mouse
-            if (_.isUndefined($event) || $event.keyCode === 13) {
-                expense.selected = !expense.selected;
+            if ($event.originalEvent instanceof MouseEvent || $event.keyCode === 13) {
+                $event.stopPropagation();
 
                 // Update 'selectedAll' attribute accordingly only if its value will change --> prevent $digest loop to run if not actually necessary
                 numberOfSelectedItem = _.where($scope.expenses, {selected: true}).length;
