@@ -110,6 +110,7 @@ input.balance {
 
 #description > textarea {
 	resize: none;
+    margin-bottom: 25px;
 }
 
 #dateInput, #amountInput {
@@ -162,4 +163,8 @@ input[type=checkbox]:checked + label:before { content: "\f046"; } /* checked ico
     max-width: 100%;
     margin-bottom: 0;
     font-weight: normal !important;
+}
+
+input#attachment-selector {
+    display: none;
 }
