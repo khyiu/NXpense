@@ -312,8 +312,8 @@
         };
     }]);
 
-    homeAppModule.controller('modalController', ['$rootScope', '$scope', '$modalInstance', 'Restangular', '$filter', 'notificationHelper', 'selectedExpense', '$http',
-        function ($rootScope, $scope, $modalInstance, Restangular, $filter, notificationHelper, selectedExpense, $http) {
+    homeAppModule.controller('modalController', ['$rootScope', '$scope', '$modalInstance', 'Restangular', '$filter', 'notificationHelper', 'selectedExpense', '$http', '$timeout',
+        function ($rootScope, $scope, $modalInstance, Restangular, $filter, notificationHelper, selectedExpense, $http, $timeout) {
 
             if (selectedExpense) {
                 $scope.expense = _.extend({}, selectedExpense);
@@ -392,6 +392,18 @@
                     lastTabbableElement = $(document).find('*[lastTab]');
                     lastTabbableElement.focus();
                 }
+            };
+
+            $scope.openFileSelector = function() {
+                // trick to wait for the digest loop to end before executing some treatment
+                $timeout(function(){
+                   $('#attachment-selector').click();
+                });
+            };
+
+            $scope.addAttachments = function() {
+                // todo: handle addition of attachments
+                console.log('>>> addAttachments');
             };
         }]);
 

@@ -12,9 +12,15 @@
                 var attachmentModelSetter = attachmentModel.assign;
 
                 element.bind('change', function(){
-                    scope.$apply(function(){
-                        attachmentModelSetter(scope, element[0].files);
-                    });
+                    // if directive has access to a 'addAttachments' function, invoke it with the fileList object
+                    if(scope.addAttachments) {
+                        scope.addAttachments(element[0].files);
+                    } else {
+                        // otherwise, fallback to a generic setter that is built based on the 'attachment-model' attribute values passed to the directive
+                        scope.$apply(function(){
+                            attachmentModelSetter(scope, element[0].files);
+                        });
+                    }
                 });
             }
         };

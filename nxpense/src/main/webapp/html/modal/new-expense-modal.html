@@ -49,8 +49,15 @@
         <fieldset id="description">
             <textarea placeholder="Description (optional)" class="form-control" ng-model="expense.description"></textarea>
         </fieldset>
-        <fieldset id="attachments">
-            <input type="file" name="expense-attachments" multiple attachment-model="attachments">
+        <fieldset id="attachments" class="fieldset-border">
+            <legend class="fieldset-border">Attachments</legend>
+            <button type="button" class="btn btn-primary" ng-click="openFileSelector()">
+                <i class="glyphicon glyphicon-plus"></i>
+                <span>
+                    Add files...
+                </span>
+            </button>
+            <input type="file" id="attachment-selector" name="expense-attachments" multiple="" attachment-model="attachments">
         </fieldset>
     </form>
 </div>
