@@ -72,7 +72,8 @@ public interface ExpenseRepository extends JpaRepository<Expense, Integer> {
      * @param user owner of the expenses to be retrieved
      * @return List of expenses whose ID is in the {@code ids} list and belonging to the {@code user} User.
      */
-    public List<Expense> findByIdInAndUser(List<Integer> ids, User user);
+    @Query("select e from Expense e where e.id in :ids and e.user = :user")
+    public List<Expense> findByIdInAndUser(@Param("ids") List<Integer> ids, @Param("user") User user);
 
     /**
      * Computes the sum of the specified user's expense filtered out by their verification status.
