@@ -1,12 +1,16 @@
 package nxpense.dto;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  *
  */
 public class ExpenseResponseDTO extends ExpenseDTO {
 
     private Integer id;
-    private Integer nbAttachment;
+    private List<AttachmentResponseDTO> attachments = new ArrayList<AttachmentResponseDTO>();
 
     public Integer getId() {
         return id;
@@ -16,11 +20,15 @@ public class ExpenseResponseDTO extends ExpenseDTO {
         this.id = id;
     }
 
-    public Integer getNbAttachment() {
-        return nbAttachment;
+    public void setNbAttachment(Integer nbAttachment) {
+        System.out.println("nbAttachment = " + nbAttachment);
     }
 
-    public void setNbAttachment(Integer nbAttachment) {
-        this.nbAttachment = nbAttachment;
+    public void setAttachments(List<AttachmentResponseDTO> attachments) {
+        this.attachments = attachments;
+    }
+
+    public List<AttachmentResponseDTO> getAttachments() {
+        return Collections.unmodifiableList(attachments);
     }
 }

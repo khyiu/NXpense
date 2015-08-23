@@ -1,5 +1,6 @@
 package nxpense.controller;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nxpense.domain.User;
 import nxpense.security.CustomUserDetails;
@@ -34,7 +35,11 @@ public class AbstractIntegrationTest {
     protected static final String USER_PASSWORD = "secret";
     protected static final String USER_EMAIL = "test@test.com";
 
-    protected static final ObjectMapper om = new ObjectMapper();
+    /*
+        Adding configuration to ignore unknown properties because in some integration tests, the JSON response is unmarshalled into POJO
+        to make assertions easier.
+     */
+    protected static final ObjectMapper om = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     @Autowired
     protected DataSource datasource;

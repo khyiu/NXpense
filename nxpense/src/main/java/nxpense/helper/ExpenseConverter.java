@@ -5,10 +5,7 @@ import nxpense.domain.CreditExpense;
 import nxpense.domain.DebitExpense;
 import nxpense.domain.Expense;
 import nxpense.domain.Tag;
-import nxpense.dto.ExpenseDTO;
-import nxpense.dto.ExpenseResponseDTO;
-import nxpense.dto.ExpenseSource;
-import nxpense.dto.PageDTO;
+import nxpense.dto.*;
 import org.joda.time.LocalDate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -49,7 +46,7 @@ public class ExpenseConverter {
             expenseDto = new ExpenseResponseDTO();
             expenseDto.setId(expense.getId());
             expenseDto.setVersion(expense.getVersion());
-            expenseDto.setNbAttachment(expense.getAttachments().size());
+            expenseDto.setAttachments(AttachmentConverter.attachmentListToAttachmentResponseDtoList(expense.getAttachments()));
 
             copyAttributeValues(expenseDto, expense);
             copyTags(expenseDto, expense);
