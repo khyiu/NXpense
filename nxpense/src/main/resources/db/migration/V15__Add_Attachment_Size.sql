@@ -1,0 +1,1 @@
+alter table EXPENSE_ATTACHMENT add size integer not null default 0;

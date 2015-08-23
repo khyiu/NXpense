@@ -11,6 +11,8 @@ public class Attachment {
     @Basic(fetch = FetchType.LAZY)
     private byte[] byteContent;
 
+    private Integer size;
+
     public Attachment() {
 
     }
@@ -18,6 +20,7 @@ public class Attachment {
     public Attachment(String filename, byte[] byteContent) {
         this.filename = filename;
         this.byteContent = byteContent;
+        this.size = byteContent.length;
     }
 
     public String getFilename() {
@@ -26,5 +29,9 @@ public class Attachment {
 
     public byte[] getByteContent() {
         return byteContent;
+    }
+
+    public Integer getSize() {
+        return size;
     }
 }
