@@ -6,13 +6,12 @@ import nxpense.helper.serialization.CustomLocalDateDeserializer;
 import nxpense.helper.serialization.CustomLocalDateSerializer;
 import org.joda.time.LocalDate;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ExpenseDTO implements Serializable {
+public class ExpenseDTO {
 
     protected Integer version;
 
