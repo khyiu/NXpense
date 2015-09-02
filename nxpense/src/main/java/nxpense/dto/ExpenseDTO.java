@@ -29,6 +29,8 @@ public class ExpenseDTO {
 
     private List<TagResponseDTO> tags = new ArrayList<TagResponseDTO>();
 
+    private List<AttachmentResponseDTO> attachments = new ArrayList<AttachmentResponseDTO>();
+
     public LocalDate getDate() {
         return date;
     }
@@ -84,5 +86,13 @@ public class ExpenseDTO {
     public List<TagResponseDTO> getTags() {
         Collections.sort(this.tags);
         return this.tags;
+    }
+
+    public void setAttachments(List<AttachmentResponseDTO> attachments) {
+        this.attachments = attachments;
+    }
+
+    public List<AttachmentResponseDTO> getAttachments() {
+        return Collections.unmodifiableList(attachments);
     }
 }

@@ -83,7 +83,7 @@
                     <input id="select-row-{{expense.id}}" type="checkbox" ng-model="expense.selected" ng-click="updateGlobalItemSelection($event)"/>
                     <label for="select-row-{{expense.id}}"></label>
                 </td>
-                <td>{{expense.nbAttachment}}</td>
+                <td>{{expense.attachments.length}}</td>
                 <td>{{expense.date}}</td>
                 <td>€{{expense.amount}}</td>
                 <td>{{expense.description}}</td>

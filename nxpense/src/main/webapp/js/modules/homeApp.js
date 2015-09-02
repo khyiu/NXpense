@@ -318,11 +318,14 @@
             if (selectedExpense) {
                 $scope.expense = _.extend({}, selectedExpense);
             } else {
-                $scope.expense = {source: 'DEBIT_CARD'};
+                $scope.expense = {
+                    source: 'DEBIT_CARD',
+                    attachments: []
+                };
+                $scope.newAttachments = [];
             }
 
             $scope.ok = function () {
-                var expenseAttachments = [];
                 var formData = new FormData();
                 var request;
                 var requestUrl;
@@ -330,12 +333,10 @@
                 $modalInstance.close();
                 notificationHelper.showServerInfo('Saving...');
 
-                _.each(this.attachments, function (attachment) {
-                    expenseAttachments.push(attachment);
+                _.each($scope.newAttachments, function (attachment) {
                     formData.append('attachments', attachment);
                 });
 
-                //formData.append('attachments', expenseAttachments);
                 formData.append('expense', new Blob([JSON.stringify(this.expense)], {type: 'application/json'}));
 
                 if (this.expense.id) {
@@ -401,9 +402,21 @@
                 });
             };
 
-            $scope.addAttachments = function() {
-                // todo: handle addition of attachments
-                console.log('>>> addAttachments');
+            $scope.addAttachments = function(selectedFiles) {
+                $scope.newAttachments = $scope.newAttachments || [];
+
+                // todo add selected files to existing attachments
+                _.each(selectedFiles, function(selectedFile){
+                    var nbAttachmentsWithSameName = _.where($scope.expense.attachments, {name: selectedFile.name}).length;
+
+                    if(nbAttachmentsWithSameName > 0) {
+                        // todo parse extension and insert suffix
+                        console.log('>>> suffix = ' + nbAttachmentsWithSameName);
+
+                    }
+
+                    $scope.newAttachments.push(selectedFile);
+                });
             };
         }]);
 
