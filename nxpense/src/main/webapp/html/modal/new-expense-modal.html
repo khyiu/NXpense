@@ -51,12 +51,22 @@
         </fieldset>
         <fieldset id="attachments" class="fieldset-border">
             <legend class="fieldset-border">Attachments</legend>
-            <button type="button" class="btn btn-primary" ng-click="openFileSelector()">
+            <button id="add-attachment-btn" type="button" class="btn btn-primary" ng-click="openFileSelector()">
                 <i class="glyphicon glyphicon-plus"></i>
                 <span>
                     Add files...
                 </span>
             </button>
+            <!-- Existing attachments -->
+            <div class="attachment-links" ng-repeat="attachment in expense.attachments">
+                <div class="attachment">
+                    <a class="attachment-link" href="{{attachment.fileUrl}}" target="_blank" title="Click to open link to attachemnt: {{attachment.fileUrl}}">
+                        <span class="glyphicon glyphicon-paperclip"></span>
+                        <span>{{attachment.filename}} ({{attachment.fileSize}}bytes)</span>
+                    </a>
+                    <span class="attachment-remover glyphicon glyphicon-remove-circle" tabindex="0" title="Click to remove this attachment from the expense item" ng-click="remove(attachment, $event)" ng-keydown="remove(attachment, $event)"></span>
+                </div>
+            </div>
             <input type="file" id="attachment-selector" name="expense-attachments" multiple="" attachment-model="attachments">
         </fieldset>
     </form>
