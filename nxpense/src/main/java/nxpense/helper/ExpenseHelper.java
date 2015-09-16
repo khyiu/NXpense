@@ -54,7 +54,7 @@ public class ExpenseHelper {
     }
 
     private static String computeNewAttachmentFilename(String newAttachmentFilename, List<Attachment> existingAttachments) {
-        Integer suffixIndex = null;
+        Integer suffixIndex;
         if(CollectionUtils.isEmpty(existingAttachments) || (suffixIndex = computeSuffixIndex(newAttachmentFilename, existingAttachments)) == 0) {
             return newAttachmentFilename;
         } else {
