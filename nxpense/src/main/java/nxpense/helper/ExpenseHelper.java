@@ -54,11 +54,10 @@ public class ExpenseHelper {
     }
 
     private static String computeNewAttachmentFilename(String newAttachmentFilename, List<Attachment> existingAttachments) {
-        if(CollectionUtils.isEmpty(existingAttachments)) {
+        Integer suffixIndex = null;
+        if(CollectionUtils.isEmpty(existingAttachments) || (suffixIndex = computeSuffixIndex(newAttachmentFilename, existingAttachments)) == 0) {
             return newAttachmentFilename;
         } else {
-            Integer suffixIndex = computeSuffixIndex(newAttachmentFilename, existingAttachments);
-
             if(newAttachmentFilename.contains(".")) {
                 int extensionSeparatorIdx = newAttachmentFilename.lastIndexOf(".");
                 return newAttachmentFilename.substring(0, extensionSeparatorIdx) + "(" + suffixIndex + ")" + newAttachmentFilename.substring(extensionSeparatorIdx);
@@ -71,7 +70,7 @@ public class ExpenseHelper {
     private static int computeSuffixIndex(String newAttachmentFilename, List<Attachment> existingAttachments) {
         if (!StringUtils.isEmpty(existingAttachments)) {
             List<Attachment> sameBasenameAttachments = existingAttachments.stream().filter(
-                a -> haveSameFilenameBase(newAttachmentFilename, a.getFilename())
+                    a -> haveSameFilenameBase(newAttachmentFilename, a.getFilename())
             ).collect(Collectors.<Attachment>toList());
 
             return CollectionUtils.isEmpty(sameBasenameAttachments) ? 0 : sameBasenameAttachments.size();
