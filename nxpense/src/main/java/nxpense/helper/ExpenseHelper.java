@@ -3,10 +3,13 @@ package nxpense.helper;
 
 import nxpense.domain.Attachment;
 import nxpense.domain.Expense;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ExpenseHelper {
     private ExpenseHelper() {
@@ -40,7 +43,8 @@ public class ExpenseHelper {
         if (expense != null && multipartFiles != null) {
             for (MultipartFile multipartFile : multipartFiles) {
                 try {
-                    Attachment expenseAttachment = MultipartFileConverter.toAttachment(multipartFile);
+                    final Attachment expenseAttachment = MultipartFileConverter.toAttachment(multipartFile);
+                    expenseAttachment.setFilename(computeNewAttachmentFilename(expenseAttachment.getFilename(), expense.getAttachments()));
                     expense.getAttachments().add(expenseAttachment);
                 } catch (IOException e) {
                     throw new IllegalArgumentException("Failed processing attachment with filename = " + multipartFile.getOriginalFilename());
@@ -48,4 +52,53 @@ public class ExpenseHelper {
             }
         }
     }
+
+    private static String computeNewAttachmentFilename(String newAttachmentFilename, List<Attachment> existingAttachments) {
+        if(CollectionUtils.isEmpty(existingAttachments)) {
+            return newAttachmentFilename;
+        } else {
+            Integer suffixIndex = computeSuffixIndex(newAttachmentFilename, existingAttachments);
+
+            if(newAttachmentFilename.contains(".")) {
+                int extensionSeparatorIdx = newAttachmentFilename.lastIndexOf(".");
+                return newAttachmentFilename.substring(0, extensionSeparatorIdx) + "(" + suffixIndex + ")" + newAttachmentFilename.substring(extensionSeparatorIdx);
+            } else {
+                return newAttachmentFilename + "(" + suffixIndex + ")";
+            }
+        }
+    }
+
+    private static int computeSuffixIndex(String newAttachmentFilename, List<Attachment> existingAttachments) {
+        if (!StringUtils.isEmpty(existingAttachments)) {
+            List<Attachment> sameBasenameAttachments = existingAttachments.stream().filter(
+                a -> haveSameFilenameBase(newAttachmentFilename, a.getFilename())
+            ).collect(Collectors.<Attachment>toList());
+
+            return CollectionUtils.isEmpty(sameBasenameAttachments) ? 0 : sameBasenameAttachments.size();
+        }
+
+        return 0;
+    }
+
+    private static boolean haveSameFilenameBase(String newAttachmentFilename, String existingAttachmentFilename) {
+        if(newAttachmentFilename != null && existingAttachmentFilename != null) {
+            if(newAttachmentFilename.equals(existingAttachmentFilename)) {
+                return true;
+            }
+
+            String newBaseName = newAttachmentFilename;
+            String existingBaseName = existingAttachmentFilename;
+
+            if(newBaseName.contains(".") && existingBaseName.contains(".")) {
+                newBaseName = newAttachmentFilename.substring(0, newAttachmentFilename.lastIndexOf("."));
+                existingBaseName = existingAttachmentFilename.substring(0, existingAttachmentFilename.lastIndexOf("."));
+            }
+
+            String temp = existingBaseName.replace(newBaseName, "");
+            return temp.matches("\\(\\d+\\)");
+        }
+
+        return false;
+    }
+
 }

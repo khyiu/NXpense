@@ -27,6 +27,10 @@ public class Attachment {
         return filename;
     }
 
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
     public byte[] getByteContent() {
         return byteContent;
     }

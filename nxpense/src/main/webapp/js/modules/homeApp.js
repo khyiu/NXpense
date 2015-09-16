@@ -258,7 +258,7 @@
         $scope.toggleItemSelection = function($event, expense) {
             expense.selected = !expense.selected;
             this.updateGlobalItemSelection($event, expense);
-        }
+        };
 
         $scope.updateGlobalItemSelection = function ($event) {
             var numberOfSelectedItem;
@@ -405,16 +405,7 @@
             $scope.addAttachments = function(selectedFiles) {
                 $scope.newAttachments = $scope.newAttachments || [];
 
-                // todo add selected files to existing attachments
                 _.each(selectedFiles, function(selectedFile){
-                    var nbAttachmentsWithSameName = _.where($scope.expense.attachments, {name: selectedFile.name}).length;
-
-                    if(nbAttachmentsWithSameName > 0) {
-                        // todo parse extension and insert suffix
-                        console.log('>>> suffix = ' + nbAttachmentsWithSameName);
-
-                    }
-
                     $scope.newAttachments.push(selectedFile);
                 });
             };
