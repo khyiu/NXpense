@@ -1,0 +1,10 @@
+<div class="attachment">
+    <a class="attachment-link" href="{{attachment.fileUrl}}" target="_blank"
+       title="Click to open link to attachment: {{attachment.fileUrl}}">
+        <span class="glyphicon glyphicon-paperclip"></span>
+        <span>{{attachment.filename}}&nbsp;({{attachment.fileSize}}&nbsp;bytes)</span>
+    </a>
+    <span class="attachment-remover glyphicon glyphicon-remove-circle" tabindex="0"
+          title="Click to remove this attachment from the expense item" ng-click="removeAttachment(attachment, $event)"
+          ng-keydown="removeAttachment(attachment, $event)"/>
+</div>

@@ -314,6 +314,16 @@
 
     homeAppModule.controller('modalController', ['$rootScope', '$scope', '$modalInstance', 'Restangular', '$filter', 'notificationHelper', 'selectedExpense', '$http', '$timeout',
         function ($rootScope, $scope, $modalInstance, Restangular, $filter, notificationHelper, selectedExpense, $http, $timeout) {
+            var updateExpenseExistingAttachments = function() {
+                $scope.expense.attachments.splice(0, $scope.expense.attachments.length);
+
+                for(var j=$scope.attachmentsToDisplay.length - 1; j > 0; j--) {
+                    $scope.expense.attachments.splice(0, 0, $scope.attachmentsToDisplay[j]);
+                }
+            };
+
+            $scope.newAttachments =  [];
+            $scope.newAttachmentsToDisplay = [];
 
             if (selectedExpense) {
                 $scope.expense = _.extend({}, selectedExpense);
@@ -322,8 +332,9 @@
                     source: 'DEBIT_CARD',
                     attachments: []
                 };
-                $scope.newAttachments = [];
             }
+
+            $scope.attachmentsToDisplay = [].concat($scope.expense.attachments);
 
             $scope.ok = function () {
                 var formData = new FormData();
@@ -332,6 +343,7 @@
 
                 $modalInstance.close();
                 notificationHelper.showServerInfo('Saving...');
+                updateExpenseExistingAttachments();
 
                 _.each($scope.newAttachments, function (attachment) {
                     formData.append('attachments', attachment);
@@ -403,10 +415,18 @@
             };
 
             $scope.addAttachments = function(selectedFiles) {
-                $scope.newAttachments = $scope.newAttachments || [];
-
                 _.each(selectedFiles, function(selectedFile){
+                    selectedFile.tempRandomId = Math.random();
                     $scope.newAttachments.push(selectedFile);
+                    $scope.newAttachmentsToDisplay.push({
+                        filename: selectedFile.name,
+                        fileSize: selectedFile.size,
+                        tempRandomId: selectedFile.tempRandomId
+                    });
+
+                    // This explicit call to $apply() was necessary, otherwise, the $scope.newAttachments wouldn't be
+                    // updated until the next action on the current scope...
+                    $scope.$apply();
                 });
             };
         }]);
