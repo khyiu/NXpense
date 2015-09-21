@@ -96,6 +96,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             ExpenseHelper.overwriteFields(ExpenseConverter.dtoToEntity(expenseDTO), existingExpense);
 
             try {
+                ExpenseHelper.updateExpenseRemainingExistingAttachments(existingExpense, expenseDTO.getAttachments());
                 ExpenseHelper.associateFilesToExpense(existingExpense, attachments);
             } catch (IllegalArgumentException iae) {
                 throw new RequestCannotCompleteException(iae.getMessage());

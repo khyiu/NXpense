@@ -3,12 +3,14 @@ package nxpense.helper;
 
 import nxpense.domain.Attachment;
 import nxpense.domain.Expense;
+import nxpense.dto.AttachmentResponseDTO;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.stream.Collectors;
 
 public class ExpenseHelper {
@@ -100,4 +102,20 @@ public class ExpenseHelper {
         return false;
     }
 
+    public static void updateExpenseRemainingExistingAttachments(Expense expense, List<AttachmentResponseDTO> remainingAttachments) {
+        if(CollectionUtils.isEmpty(remainingAttachments)) {
+            expense.getAttachments().clear();
+        } else {
+            ListIterator<Attachment> listIt = expense.getAttachments().listIterator();
+
+            while(listIt.hasNext()) {
+                Attachment existingAttachment = listIt.next();
+                boolean keepAttachment = remainingAttachments.stream().anyMatch(ra -> ra.getFilename().equals(existingAttachment.getFilename()));
+
+                if(!keepAttachment) {
+                    listIt.remove();
+                }
+            }
+        }
+    }
 }
