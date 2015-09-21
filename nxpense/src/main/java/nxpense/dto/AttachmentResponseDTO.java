@@ -1,8 +1,6 @@
 package nxpense.dto;
 
 
-import java.io.Serializable;
-
 public class AttachmentResponseDTO {
 
     private String filename;
