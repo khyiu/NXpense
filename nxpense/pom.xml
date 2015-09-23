@@ -12,6 +12,7 @@
 		<database.url>jdbc:h2:file:~/nxpense/database/nxpense</database.url>
 		<database.username>kayiu</database.username>
 		<database.password>Wat3rl001815</database.password>
+		<attachments.rootdir>C:/Users/Utilisateur/nxpense/attachments/</attachments.rootdir>
 
 		<spring.version>4.1.3.RELEASE</spring.version>
 		<spring.security.version>3.2.5.RELEASE</spring.security.version>
@@ -227,6 +228,10 @@
 				<directory>src/main/resources/db/migration</directory>
 				<filtering>false</filtering>
 				<targetPath>/db/migration</targetPath>
+			</resource>
+			<resource>
+				<directory>src/main/resources/app-properties</directory>
+				<filtering>true</filtering>
 			</resource>
 			<resource>
 				<directory>src/main/resources</directory>

@@ -16,6 +16,7 @@
 	
 	
 	<mvc:resources mapping="/view/**" location="/html/" />
+	<mvc:resources mapping="/attach/**" location="file:${attachments.rootdir}"/>
 
 	<!-- Necessary default handler for serving static resources -->
 	<mvc:default-servlet-handler />
