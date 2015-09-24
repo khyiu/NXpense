@@ -27,4 +27,9 @@
         <property name="maxInMemorySize" value="1048576"/>
 		<property name="defaultEncoding" value="UTF-8" />
     </bean>
+
+	<bean id="appConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:/app-properties/nxpense-config.properties"/>
+		<property name="ignoreUnresolvablePlaceholders" value="false" />
+	</bean>
 </beans>

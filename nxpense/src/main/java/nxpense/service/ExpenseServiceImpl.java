@@ -212,4 +212,9 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         return expenseRepository.save(expense);
     }
+
+    @Override
+    public Expense getExpense(int expenseId) {
+        return expenseRepository.findOne(expenseId);
+    }
 }

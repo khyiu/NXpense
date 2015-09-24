@@ -232,6 +232,7 @@
 			<resource>
 				<directory>src/main/resources/app-properties</directory>
 				<filtering>true</filtering>
+				<targetPath>/app-properties</targetPath>
 			</resource>
 			<resource>
 				<directory>src/main/resources</directory>

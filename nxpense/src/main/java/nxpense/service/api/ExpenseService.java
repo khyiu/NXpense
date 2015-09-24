@@ -11,9 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-/**
- *
- */
 public interface ExpenseService {
 
 
@@ -80,4 +77,11 @@ public interface ExpenseService {
      * @return Updated Expense item
      */
     public Expense removeTagFromExpense(int expenseId, String tagName);
+
+    /**
+     * Retrieves the {@link Expense} item whose ID is equal to the specified one
+     * @param expenseId ID of the expense to retrieve
+     * @return Expense item
+     */
+    public Expense getExpense(int expenseId);
 }
