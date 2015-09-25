@@ -152,6 +152,7 @@ public class ExpenseHelperTest {
         assertThat(expense.getAttachments()).contains(new Attachment(ATTACHMENT_NAME_2, new byte[]{}));
     }
 
+    @Test
     public void testAssociateFilesToExpense_existFileWithSameName() {
         Expense expense = ExpenseSource.DEBIT_CARD.getEmptyExpenseInstance();
         expense.getAttachments().add(new Attachment(ATTACHMENT_NAME_1, new byte[]{}));
