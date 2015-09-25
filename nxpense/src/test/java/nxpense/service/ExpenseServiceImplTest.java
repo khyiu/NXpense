@@ -320,4 +320,11 @@ public class ExpenseServiceImplTest extends AbstractServiceTest {
         Expense updatedExpense = expenseService.removeTagFromExpense(EXPENSE_ID, TAG_NAME);
         assertThat(updatedExpense.getTags()).hasSize(0);
     }
+
+    @Test
+    public void testGetExpense() {
+        Expense expense = expenseService.getExpense(EXPENSE_ID);
+        assertThat(expense).isNotNull();
+        assertThat(expense.getId()).isEqualTo(EXPENSE_ID);
+    }
 }
