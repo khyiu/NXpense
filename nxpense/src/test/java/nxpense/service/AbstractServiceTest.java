@@ -29,8 +29,6 @@ public class AbstractServiceTest {
         idField.setAccessible(true);
         idField.set(mockUser, Integer.parseInt("1"));
 
-
-
         UserDetails userDetails = new CustomUserDetails(mockUser);
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, USER_PASSWORD, Collections.<GrantedAuthority>emptyList());
         SecurityContextHolder.getContext().setAuthentication(authentication);
