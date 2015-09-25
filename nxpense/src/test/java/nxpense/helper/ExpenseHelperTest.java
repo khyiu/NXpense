@@ -7,6 +7,8 @@ import nxpense.dto.AttachmentResponseDTO;
 import nxpense.dto.ExpenseSource;
 import org.joda.time.LocalDate;
 import org.junit.Test;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ public class ExpenseHelperTest {
     private static final String DESCRIPTION = "An expense description";
 
     private static final String ATTACHMENT_NAME_1 = "file1.txt";
+    private static final String ATTACHMENT_NAME_1_BIS = "file1(1).txt";
     private static final String ATTACHMENT_NAME_2 = "file2";
 
     private static final String ATTACHMENT_URL_1 = "/nxpense/attach/1/" + ATTACHMENT_NAME_1;
@@ -30,6 +33,11 @@ public class ExpenseHelperTest {
 
     private static final Attachment ATTACHMENT_1 = new Attachment(ATTACHMENT_NAME_1, new byte[]{});
     private static final Attachment ATTACHMENT_2 = new Attachment(ATTACHMENT_NAME_2, new byte[]{});
+
+    private static final List<MultipartFile> MULTIPART_FILES = new ArrayList(){{
+        add(new MockMultipartFile(ATTACHMENT_NAME_1, ATTACHMENT_NAME_1, "text/plain", new byte[]{}));
+        add(new MockMultipartFile(ATTACHMENT_NAME_2, ATTACHMENT_NAME_2, "text/plain", new byte[]{}));
+    }};
 
     @Test
     public void testOverwriteFields_noSource() {
@@ -119,5 +127,39 @@ public class ExpenseHelperTest {
         expense.getAttachments().add(ATTACHMENT_2);
         ExpenseHelper.updateExpenseRemainingExistingAttachments(expense, null);
         assertThat(expense.getAttachments()).isEmpty();
+    }
+
+    @Test
+    public void testAssociateFilesToExpense_nullMultiparts() {
+        Expense expense = ExpenseSource.DEBIT_CARD.getEmptyExpenseInstance();
+        ExpenseHelper.associateFilesToExpense(expense, null);
+        assertThat(expense.getAttachments()).isEmpty();
+    }
+
+    @Test
+    public void testAssociateFilesToExpense_emptyMultiparts() {
+        Expense expense = ExpenseSource.DEBIT_CARD.getEmptyExpenseInstance();
+        ExpenseHelper.associateFilesToExpense(expense, Collections.<MultipartFile>emptyList());
+        assertThat(expense.getAttachments()).isEmpty();
+    }
+
+    @Test
+    public void testAssociateFilesToExpense() {
+        Expense expense = ExpenseSource.DEBIT_CARD.getEmptyExpenseInstance();
+        ExpenseHelper.associateFilesToExpense(expense, MULTIPART_FILES);
+        assertThat(expense.getAttachments()).hasSize(2);
+        assertThat(expense.getAttachments()).contains(new Attachment(ATTACHMENT_NAME_1, new byte[]{}));
+        assertThat(expense.getAttachments()).contains(new Attachment(ATTACHMENT_NAME_2, new byte[]{}));
+    }
+
+    public void testAssociateFilesToExpense_existFileWithSameName() {
+        Expense expense = ExpenseSource.DEBIT_CARD.getEmptyExpenseInstance();
+        expense.getAttachments().add(new Attachment(ATTACHMENT_NAME_1, new byte[]{}));
+
+        ExpenseHelper.associateFilesToExpense(expense, MULTIPART_FILES);
+        assertThat(expense.getAttachments()).hasSize(3);
+        assertThat(expense.getAttachments()).contains(new Attachment(ATTACHMENT_NAME_1, new byte[]{}));
+        assertThat(expense.getAttachments()).contains(new Attachment(ATTACHMENT_NAME_2, new byte[]{}));
+        assertThat(expense.getAttachments()).contains(new Attachment(ATTACHMENT_NAME_1_BIS, new byte[]{}));
     }
 }
