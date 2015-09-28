@@ -5,6 +5,7 @@ import nxpense.builder.ExpenseDtoBuilder;
 import nxpense.dto.*;
 import nxpense.repository.ExpenseRepository;
 import nxpense.security.CustomUserDetails;
+import nxpense.service.AttachmentServiceImpl;
 import org.dbunit.operation.DatabaseOperation;
 import org.joda.time.LocalDate;
 import org.junit.Before;
@@ -27,10 +28,13 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -61,9 +65,18 @@ public class ExpenseControllerIntegrationTest extends AbstractIntegrationTest {
     @Autowired
     private ExpenseRepository expenseRepository;
 
+    @Autowired
+    private AttachmentServiceImpl attachmentService;
+
     @Before
     public void setUp() throws Exception {
         DatabaseOperation.CLEAN_INSERT.execute(getDBConnection(), loadDataSet("dataset/expense-controller-integration-test-dataset.xml"));
+
+        Properties prop = new Properties();
+        prop.load(ExpenseControllerIntegrationTest.class.getResourceAsStream("/app-properties/nxpense-test-config.properties"));
+        Field attachmentDirField = ReflectionUtils.findField(AttachmentServiceImpl.class, "attachmentDir");
+        attachmentDirField.setAccessible(true);
+        attachmentDirField.set(attachmentService, prop.getProperty("attachmentDir"));
     }
 
     @Test
@@ -320,5 +333,57 @@ public class ExpenseControllerIntegrationTest extends AbstractIntegrationTest {
 
         assertThat(tags).isNotNull().hasSize(1);
         assertThat(tags.get(0).getName()).isEqualTo("Mobile phone");
+    }
+
+    @Test
+    public void testAccessAttachment() throws Exception {
+        mockAuthenticatedUser(1);
+
+        mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+        mockMvcBuilder.alwaysExpect(status().isOk());
+        mockMvc = mockMvcBuilder.build();
+
+        RequestBuilder requestBuilder = get("/attach/1/test.txt");
+
+        mockMvc.perform(requestBuilder).andDo(print());
+    }
+
+    @Test
+    public void testAccessAttachment_unexistingExpense() throws Exception {
+        mockAuthenticatedUser(1);
+
+        mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+        mockMvcBuilder.alwaysExpect(status().isBadRequest());
+        mockMvc = mockMvcBuilder.build();
+
+        RequestBuilder requestBuilder = get("/attach/100/test.txt");
+
+        mockMvc.perform(requestBuilder).andDo(print());
+    }
+
+    @Test
+    public void testAccessAttachment_unauthorized() throws Exception {
+        mockAuthenticatedUser(2);
+
+        mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+        mockMvcBuilder.alwaysExpect(status().isForbidden());
+        mockMvc = mockMvcBuilder.build();
+
+        RequestBuilder requestBuilder = get("/attach/1/test.txt");
+
+        mockMvc.perform(requestBuilder).andDo(print());
+    }
+
+    @Test
+    public void testAccessAttachment_unexistingAttachment() throws Exception {
+        mockAuthenticatedUser(1);
+
+        mockMvcBuilder = MockMvcBuilders.webAppContextSetup(wac);
+        mockMvcBuilder.alwaysExpect(status().isNotFound());
+        mockMvc = mockMvcBuilder.build();
+
+        RequestBuilder requestBuilder = get("/attach/1/unexisting.txt");
+
+        mockMvc.perform(requestBuilder).andDo(print());
     }
 }

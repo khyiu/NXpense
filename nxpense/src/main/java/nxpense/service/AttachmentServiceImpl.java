@@ -10,8 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,7 +20,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional(propagation = Propagation.NEVER)
 public class AttachmentServiceImpl implements AttachmentService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AttachmentServiceImpl.class);
