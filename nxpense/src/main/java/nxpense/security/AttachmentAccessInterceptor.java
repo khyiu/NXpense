@@ -1,5 +1,6 @@
 package nxpense.security;
 
+import nxpense.domain.Attachment;
 import nxpense.domain.Expense;
 import nxpense.domain.User;
 import nxpense.exception.BadRequestException;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 public class AttachmentAccessInterceptor extends HandlerInterceptorAdapter {
@@ -43,13 +45,18 @@ public class AttachmentAccessInterceptor extends HandlerInterceptorAdapter {
             Integer expenseId = Integer.valueOf(tokens[tokens.length - 2]);
 
             User currentUser = securityPrincipalHelper.getCurrentUser();
-            checkAttachmentAccessibility(expenseId, filename, currentUser);
+            String targetAttachmentFilename = convertRequestUrlFilenameToString(filename);
+            checkAttachmentAccessibility(expenseId, targetAttachmentFilename, currentUser);
 
-            attachmentService.createAttachment(expenseId, filename);
+            attachmentService.createAttachment(expenseId, targetAttachmentFilename);
         }
 
 
         return super.preHandle(request, response, handler);
+    }
+
+    private String convertRequestUrlFilenameToString(String attachmentFilename) {
+        return attachmentFilename.replaceAll("%20", " ");
     }
 
     private void checkAttachmentAccessibility(int expenseId, String attachmentFilename, User currentUser) {
