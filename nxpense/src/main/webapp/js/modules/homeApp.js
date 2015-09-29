@@ -314,14 +314,6 @@
 
     homeAppModule.controller('modalController', ['$rootScope', '$scope', '$modalInstance', 'Restangular', '$filter', 'notificationHelper', 'selectedExpense', '$http', '$timeout',
         function ($rootScope, $scope, $modalInstance, Restangular, $filter, notificationHelper, selectedExpense, $http, $timeout) {
-            var updateExpenseExistingAttachments = function() {
-                $scope.expense.attachments.splice(0, $scope.expense.attachments.length);
-
-                for(var j=$scope.attachmentsToDisplay.length - 1; j > 0; j--) {
-                    $scope.expense.attachments.splice(0, 0, $scope.attachmentsToDisplay[j]);
-                }
-            };
-
             $scope.newAttachments =  [];
             $scope.newAttachmentsToDisplay = [];
 
@@ -343,7 +335,6 @@
 
                 $modalInstance.close();
                 notificationHelper.showServerInfo('Saving...');
-                updateExpenseExistingAttachments();
 
                 _.each($scope.newAttachments, function (attachment) {
                     formData.append('attachments', attachment);
