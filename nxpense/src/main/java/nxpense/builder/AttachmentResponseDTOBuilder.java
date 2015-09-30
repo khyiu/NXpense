@@ -24,7 +24,6 @@ public class AttachmentResponseDTOBuilder {
     }
 
     public AttachmentResponseDTO build() {
-        AttachmentResponseDTO attachmentResponseDTO = new AttachmentResponseDTO(filename, fileUrl, fileSize);
-        return attachmentResponseDTO;
+        return new AttachmentResponseDTO(filename, fileUrl, fileSize);
     }
 }
