@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ExpenseConverterTest {
 
     private static final String EXPENSE_DESCRIPTION = "Test groceries";
-    private static final BigDecimal EXPENSE_AMOUNT = new BigDecimal(49.95);
+    private static final BigDecimal EXPENSE_AMOUNT = BigDecimal.valueOf(49.95);
     private static final LocalDate EXPENSE_DATE = new LocalDate(2015, 3, 1);
     private static final int EXPENSE_POSITION = 15;
 

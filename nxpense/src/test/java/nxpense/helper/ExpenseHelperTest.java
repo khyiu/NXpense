@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ExpenseHelperTest {
 
     private static final Date DATE = new LocalDate(2015, 1, 1).toDate();
-    private static final BigDecimal AMOUNT = new BigDecimal(123.45);
+    private static final BigDecimal AMOUNT = BigDecimal.valueOf(123.45);
     private static final String DESCRIPTION = "An expense description";
 
     private static final String ATTACHMENT_NAME_1 = "file1.txt";

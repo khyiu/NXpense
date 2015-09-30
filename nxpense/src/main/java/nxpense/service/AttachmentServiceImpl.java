@@ -44,7 +44,7 @@ public class AttachmentServiceImpl implements AttachmentService {
                 List<Attachment> attachments = expense.getAttachments().stream().filter(a -> a.getFilename().equals(filename)).collect(Collectors.toList());
                 Files.write(attachmentPath, attachments.get(0).getByteContent(), LinkOption.NOFOLLOW_LINKS);
             } catch (IOException e) {
-                throw new ServerException("An error occurred making the requested attachment available");
+                throw new ServerException("An error occurred making the requested attachment available", e);
             }
         }
     }

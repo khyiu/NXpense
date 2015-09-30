@@ -1,12 +1,8 @@
 package nxpense.dto;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class TagDTO implements Serializable, Comparable<TagDTO>{
-
-    private static final long serialVersionUID = 7213250656506744049L;
-
+public class TagDTO implements Comparable<TagDTO>{
     private Integer version;
     private String name;
     private String backgroundColor;
@@ -61,5 +57,21 @@ public class TagDTO implements Serializable, Comparable<TagDTO>{
         }
 
         return this.name.compareTo(otherTag.getName());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TagDTO tagDTO = (TagDTO) o;
+
+        return name.equals(tagDTO.name);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
     }
 }

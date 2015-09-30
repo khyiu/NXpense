@@ -197,7 +197,7 @@ public class ExpenseControllerIntegrationTest extends AbstractIntegrationTest {
         mockMvcBuilder.alwaysExpect(status().isOk());
         mockMvc = mockMvcBuilder.build();
 
-        BigDecimal newAmount = new BigDecimal(88.88);
+        BigDecimal newAmount = BigDecimal.valueOf(88.88);
         String newDescription = "Description updated in integration test";
         LocalDate newDate = new LocalDate(2016, 1, 1);
 
@@ -232,7 +232,7 @@ public class ExpenseControllerIntegrationTest extends AbstractIntegrationTest {
         mockMvcBuilder.alwaysExpect(status().is(499));
         mockMvc = mockMvcBuilder.build();
 
-        BigDecimal newAmount = new BigDecimal(88.88);
+        BigDecimal newAmount = BigDecimal.valueOf(88.88);
         String newDescription = "Description updated in integration test";
         LocalDate newDate = new LocalDate(2016, 1, 1);
 
@@ -261,7 +261,7 @@ public class ExpenseControllerIntegrationTest extends AbstractIntegrationTest {
         mockMvcBuilder.alwaysExpect(status().isOk());
         mockMvc = mockMvcBuilder.build();
 
-        BigDecimal newAmount = new BigDecimal(88.88);
+        BigDecimal newAmount = BigDecimal.valueOf(88.88);
         String newDescription = "Description updated in integration test";
         LocalDate newDate = new LocalDate(2015, 1, 1);
 
@@ -302,9 +302,9 @@ public class ExpenseControllerIntegrationTest extends AbstractIntegrationTest {
         String jsonResponse = result.getResponse().getContentAsString();
         BalanceInfoDTO balance = om.readValue(jsonResponse, BalanceInfoDTO.class);
 
-        assertThat(balance.getNonVerified()).isEqualTo(new BigDecimal("-8.05"));
-        assertThat(balance.getVerified()).isEqualTo(new BigDecimal("1508.45"));
-        assertThat(balance.getGlobal()).isEqualTo(new BigDecimal("1500.40"));
+        assertThat(balance.getNonVerified()).isEqualTo(BigDecimal.valueOf(-8.05));
+        assertThat(balance.getVerified()).isEqualTo(BigDecimal.valueOf(1508.45));
+        assertThat(balance.getGlobal().compareTo(BigDecimal.valueOf(1500.4))).isZero();
     }
 
     @Test

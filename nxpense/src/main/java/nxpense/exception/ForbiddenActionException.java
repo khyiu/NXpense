@@ -8,4 +8,12 @@ public class ForbiddenActionException extends RuntimeException {
     public ForbiddenActionException(String message) {
         super(message);
     }
+
+    public ForbiddenActionException(String message, Exception e) {
+        super(message, e);
+    }
+
+    public ForbiddenActionException(Exception e) {
+        super(e);
+    }
 }

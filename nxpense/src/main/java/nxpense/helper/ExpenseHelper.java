@@ -49,7 +49,7 @@ public class ExpenseHelper {
                     expenseAttachment.setFilename(computeNewAttachmentFilename(expenseAttachment.getFilename(), expense.getAttachments()));
                     expense.getAttachments().add(expenseAttachment);
                 } catch (IOException e) {
-                    throw new IllegalArgumentException("Failed processing attachment with filename = " + multipartFile.getOriginalFilename());
+                    throw new IllegalArgumentException("Failed processing attachment with filename = " + multipartFile.getOriginalFilename(), e);
                 }
             }
         }

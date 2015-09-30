@@ -9,4 +9,12 @@ public class UnauthenticatedException extends RuntimeException {
     public UnauthenticatedException(String message) {
         super(message);
     }
+
+    public UnauthenticatedException(String message, Exception e) {
+        super(message, e);
+    }
+
+    public UnauthenticatedException(Exception e) {
+        super(e);
+    }
 }

@@ -57,7 +57,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         try {
             ExpenseHelper.associateFilesToExpense(expense, attachments);
         } catch (IllegalArgumentException iae) {
-            throw new RequestCannotCompleteException(iae.getMessage());
+            throw new RequestCannotCompleteException(iae);
         }
 
         User currentUser = securityPrincipalHelper.getCurrentUser();
@@ -99,7 +99,7 @@ public class ExpenseServiceImpl implements ExpenseService {
                 ExpenseHelper.updateExpenseRemainingExistingAttachments(existingExpense, expenseDTO.getAttachments());
                 ExpenseHelper.associateFilesToExpense(existingExpense, attachments);
             } catch (IllegalArgumentException iae) {
-                throw new RequestCannotCompleteException(iae.getMessage());
+                throw new RequestCannotCompleteException(iae);
             }
 
             return expenseRepository.save(existingExpense);
@@ -206,7 +206,7 @@ public class ExpenseServiceImpl implements ExpenseService {
                 expense.getTags().remove(targetTag);
             } catch (NoSuchElementException e) {
                 LOGGER.debug("Could not find tag with name {} to remove from expense with id {}", tagName, expenseId);
-                throw new RequestCannotCompleteException("No corresponding tag found!");
+                throw new RequestCannotCompleteException("No corresponding tag found!", e);
             }
         }
 

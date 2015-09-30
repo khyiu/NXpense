@@ -87,7 +87,7 @@ public class TagController {
             writer.flush();
             writer.close();
         } catch (IOException e) {
-            LOGGER.error("An error occurred when writing custom HTTP error code to HTTP response");
+            LOGGER.error("An error occurred when writing custom HTTP error code to HTTP response", e);
         }
     }
 }
