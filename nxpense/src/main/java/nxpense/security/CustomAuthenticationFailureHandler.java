@@ -13,18 +13,18 @@ import java.io.IOException;
 /**
  * A CustomAuthenticationFailureHandler handles failed login requests by sending back a response with a specific header
  * based on which, the client is able to display a relevant error message without having to follow any redirection.
- * 
+ *
  * @author kar.hoo.yiu
  */
 public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(CustomAuthenticationFailureHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomAuthenticationFailureHandler.class);
 
-	public void onAuthenticationFailure(HttpServletRequest failedRequest, HttpServletResponse response, 
-			AuthenticationException authenticationException) throws IOException, ServletException {
-		LOGGER.info("Login attempt failed", authenticationException);
-		
-		response.setHeader("nxpense-login-error", "Bad credentials");
-	}
+    public void onAuthenticationFailure(HttpServletRequest failedRequest, HttpServletResponse response,
+                                        AuthenticationException authenticationException) throws IOException, ServletException {
+        LOGGER.info("Login attempt failed", authenticationException);
+
+        response.setHeader("nxpense-login-error", "Bad credentials");
+    }
 
 }
