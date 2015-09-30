@@ -101,27 +101,4 @@ public class ExpenseHelper {
 
         return false;
     }
-
-    /**
-     * Updates the current state of an existing expense item regarding the attachments that are associated to it, based
-     * on the list of attachments that have been identified as remaining.
-     * @param expense Expense item to be updated
-     * @param remainingAttachments List of attachments that are still associated to {@code expense}
-     */
-    public static void updateExpenseRemainingExistingAttachments(Expense expense, List<AttachmentResponseDTO> remainingAttachments) {
-        if(CollectionUtils.isEmpty(remainingAttachments)) {
-            expense.getAttachments().clear();
-        } else {
-            ListIterator<Attachment> listIt = expense.getAttachments().listIterator();
-
-            while(listIt.hasNext()) {
-                Attachment existingAttachment = listIt.next();
-                boolean keepAttachment = remainingAttachments.stream().anyMatch(ra -> ra.getFilename().equals(existingAttachment.getFilename()));
-
-                if(!keepAttachment) {
-                    listIt.remove();
-                }
-            }
-        }
-    }
 }

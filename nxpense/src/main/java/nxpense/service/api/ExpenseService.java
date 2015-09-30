@@ -1,6 +1,7 @@
 package nxpense.service.api;
 
 import nxpense.domain.Expense;
+import nxpense.dto.AttachmentResponseDTO;
 import nxpense.dto.BalanceInfoDTO;
 import nxpense.dto.ExpenseDTO;
 import nxpense.dto.VersionedSelectionItem;
@@ -84,4 +85,12 @@ public interface ExpenseService {
      * @return Expense item
      */
     public Expense getExpense(int expenseId);
+
+    /**
+     * Updates the current state of an existing expense item regarding the attachments that are associated to it, based
+     * on the list of attachments that have been identified as remaining.
+     * @param expense Expense item to be updated
+     * @param remainingAttachments List of attachments that are still associated to {@code expense}
+     */
+    public void updateExpenseRemainingExistingAttachments(Expense expense, List<AttachmentResponseDTO> remainingAttachments) ;
 }

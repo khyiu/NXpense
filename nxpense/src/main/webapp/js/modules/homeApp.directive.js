@@ -27,6 +27,12 @@
                             }).indexOf(attachmentToRemove.filename);
 
                             $scope.attachmentsToDisplay.splice(idxToDelete, 1);
+
+                            idxToDelete = $scope.expense.attachments.map(function(attachment) {
+                                return attachment.filename;
+                            }).indexOf(attachmentToRemove.filename);
+
+                            $scope.expense.attachments.splice(idxToDelete, 1);
                         }
                     }
                 };

@@ -1,11 +1,10 @@
 package nxpense.service;
 
 
+import nxpense.builder.AttachmentResponseDTOBuilder;
 import nxpense.builder.ExpenseDtoBuilder;
-import nxpense.domain.DebitExpense;
-import nxpense.domain.Expense;
-import nxpense.domain.Tag;
-import nxpense.domain.User;
+import nxpense.domain.*;
+import nxpense.dto.AttachmentResponseDTO;
 import nxpense.dto.ExpenseDTO;
 import nxpense.dto.ExpenseSource;
 import nxpense.dto.VersionedSelectionItem;
@@ -18,6 +17,7 @@ import nxpense.repository.ExpenseRepository;
 import nxpense.repository.TagRepository;
 import nxpense.repository.UserRepository;
 import nxpense.security.CustomUserDetails;
+import nxpense.service.api.AttachmentService;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -67,6 +67,9 @@ public class ExpenseServiceImplTest extends AbstractServiceTest {
     @Mock
     private SecurityPrincipalHelper securityPrincipalHelper;
 
+    @Mock
+    private AttachmentService attachmentService;
+
     @InjectMocks
     private ExpenseServiceImpl expenseService;
 
@@ -97,6 +100,13 @@ public class ExpenseServiceImplTest extends AbstractServiceTest {
             .setDate(DATE)
             .setDescription(DESCRIPTION)
             .build();
+
+
+    private static final String ATTACHMENT_URL_1 = "/nxpense/attach/1/" + ATTACHMENT_FILENAME_1;
+    private static final String ATTACHMENT_URL_2 = "/nxpense/attach/1/" + ATTACHMENT_FILENAME_2;
+
+    private static final Attachment ATTACHMENT_1 = new Attachment(ATTACHMENT_FILENAME_1, new byte[]{});
+    private static final Attachment ATTACHMENT_2 = new Attachment(ATTACHMENT_FILENAME_2, new byte[]{});
 
     @Before
     public void initMocks() {
@@ -326,5 +336,71 @@ public class ExpenseServiceImplTest extends AbstractServiceTest {
         Expense expense = expenseService.getExpense(EXPENSE_ID);
         assertThat(expense).isNotNull();
         assertThat(expense.getId()).isEqualTo(EXPENSE_ID);
+    }
+
+    @Test
+    public void testUpdateExpenseRemainingExistingAttachments_keepOne() {
+        Expense expense = ExpenseSource.DEBIT_CARD.getEmptyExpenseInstance();
+        expense.getAttachments().add(ATTACHMENT_1);
+        expense.getAttachments().add(ATTACHMENT_2);
+
+        AttachmentResponseDTO remainingAttachment = new AttachmentResponseDTOBuilder()
+                .setFilename(ATTACHMENT_FILENAME_2)
+                .setFileUrl(ATTACHMENT_URL_2)
+                .setFileSize(0)
+                .build();
+
+        List<AttachmentResponseDTO> remainingAttachments = new ArrayList<>();
+        remainingAttachments.add(remainingAttachment);
+
+        expenseService.updateExpenseRemainingExistingAttachments(expense, remainingAttachments);
+        assertThat(expense.getAttachments()).hasSize(1);
+        assertThat(expense.getAttachments()).containsOnly(ATTACHMENT_2);
+    }
+
+    @Test
+    public void testUpdateExpenseRemainingExistingAttachments_keepAll() {
+        Expense expense = ExpenseSource.DEBIT_CARD.getEmptyExpenseInstance();
+        expense.getAttachments().add(ATTACHMENT_1);
+        expense.getAttachments().add(ATTACHMENT_2);
+
+        AttachmentResponseDTO remainingAttachment1 = new AttachmentResponseDTOBuilder()
+                .setFilename(ATTACHMENT_FILENAME_1)
+                .setFileUrl(ATTACHMENT_URL_1)
+                .setFileSize(0)
+                .build();
+
+        AttachmentResponseDTO remainingAttachment2 = new AttachmentResponseDTOBuilder()
+                .setFilename(ATTACHMENT_FILENAME_2)
+                .setFileUrl(ATTACHMENT_URL_2)
+                .setFileSize(0)
+                .build();
+
+        List<AttachmentResponseDTO> remainingAttachments = new ArrayList<>();
+        remainingAttachments.add(remainingAttachment1);
+        remainingAttachments.add(remainingAttachment2);
+
+        expenseService.updateExpenseRemainingExistingAttachments(expense, remainingAttachments);
+        assertThat(expense.getAttachments()).hasSize(2);
+        assertThat(expense.getAttachments()).contains(ATTACHMENT_1);
+        assertThat(expense.getAttachments()).contains(ATTACHMENT_2);
+    }
+
+    @Test
+    public void testUpdateExpenseRemainingExistingAttachments_keepNoneEmpty() {
+        Expense expense = ExpenseSource.DEBIT_CARD.getEmptyExpenseInstance();
+        expense.getAttachments().add(ATTACHMENT_1);
+        expense.getAttachments().add(ATTACHMENT_2);
+        expenseService.updateExpenseRemainingExistingAttachments(expense, Collections.<AttachmentResponseDTO>emptyList());
+        assertThat(expense.getAttachments()).isEmpty();
+    }
+
+    @Test
+    public void testUpdateExpenseRemainingExistingAttachments_keepNoneNull() {
+        Expense expense = ExpenseSource.DEBIT_CARD.getEmptyExpenseInstance();
+        expense.getAttachments().add(ATTACHMENT_1);
+        expense.getAttachments().add(ATTACHMENT_2);
+        expenseService.updateExpenseRemainingExistingAttachments(expense, null);
+        assertThat(expense.getAttachments()).isEmpty();
     }
 }

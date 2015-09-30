@@ -1,10 +1,11 @@
 package nxpense.service;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
+import nxpense.domain.Attachment;
 import nxpense.domain.Expense;
 import nxpense.domain.Tag;
 import nxpense.domain.User;
+import nxpense.dto.AttachmentResponseDTO;
 import nxpense.dto.BalanceInfoDTO;
 import nxpense.dto.ExpenseDTO;
 import nxpense.dto.VersionedSelectionItem;
@@ -16,6 +17,7 @@ import nxpense.helper.ExpenseHelper;
 import nxpense.helper.SecurityPrincipalHelper;
 import nxpense.repository.ExpenseRepository;
 import nxpense.repository.TagRepository;
+import nxpense.service.api.AttachmentService;
 import nxpense.service.api.ExpenseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +27,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,6 +47,9 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Autowired
     private TagRepository tagRepository;
+
+    @Autowired
+    private AttachmentService attachmentService;
 
     @Transactional(rollbackFor = {Exception.class})
     public Expense createNewExpense(ExpenseDTO expenseDTO, List<MultipartFile> attachments) {
@@ -96,7 +102,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             ExpenseHelper.overwriteFields(ExpenseConverter.dtoToEntity(expenseDTO), existingExpense);
 
             try {
-                ExpenseHelper.updateExpenseRemainingExistingAttachments(existingExpense, expenseDTO.getAttachments());
+                updateExpenseRemainingExistingAttachments(existingExpense, expenseDTO.getAttachments());
                 ExpenseHelper.associateFilesToExpense(existingExpense, attachments);
             } catch (IllegalArgumentException iae) {
                 throw new RequestCannotCompleteException(iae);
@@ -122,7 +128,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         User currentUser = securityPrincipalHelper.getCurrentUser();
         Map<Integer, Integer> expenseIdVersions = new HashMap<Integer, Integer>();
 
-        for(VersionedSelectionItem item : selection) {
+        for (VersionedSelectionItem item : selection) {
             expenseIdVersions.put(item.getId(), item.getVersion());
         }
 
@@ -130,7 +136,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         expenseRepository.decrementSameDateHigherPosition(ids, currentUser);
         List<Expense> expensesToDelete = expenseRepository.findByIdInAndUser(ids, currentUser);
 
-        for(Expense expense : expensesToDelete) {
+        for (Expense expense : expensesToDelete) {
             // sync expense item version with the one sent by the client
             expense.setVersion(expenseIdVersions.get(expense.getId()));
             expenseRepository.delete(expense);
@@ -157,24 +163,24 @@ public class ExpenseServiceImpl implements ExpenseService {
         User currentUser = securityPrincipalHelper.getCurrentUser();
         Expense expense = expenseRepository.findOne(expenseId);
 
-        if(expense == null) {
+        if (expense == null) {
             LOGGER.warn("Attempt to add tag to an expense that wasn't found (ID={})", expenseId);
             throw new BadRequestException("No expense found for tag association");
         }
 
         Tag tag = tagRepository.findOne(tagId);
 
-        if(tag == null) {
+        if (tag == null) {
             LOGGER.warn("Attempt to add a tag that wasn't found (ID={})", tagId);
             throw new BadRequestException("No tag found for tag association");
         }
 
-        if(!expense.getUser().getId().equals(currentUser.getId())) {
+        if (!expense.getUser().getId().equals(currentUser.getId())) {
             LOGGER.warn("Attempt to update an expense that does not belong to current user (ID={})", expenseId);
             throw new ForbiddenActionException("Cannot update expense that does not belong to current user");
         }
 
-        if(!currentUser.ownTag(tag)) {
+        if (!currentUser.ownTag(tag)) {
             LOGGER.warn("Attempt to associate a tag that does not belong to current user (ID={})", tagId);
             throw new ForbiddenActionException("Cannot associate a tag that does not belong to current user");
         }
@@ -189,12 +195,12 @@ public class ExpenseServiceImpl implements ExpenseService {
     public Expense removeTagFromExpense(int expenseId, final String tagName) {
         Expense expense = expenseRepository.findOne(expenseId);
 
-        if(expense == null) {
+        if (expense == null) {
             LOGGER.debug("No expense item found for ID = {}", expenseId);
             throw new RequestCannotCompleteException("No expense item found for specified ID");
         }
 
-        if(!StringUtils.isEmpty(tagName)) {
+        if (!StringUtils.isEmpty(tagName)) {
             try {
                 Tag targetTag = Iterables.find(expense.getTags(), tag -> tag != null && tagName.equals(tag.getName()));
                 expense.getTags().remove(targetTag);
@@ -210,5 +216,24 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public Expense getExpense(int expenseId) {
         return expenseRepository.findOne(expenseId);
+    }
+
+    @Override
+    public void updateExpenseRemainingExistingAttachments(Expense expense, List<AttachmentResponseDTO> remainingAttachments) {
+        if (CollectionUtils.isEmpty(remainingAttachments)) {
+            expense.getAttachments().clear();
+        } else {
+            ListIterator<Attachment> listIt = expense.getAttachments().listIterator();
+
+            while (listIt.hasNext()) {
+                Attachment existingAttachment = listIt.next();
+                boolean keepAttachment = remainingAttachments.stream().anyMatch(ra -> ra.getFilename().equals(existingAttachment.getFilename()));
+
+                if (!keepAttachment) {
+                    listIt.remove();
+                    attachmentService.deleteAttachment(expense.getId(), existingAttachment.getFilename());
+                }
+            }
+        }
     }
 }

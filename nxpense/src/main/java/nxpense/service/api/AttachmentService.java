@@ -15,10 +15,8 @@ public interface AttachmentService {
 
     /**
      * Physically removes the file with name {@code filename} from the server's file system.
-     * @param ownerId ID of the user to which the file belongs. This ID determines the sub-directory in which the file to be
-     *                deleted is located.
      * @param expenseId ID of the expense item with which the attachment is associated
      * @param filename name of the file to be removed
      */
-    public void deleteAttachment(Integer ownerId, Integer expenseId, String filename);
+    public void deleteAttachment(Integer expenseId, String filename);
 }

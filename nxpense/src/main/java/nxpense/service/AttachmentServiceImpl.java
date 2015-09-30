@@ -50,8 +50,13 @@ public class AttachmentServiceImpl implements AttachmentService {
     }
 
     @Override
-    public void deleteAttachment(Integer ownerId, Integer expenseId, String filename) {
-        // todo implement
+    public void deleteAttachment(Integer expenseId, String filename) {
+        Path pathToDelete = Paths.get(attachmentDir, expenseId.toString(), filename);
 
+        try {
+            Files.delete(pathToDelete);
+        } catch (IOException e) {
+            LOGGER.error("Failed deleting attachment with path= {}", pathToDelete, e);
+        }
     }
 }
