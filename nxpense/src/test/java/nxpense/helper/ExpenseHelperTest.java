@@ -26,10 +26,12 @@ public class ExpenseHelperTest {
     private static final String ATTACHMENT_NAME_1_BIS = "file1(1).txt";
     private static final String ATTACHMENT_NAME_2 = "file2";
 
-    private static final List<MultipartFile> MULTIPART_FILES = new ArrayList(){{
-        add(new MockMultipartFile(ATTACHMENT_NAME_1, ATTACHMENT_NAME_1, "text/plain", new byte[]{}));
-        add(new MockMultipartFile(ATTACHMENT_NAME_2, ATTACHMENT_NAME_2, "text/plain", new byte[]{}));
-    }};
+    private static final List<MultipartFile> MULTIPART_FILES = new ArrayList();
+
+    static {
+        MULTIPART_FILES.add(new MockMultipartFile(ATTACHMENT_NAME_1, ATTACHMENT_NAME_1, "text/plain", new byte[]{}));
+        MULTIPART_FILES.add(new MockMultipartFile(ATTACHMENT_NAME_2, ATTACHMENT_NAME_2, "text/plain", new byte[]{}));
+    }
 
     @Test
     public void testOverwriteFields_noSource() {
