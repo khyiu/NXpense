@@ -105,8 +105,14 @@
                             selectedExpense: function () {
                                 return _.findWhere($scope.expenses, {selected: true});
                             }
-                        }
-                    });
+                        },
+                    }).opened.then(function () {
+                            //  NOTE: setting a timeout to wait for the opened modal to be actually visible
+                            //        before triggering the auto-resize on the text area
+                            setTimeout(function () {
+                                $('#description > textarea').trigger('autosize.resize');
+                            }, 100);
+                        });
                 };
 
                 $scope.disableEditButton = function () {
