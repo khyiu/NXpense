@@ -2,7 +2,7 @@ package nxpense.dto;
 
 import java.util.List;
 
-public class TagDTO implements Comparable<TagDTO>{
+public class TagDTO implements Comparable<TagDTO> {
     private Integer version;
     private String name;
     private String backgroundColor;
@@ -52,7 +52,7 @@ public class TagDTO implements Comparable<TagDTO>{
 
     @Override
     public int compareTo(TagDTO otherTag) {
-        if(otherTag == null) {
+        if (otherTag == null) {
             return 1;
         }
 
@@ -61,13 +61,17 @@ public class TagDTO implements Comparable<TagDTO>{
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         TagDTO tagDTO = (TagDTO) o;
 
         return name.equals(tagDTO.name);
-
     }
 
     @Override
