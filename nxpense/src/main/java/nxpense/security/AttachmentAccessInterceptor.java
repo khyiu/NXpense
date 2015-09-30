@@ -1,6 +1,5 @@
 package nxpense.security;
 
-import nxpense.domain.Attachment;
 import nxpense.domain.Expense;
 import nxpense.domain.User;
 import nxpense.exception.BadRequestException;
@@ -16,7 +15,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 public class AttachmentAccessInterceptor extends HandlerInterceptorAdapter {
