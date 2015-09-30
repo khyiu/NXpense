@@ -1,9 +1,7 @@
 package nxpense.helper;
 
-import nxpense.builder.AttachmentResponseDTOBuilder;
 import nxpense.domain.Attachment;
 import nxpense.domain.Expense;
-import nxpense.dto.AttachmentResponseDTO;
 import nxpense.dto.ExpenseSource;
 import org.joda.time.LocalDate;
 import org.junit.Test;

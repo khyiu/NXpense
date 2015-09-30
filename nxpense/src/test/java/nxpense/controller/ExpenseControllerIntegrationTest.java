@@ -5,7 +5,6 @@ import nxpense.builder.ExpenseDtoBuilder;
 import nxpense.dto.*;
 import nxpense.repository.ExpenseRepository;
 import nxpense.security.CustomUserDetails;
-import nxpense.service.AttachmentServiceImpl;
 import org.dbunit.operation.DatabaseOperation;
 import org.joda.time.LocalDate;
 import org.junit.Before;
@@ -28,13 +27,10 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ReflectionUtils;
 
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

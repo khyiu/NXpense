@@ -1,7 +1,6 @@
 package nxpense.service;
 
 import nxpense.domain.Attachment;
-import nxpense.domain.DebitExpense;
 import nxpense.domain.Expense;
 import nxpense.dto.ExpenseSource;
 import nxpense.service.api.ExpenseService;
