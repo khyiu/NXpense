@@ -5,6 +5,7 @@ import nxpense.domain.DebitExpense;
 import nxpense.domain.Expense;
 import nxpense.dto.ExpenseSource;
 import nxpense.service.api.ExpenseService;
+import org.assertj.core.util.Files;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,8 +18,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 import org.springframework.util.ReflectionUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -61,5 +65,22 @@ public class AttachmentServiceImplTest extends AbstractServiceTest {
         attachmentService.createAttachment(EXPENSE_ID, ATTACHMENT_FILENAME);
         assertThat(temporaryFolder.getRoot().list()).isNotEmpty().hasSize(1);
         assertThat(temporaryFolder.getRoot().listFiles()[0].list()).isNotEmpty().hasSize(1).contains(ATTACHMENT_FILENAME);
+    }
+
+    @Test
+    public void deleteAttachment() throws IllegalAccessException, IOException {
+        Field attachmentDirField = ReflectionUtils.findField(AttachmentServiceImpl.class, "attachmentDir");
+        attachmentDirField.setAccessible(true);
+        attachmentDirField.set(attachmentService, temporaryFolder.getRoot().getAbsolutePath());
+
+        Path expensePath = Paths.get(temporaryFolder.getRoot().getAbsolutePath(), EXPENSE_ID.toString());
+        File expenseFolder = Files.newFolder(expensePath.toString());
+
+        Path attachmentPath = Paths.get(expenseFolder.getAbsolutePath(), ATTACHMENT_FILENAME);
+        File attachment = Files.newFile(attachmentPath.toString());
+
+        assertThat(attachment.exists()).as("Dummy attachment file exists").isTrue();
+        attachmentService.deleteAttachment(EXPENSE_ID, ATTACHMENT_FILENAME);
+        assertThat(attachment.exists()).as("Dummy attachment file exists (after deletion)").isFalse();
     }
 }
