@@ -3,14 +3,12 @@ package nxpense.helper;
 
 import nxpense.domain.Attachment;
 import nxpense.domain.Expense;
-import nxpense.dto.AttachmentResponseDTO;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.stream.Collectors;
 
 public class ExpenseHelper {
