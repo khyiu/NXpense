@@ -24,7 +24,6 @@ public class AccountController {
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     @ResponseBody
     public String createNewAccount(HttpServletRequest request, @RequestParam String email, @RequestParam char[] password, @RequestParam char[] passwordRepeat) {
-        // TODO add Spring validation
         userService.createUser(email, password, passwordRepeat);
 
         StringBuilder redirection = new StringBuilder()
