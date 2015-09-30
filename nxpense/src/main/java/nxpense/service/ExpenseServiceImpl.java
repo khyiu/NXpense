@@ -196,13 +196,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         if(!StringUtils.isEmpty(tagName)) {
             try {
-                Tag targetTag = Iterables.find(expense.getTags(), new Predicate<Tag>() {
-                    @Override
-                    public boolean apply(Tag tag) {
-                        return tag != null && tagName.equals(tag.getName());
-                    }
-                });
-
+                Tag targetTag = Iterables.find(expense.getTags(), tag -> tag != null && tagName.equals(tag.getName()));
                 expense.getTags().remove(targetTag);
             } catch (NoSuchElementException e) {
                 LOGGER.debug("Could not find tag with name {} to remove from expense with id {}", tagName, expenseId);
