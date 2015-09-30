@@ -42,13 +42,24 @@ public class Attachment {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Attachment that = (Attachment) o;
 
-        if (!filename.equals(that.filename)) return false;
-        if (!Arrays.equals(byteContent, that.byteContent)) return false;
+        if (!filename.equals(that.filename)) {
+            return false;
+        }
+
+        if (!Arrays.equals(byteContent, that.byteContent)) {
+            return false;
+        }
+
         return !(size != null ? !size.equals(that.size) : that.size != null);
 
     }
