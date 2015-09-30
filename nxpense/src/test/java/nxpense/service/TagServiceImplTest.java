@@ -17,6 +17,8 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.lang.reflect.Field;
@@ -28,6 +30,8 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TagServiceImplTest extends AbstractServiceTest {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TagServiceImplTest.class);
 
     private static final Integer ID_NON_EXISTING_TAG = 11;
     private static final Integer ID_NON_CURRENT_USER_TAG = 22;
@@ -61,10 +65,8 @@ public class TagServiceImplTest extends AbstractServiceTest {
             Field idField = tag.getClass().getDeclaredField("id");
             idField.setAccessible(true);
             idField.set(tag, ID_CURRENT_USER_TAG);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            LOGGER.error("Failed setting tag ID", e);
         }
 
         tag.setName(TAG_NAME_ROOT);
