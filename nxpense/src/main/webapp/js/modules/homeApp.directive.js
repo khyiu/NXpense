@@ -63,21 +63,6 @@
         };
     }]);
 
-    homeAppDirectiveModule.directive('sideMenu', ['Restangular', '$rootScope', function (Restangular, $rootScope) {
-        return {
-            restrict: 'E',
-            transclude: true,
-            templateUrl: 'navigation/side-menu.html',
-            scope: {
-            },
-            controller: function ($scope, $rootScope) {
-                $scope.logout = function () {
-                    window.location.assign('/' + $rootScope.WEB_CONTEXT + '/logout');
-                };
-            }
-        };
-    }]);
-
     homeAppDirectiveModule.directive('nxExpenseTableFooter', ['Restangular', '$modal', 'notificationHelper', '$http', function (Restangular, $modal, notificationHelper, $http) {
         return {
             restrict: 'E',
