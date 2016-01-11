@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('homeApp.directive').directive('sideMenu', SideMenu);
+    angular.module('homeApp.directive').directive('nxSideMenu', SideMenu);
 
     SideMenu.$inject = ['$rootScope'];
 
