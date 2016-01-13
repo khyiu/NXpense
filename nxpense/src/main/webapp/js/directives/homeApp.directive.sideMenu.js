@@ -5,13 +5,13 @@
 
     SideMenu.$inject = ['$rootScope'];
 
-    function SideMenu($rootScope) {
+    function SideMenu($rootScope, $scope) {
         return {
             restrict: 'E',
             transclude: true,
             templateUrl: 'navigation/side-menu.html',
             controller: SideMenuController,
-            controllerAs: 'sideMenuController'
+            controllerAs: 'sideMenuController',
         };
 
         function SideMenuController() {
@@ -39,14 +39,32 @@
             }
 
             function toggle($event, menuEntry) {
+                var elementSelector = '#' + menuEntry;
                 var state = self.viewStates[menuEntry];
+                var newState;
 
-                if(!state) {
+                if (!state) {
                     throw new Error('View state for menu entry named [' + menuEntry + '] does not exist!');
                 }
 
-                self.viewStates[menuEntry] = (state === 'collapsed' ? 'open' : 'collapsed');
+                newState = (state === 'collapsed' ? 'open' : 'collapsed');
+
+                if (state === 'collapsed') {
+                    updateViewStateAfterAnimation(menuEntry, newState);
+                    angular.element(elementSelector).slideDown();
+                } else {
+                    angular.element(elementSelector).slideUp(400, function animationEnded() {
+                        updateViewStateAfterAnimation(menuEntry, newState);
+                        $rootScope.$apply();
+                    });
+                }
+
+
                 $event.preventDefault();
+            }
+
+            function updateViewStateAfterAnimation(menuEntry, newState) {
+                self.viewStates[menuEntry] = newState;
             }
         }
     }

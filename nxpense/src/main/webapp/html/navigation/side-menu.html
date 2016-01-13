@@ -6,7 +6,7 @@
                 Expenses
                 <span class="fa arrow"></span>
             </a>
-            <ul class="nav nav-second-level"
+            <ul id="expenses" class="nav nav-second-level"
                 ng-class="{'collapse': sideMenuController.viewStates.expenses === 'collapsed'}">
                 <li>
                     <a href="#expense/details">Details</a>
@@ -17,7 +17,7 @@
                         Available tags
                         <span class="fa arrow"></span>
                     </a>
-                    <ul class="tags nav nav-third-level"
+                    <ul id="availableTags" class="tags nav nav-third-level"
                         ng-class="{'collapse': sideMenuController.viewStates.availableTags === 'collapsed'}">
                         <li ng-repeat="tag in $root.existingTags" ng-drag="true" ng-drag-data="tag"
                             ng-center-anchor="false">
@@ -36,7 +36,7 @@
                 Tags
                 <span class="fa arrow"></span>
             </a>
-            <ul class="nav nav-second-level"
+            <ul id="tags" class="nav nav-second-level"
                 ng-class="{'collapse': sideMenuController.viewStates.tags === 'collapsed'}">
                 <li>
                     <a href="#tag/management" title="Open tags management interface">
