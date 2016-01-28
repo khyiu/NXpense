@@ -5,7 +5,7 @@
 
     SideMenu.$inject = ['$rootScope'];
 
-    function SideMenu($rootScope, $scope) {
+    function SideMenu($rootScope) {
         return {
             restrict: 'E',
             transclude: true,
