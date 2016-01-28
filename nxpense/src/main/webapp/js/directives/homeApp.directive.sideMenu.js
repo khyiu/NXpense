@@ -17,7 +17,7 @@
         function SideMenuController() {
             var self = this;
 
-            this.viewStates;
+            this.viewStates = null;
 
             this.logout = logout;
             this.toggle = toggle;
