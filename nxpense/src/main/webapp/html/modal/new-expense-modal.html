@@ -59,10 +59,10 @@
             </button>
             <!-- Existing attachments -->
             <div class="attachment-links" ng-repeat="attachment in attachmentsToDisplay">
-                <attachment-item/>
+                <nx-attachment-item></nx-attachment-item>
             </div>
             <div class="attachment-links" ng-repeat="attachment in newAttachmentsToDisplay">
-                <attachment-item/>
+                <nx-attachment-item></nx-attachment-item>
             </div>
             <input type="file" id="attachment-selector" name="expense-attachments" multiple="" attachment-model="attachments">
         </fieldset>
