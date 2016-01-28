@@ -3,9 +3,9 @@
 
     angular.module('homeApp.directive').directive('nxExpenseTableFooter', nxExpenseTableFooter);
 
-    nxExpenseTableFooter.$inject = ['$modal', 'notificationHelper', '$http'];
+    nxExpenseTableFooter.$inject = ['$modal', 'notificationHelper', '$http', '$timeout'];
 
-    function nxExpenseTableFooter($modal, notificationHelper, $http) {
+    function nxExpenseTableFooter($modal, notificationHelper, $http, $timeout) {
         return {
             restrict: 'E',
             transclude: true,
@@ -72,10 +72,8 @@
                             }
                         }
                     }).opened.then(function () {
-                        //  NOTE: setting a timeout to wait for the opened modal to be actually visible
-                        //        before triggering the auto-resize on the text area
-                        setTimeout(function () {
-                            $('#description > textarea').trigger('autosize.resize');
+                        $timeout(function dynamizeTextarea() {
+                            $('#description').find('> textarea').trigger('autosize.resize');
                         }, 100);
                     });
                 };
