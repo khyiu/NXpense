@@ -11,7 +11,7 @@
             transclude: true,
             templateUrl: 'navigation/side-menu.html',
             controller: SideMenuController,
-            controllerAs: 'sideMenuController',
+            controllerAs: 'sideMenuController'
         };
 
         function SideMenuController() {
