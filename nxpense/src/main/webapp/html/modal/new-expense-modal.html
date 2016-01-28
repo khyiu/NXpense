@@ -64,7 +64,7 @@
             <div class="attachment-links" ng-repeat="attachment in newAttachmentsToDisplay">
                 <nx-attachment-item></nx-attachment-item>
             </div>
-            <input type="file" id="attachment-selector" name="expense-attachments" multiple="" attachment-model="attachments">
+            <input type="file" id="attachment-selector" name="expense-attachments" multiple nx-attachment-model="attachments">
         </fieldset>
     </form>
 </div>

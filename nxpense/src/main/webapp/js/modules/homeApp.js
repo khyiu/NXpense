@@ -1,7 +1,7 @@
 (function (angular) {
     'use strict';
 
-    var homeAppModule = angular.module('homeApp', ['ngRoute', 'ui.bootstrap', 'restangular', 'notificationHelperModule', 'homeApp.directive']);
+    var homeAppModule = angular.module('homeApp', ['ngRoute', 'ui.bootstrap', 'restangular', 'notificationHelperModule', 'ngDraggable']);
 
     // Run block to initialize attributes to be used across controllers that are not necessarily nested in each other
     // --> cannot benefit from scope hierarchy...

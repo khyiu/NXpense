@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('homeApp.directive').directive('nxExpenseTableFooter', nxExpenseTableFooter);
+    angular.module('homeApp').directive('nxExpenseTableFooter', nxExpenseTableFooter);
 
     nxExpenseTableFooter.$inject = ['$modal', 'notificationHelper', '$http', '$timeout'];
 

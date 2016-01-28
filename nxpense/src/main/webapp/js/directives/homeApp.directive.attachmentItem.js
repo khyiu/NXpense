@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('homeApp.directive').directive('nxAttachmentItem', attachmentItem);
+    angular.module('homeApp').directive('nxAttachmentItem', attachmentItem);
 
     function attachmentItem() {
         return {
