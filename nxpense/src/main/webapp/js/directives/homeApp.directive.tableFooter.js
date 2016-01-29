@@ -64,8 +64,9 @@
 
                 $scope.editSelectedExpense = function () {
                     $modal.open({
-                        templateUrl: 'modal/new-expense-modal.html',
+                        templateUrl: 'modal/expense-modal.html',
                         controller: 'modalController',
+                        controllerAs: 'modalController',
                         resolve: {
                             selectedExpense: function () {
                                 return _.findWhere($scope.expenses, {selected: true});
@@ -93,8 +94,9 @@
 
                 $scope.openNewExpenseModal = function () {
                     $modal.open({
-                        templateUrl: 'modal/new-expense-modal.html',
+                        templateUrl: 'modal/expense-modal.html',
                         controller: 'modalController',
+                        controllerAs: 'modalController',
                         resolve: {
                             selectedExpense: function () {
                                 return null;

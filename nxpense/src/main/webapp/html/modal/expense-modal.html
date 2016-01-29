@@ -4,8 +4,8 @@
 <div class="modal-body">
     <form name="expenseForm" id="new-expense-form">
         <fieldset id="date" ng-class="{'has-error': expenseForm.date.$invalid && expenseForm.date.$dirty}">
-            <div id="dateInputGroup" class="input-group" ng-keydown="processKey($event)">
-                <input id="dateInput" name="date" type="text" tabindex="0" class="form-control"  ng-model="expense.date" placeholder="Date" firstTab
+            <div id="dateInputGroup" class="input-group" ng-keydown="modalController.processKey($event)">
+                <input id="dateInput" name="date" type="text" tabindex="0" class="form-control"  ng-model="modalController.expense.date" placeholder="Date" firstTab
                        required pattern="(\d{2})/(\d{2})/(\d{4})" maxlength="10"/>
                 <span class="input-group-addon">
 					<i class="fa fa-calendar"></i>
@@ -20,8 +20,11 @@
         </fieldset>
         <fieldset id="amount" ng-class="{'has-error': expenseForm.amount.$invalid && expenseForm.amount.$dirty}">
             <div id="amountInputGroup" class="input-group">
-                <input id="amountInput" name="amount" tabindex="0" type="text" class="form-control" ng-class="{'neg-value': expense.amount < 0, 'pos-value': expense.amount >= 0}" placeholder="Amount" ng-model="expense.amount"
-                       required pattern="^(-?)\d+(\.\d{1,2})*$"/>
+                <input id="amountInput" name="amount" tabindex="0" type="text" class="form-control" placeholder="Amount"
+                       required
+                       pattern="^(-?)\d+(\.\d{1,2})*$"
+                       ng-model="expense.amount"
+                       ng-class="{'neg-value': modalController.expense.amount < 0, 'pos-value': modalController.expense.amount >= 0}"/>
 				<span class="input-group-addon">
 					<i class="fa fa-eur"></i>
 				</span>
@@ -34,43 +37,46 @@
         <fieldset class="fieldset-border">
             <legend class="fieldset-border">Source</legend>
             <div class="radio radio-primary">
-                <input tabindex="0" ng-model="expense.source" id="debitcard" type="radio" name="source" value="DEBIT_CARD" checked>
+                <input tabindex="0" ng-model="modalController.expense.source" id="debitcard" type="radio" name="source" value="DEBIT_CARD" checked>
                 <label for="debitcard">
                     Debit card
                 </label>
             </div>
             <div class="radio radio-primary">
-                <input tabindex="0" ng-model="expense.source" id="creditcard" type="radio" name="source" value="CREDIT_CARD">
+                <input tabindex="0" ng-model="modalController.expense.source" id="creditcard" type="radio" name="source" value="CREDIT_CARD">
                 <label for="creditcard">
                     Credit card
                 </label>
             </div>
         </fieldset>
         <fieldset id="description">
-            <textarea placeholder="Description (optional)" class="form-control" ng-model="expense.description"></textarea>
+            <textarea placeholder="Description (optional)" class="form-control" ng-model="modalController.expense.description"></textarea>
         </fieldset>
         <fieldset id="attachments" class="fieldset-border">
             <legend class="fieldset-border">Attachments</legend>
-            <button id="add-attachment-btn" type="button" class="btn btn-primary" ng-click="openFileSelector()">
+            <button id="add-attachment-btn" type="button" class="btn btn-primary" ng-click="modalController.openFileSelector()">
                 <i class="glyphicon glyphicon-plus"></i>
                 <span>
                     Add files...
                 </span>
             </button>
             <!-- Existing attachments -->
-            <div class="attachment-links" ng-repeat="attachment in attachmentsToDisplay">
+            <div class="attachment-links" ng-repeat="attachment in modalController.attachmentsToDisplay">
                 <nx-attachment-item></nx-attachment-item>
             </div>
-            <div class="attachment-links" ng-repeat="attachment in newAttachmentsToDisplay">
+            <div class="attachment-links" ng-repeat="attachment in modalController.newAttachmentsToDisplay">
                 <nx-attachment-item></nx-attachment-item>
             </div>
-            <input type="file" id="attachment-selector" name="expense-attachments" multiple nx-attachment-model="attachments">
+            <input type="file" id="attachment-selector" name="expense-attachments" multiple
+                   nx-attachment-model
+                   nx-am-controller="modalController"
+                   nx-am-action="addAttachments">
         </fieldset>
     </form>
 </div>
-<div class="modal-footer" ng-keydown=processKey($event)>
-    <button tabindex="0" class="btn btn-success" ng-disabled="expenseForm.$invalid" ng-click="ok()">Save</button>
-    <button tabindex="0" class="btn btn-warning" ng-click="cancel()" lastTab>Cancel</button>
+<div class="modal-footer" ng-keydown=modalController.processKey($event)>
+    <button tabindex="0" class="btn btn-success" ng-disabled="expenseForm.$invalid" ng-click="modalController.ok()">Save</button>
+    <button tabindex="0" class="btn btn-warning" ng-click="modalController.cancel()" lastTab>Cancel</button>
 </div>
 
 
