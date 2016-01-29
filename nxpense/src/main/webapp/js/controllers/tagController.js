@@ -3,9 +3,9 @@
 
     angular.module('homeApp').controller('tagController', TagController);
 
-    TagController.$inject = ['$scope', 'Restangular', 'notificationHelper'];
+    TagController.$inject = ['$scope', 'Restangular', 'notificationHelper', 'underscore'];
 
-    function TagController($scope, Restangular, notificationHelper) {
+    function TagController($scope, Restangular, notificationHelper, _) {
         var self = this;
 
         var defaultTag = {
