@@ -1,7 +1,7 @@
 <div>
     <form name="tagForm">
         <fieldset class="fieldset-border">
-            <legend class="fieldset-border">{{mode}} tag</legend>
+            <legend class="fieldset-border">{{tagController.mode}} tag</legend>
             <div class="row">
                 <div class="col-md-5">
                     <label for="foreground-color-group">Foreground color</label>
@@ -9,7 +9,7 @@
                         <span class="input-group-addon" title="Tag text color">
                             <span class="glyphicon glyphicon-text-color"></span>
                         </span>
-                        <input type="color" name="foreground-color" class="form-control" title="Click to pick a color" ng-model="currentTag.foregroundColor" required>
+                        <input type="color" name="foreground-color" class="form-control" title="Click to pick a color" ng-model="tagController.currentTag.foregroundColor" required>
                     </div>
                 </div>
                 <div class="col-md-5">
@@ -18,14 +18,14 @@
                         <span class="input-group-addon" title="Tag background color">
                             <span class="glyphicon glyphicon-text-background"></span>
                         </span>
-                        <input type="color" name="background-color" class="form-control" title="Click to pick a color" ng-model="currentTag.backgroundColor" required>
+                        <input type="color" name="background-color" class="form-control" title="Click to pick a color" ng-model="tagController.currentTag.backgroundColor" required>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-5" ng-class="{'has-error': tagForm.tagName.$invalid && tagForm.tagName.$dirty}">
                     <label>Tag name (min: 3 characters - max: 50 characters)</label>
-                    <input id="tagName" type="text" placeholder="Type in the tag's name" name="tagName" class="form-control form-group" ng-model="currentTag.name"
+                    <input id="tagName" type="text" placeholder="Type in the tag's name" name="tagName" class="form-control form-group" ng-model="tagController.currentTag.name"
                            required maxlength="50" pattern="^(.){3,50}$">
                     <div class="validationMsg">
                         <label ng-show="tagForm.tagName.$dirty && tagForm.tagName.$error.required" class="control-label" for="tagName">Please specify a tag name</label>
@@ -37,8 +37,8 @@
                     <label>Tag preview</label>
                     <ul class="tags">
                         <li>
-                            <a style="background-color: {{currentTag.backgroundColor}}; border-right-color: {{currentTag.backgroundColor}}; opacity: {{tagPreviewOpacity}}; color: {{currentTag.foregroundColor}}">
-                                <span class="tag-label" title="{{currentTag.name || '&nbsp;'}}">{{currentTag.name || '&nbsp;'}}</span>
+                            <a style="background-color: {{tagController.currentTag.backgroundColor}}; border-right-color: {{tagController.currentTag.backgroundColor}}; color: {{tagController.currentTag.foregroundColor}}">
+                                <span class="tag-label" title="{{tagController.currentTag.name || '&nbsp;'}}">{{tagController.currentTag.name || '&nbsp;'}}</span>
                                 <span class="tag-remover glyphicon glyphicon-remove-circle" tabindex="0"></span>
                             </a>
                         </li>
@@ -49,8 +49,8 @@
             <div id="existing-tag-previews" class="row">
                 <ul class="tags">
                     <li ng-repeat="tag in existingTags">
-                        <a href="#" tabindex="0" style="background-color: {{tag.backgroundColor}}; border-right-color: {{tag.backgroundColor}}; opacity: {{tagPreviewOpacity}}; color: {{tag.foregroundColor}}"
-                                ng-click="editTag(tag, $event)" ng-keydown="editTag(tag, $event)">
+                        <a href="#" tabindex="0" style="background-color: {{tag.backgroundColor}}; border-right-color: {{tag.backgroundColor}}; color: {{tag.foregroundColor}}"
+                                ng-click="tagController.editTag(tag, $event)" ng-keydown="tagController.editTag(tag, $event)">
                             <span class="tag-label" title="{{tag.name}}">{{tag.name || '&nbsp;'}}</span>
                             <span class="tag-remover glyphicon glyphicon-remove-circle" tabindex="0" title="Click to delete tag (it will also be removed from all tagged expenses)"
                                     ng-click="remove(tag, $event)" ng-keydown="remove(tag, $event)"></span>
@@ -59,8 +59,8 @@
                 </ul>
             </div>
             <div class="row footer-row">
-                <button id="tag-reset-btn" type="button" class="btn btn-warning" title="Click to restart tag creation from scratch" ng-click="reset()">Reset</button>
-                <button ng-disabled="tagForm.$invalid" type="button" class="btn btn-success" title="Click to save your new tag" ng-click="saveTag()">{{mode}} tag</button>
+                <button id="tag-reset-btn" type="button" class="btn btn-warning" title="Click to restart tag creation from scratch" ng-click="tagController.reset()">Reset</button>
+                <button ng-disabled="tagForm.$invalid" type="button" class="btn btn-success" title="Click to save your new tag" ng-click="tagController.saveTag()">{{tagController.mode}} tag</button>
             </div>
         </fieldset>
     </form>

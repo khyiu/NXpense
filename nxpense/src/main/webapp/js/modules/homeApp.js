@@ -44,114 +44,14 @@
             controller: 'expenseController'
         }).when('/tag/management', {
             templateUrl: 'views/tag-manage.html',
-            controller: 'tagController'
+            controller: 'tagController',
+            controllerAs: 'tagController'
         }).otherwise({
             redirectTo: '/expense/details'
         });
     });
 
-    homeAppModule.controller('tagController', ['$rootScope', '$scope', 'Restangular', 'notificationHelper', function ($rootScope, $scope, Restangular, notificationHelper) {
-        var tagDAO = Restangular.all('tag');
-        var defaultMode = 'Create';
-        var existingTagPreviousState;
-        var defaultTag = {
-            backgroundColor: '#8546EB',
-            foregroundColor: '#FFFF00',
-            name: null
-        };
 
-        // reverting the existing tag whose edition was in progress to its initial state
-        var discardEditionInProgress = function() {
-            if(existingTagPreviousState) {
-                angular.copy(existingTagPreviousState, $scope.currentTag);
-                existingTagPreviousState = null;
-            }
-        };
-
-        $scope.mode = defaultMode;
-
-        // DISPLAY TAGS
-        $scope.loadTags();
-
-        // TAG DELETION
-        $scope.remove = function (tag, $event) {
-            if (tag && (_.isUndefined($event.keyCode) || $event.keyCode === 13)) {
-                notificationHelper.showServerInfo('Deleting tag...');
-
-                tagDAO.customDELETE(tag.id).then(
-                    function () {
-                        notificationHelper.hideServerInfo();
-                        $scope.loadTags();
-                    },
-
-                    function () {
-                        notificationHelper.hideServerInfo();
-                        notificationHelper.showOperationFailure('Failed deleting tag! Please retry later...');
-                    }
-                );
-            }
-
-            $event.stopPropagation();
-        };
-
-        // TAG CREATION
-        $scope.currentTag = angular.copy(defaultTag, {});
-
-        $scope.reset = function () {
-            $scope.mode = defaultMode;
-
-            discardEditionInProgress();
-            $scope.currentTag = angular.copy(defaultTag, {});
-            $scope.tagForm.$setPristine(true);
-        };
-
-        $scope.$watch('currentTag.name', function () {
-            $scope.tagForm.tagName.$setValidity('alreadyExists', true);
-        });
-
-        // TAG EDITION
-        $scope.editTag = function (tag, $event) {
-            if (tag && (_.isUndefined($event.keyCode) || $event.keyCode === 13)) {
-                discardEditionInProgress();
-                $scope.mode = 'Edit';
-                existingTagPreviousState = angular.copy(tag, {});
-                $scope.currentTag = tag;
-                $event.preventDefault();
-            }
-        };
-
-        // SAVING TAG CREATION/MODIFICATION
-        $scope.saveTag = function () {
-            var successCallback = function () {
-                notificationHelper.hideServerInfo();
-                notificationHelper.showOperationSuccess('Tag saved.');
-                $scope.reset();
-                $scope.loadTags();
-            };
-
-            var failureCallback = function (response) {
-                var msgToDisplay = 'Failed saving tag!';
-                var serverSideValidationMsg = response.headers('SERVERSIDE_VALIDATION_ERROR_MSG');
-
-                if(response && response.status === 499 && response.data) {
-                    msgToDisplay = response.data;
-                }
-
-                notificationHelper.hideServerInfo();
-                notificationHelper.showOperationFailure(msgToDisplay);
-
-                if (serverSideValidationMsg) {
-                    $scope.tagForm.tagName.$setValidity('alreadyExists', false);
-                }
-            };
-
-            if (this.currentTag.id) {
-                tagDAO.one(this.currentTag.id.toString()).customPUT(this.currentTag).then(successCallback, failureCallback);
-            } else {
-                tagDAO.customPOST(this.currentTag).then(successCallback, failureCallback);
-            }
-        };
-    }]);
 
     homeAppModule.controller('expenseController', ['$rootScope', '$scope', 'Restangular', 'notificationHelper', function ($rootScope, $scope, Restangular, notificationHelper) {
         var expenseDAO = Restangular.one('expense');
