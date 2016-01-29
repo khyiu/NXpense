@@ -39,8 +39,8 @@
             if (tag && (_.isUndefined($event.keyCode) || $event.keyCode === 13)) {
                 discardEditionInProgress();
                 self.mode = 'Edit';
-                existingTagPreviousState = angular.copy(tag, {});
-                $scope.currentTag = tag;
+                self.existingTagPreviousState = angular.copy(tag, {});
+                self.currentTag = tag;
                 $event.preventDefault();
             }
         }
