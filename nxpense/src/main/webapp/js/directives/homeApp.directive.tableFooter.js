@@ -53,7 +53,7 @@
                 };
 
                 $scope.disableDeleteButton = function () {
-                    var hasSelectedItems = $scope.expenses && _.findWhere($scope.expenses, {selected: true});
+                    var hasSelectedItems = $scope.expenseController.expenses && _.findWhere($scope.expenseController.expenses, {selected: true});
                     return !hasSelectedItems;
                 };
 
