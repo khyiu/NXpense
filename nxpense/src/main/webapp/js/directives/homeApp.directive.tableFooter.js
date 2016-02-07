@@ -58,7 +58,8 @@
                 };
 
                 $scope.disableEditButton = function () {
-                    var hasOnlyOneSelectedExpense = $scope.expenses && _.where($scope.expenses, {selected: true}).length === 1;
+                    var hasOnlyOneSelectedExpense = $scope.expenseController.expenses &&
+                        _.where($scope.expenseController.expenses, {selected: true}).length === 1;
                     return !hasOnlyOneSelectedExpense;
                 };
 
