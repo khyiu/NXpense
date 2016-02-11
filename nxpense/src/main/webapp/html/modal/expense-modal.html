@@ -23,7 +23,7 @@
                 <input id="amountInput" name="amount" tabindex="0" type="text" class="form-control" placeholder="Amount"
                        required
                        pattern="^(-?)\d+(\.\d{1,2})*$"
-                       ng-model="expense.amount"
+                       ng-model="modalController.expense.amount"
                        ng-class="{'neg-value': modalController.expense.amount < 0, 'pos-value': modalController.expense.amount >= 0}"/>
 				<span class="input-group-addon">
 					<i class="fa fa-eur"></i>

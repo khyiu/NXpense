@@ -3,9 +3,13 @@
 
     angular.module('homeApp').directive('nxExpenseTableFooter', nxExpenseTableFooter);
 
-    nxExpenseTableFooter.$inject = ['$modal', 'notificationHelper', '$http', '$timeout'];
+    nxExpenseTableFooter.$inject = [
+        '$modal', 'notificationHelper', '$http', '$timeout',
+        'underscore'
+    ];
 
-    function nxExpenseTableFooter($modal, notificationHelper, $http, $timeout) {
+    function nxExpenseTableFooter($modal, notificationHelper, $http, $timeout,
+                                  _) {
         return {
             restrict: 'E',
             transclude: true,
@@ -14,7 +18,7 @@
             controller: function ($scope, $rootScope) {
 
                 $scope.deleteSelected = function () {
-                    var expensesToDelete = _.where($scope.expenses, {selected: true});
+                    var expensesToDelete = _.where($scope.expenseController.expenses, {selected: true});
                     var deleteRequest = {
                         method: 'DELETE',
                         url: '/' + $scope.WEB_CONTEXT + '/expense',
@@ -33,14 +37,14 @@
 
                     $http(deleteRequest).then(
                         function () {
-                            notificationHelper.showOperationSuccess("Expense(s) deleted.");
+                            notificationHelper.showOperationSuccess('Expense(s) deleted.');
 
                             // send event to trigger reloading of current item page
                             $rootScope.$broadcast('expense:reloadPage');
                         },
 
                         function (error) {
-                            var msgToDisplay = "Failed deleting expenses! Please retry later...";
+                            var msgToDisplay = 'Failed deleting expenses! Please retry later...';
 
                             if (error && error.status === 499 && error.data) {
                                 msgToDisplay = error.data;
@@ -53,7 +57,8 @@
                 };
 
                 $scope.disableDeleteButton = function () {
-                    var hasSelectedItems = $scope.expenseController.expenses && _.findWhere($scope.expenseController.expenses, {selected: true});
+                    var hasSelectedItems = $scope.expenseController.expenses &&
+                        _.findWhere($scope.expenseController.expenses, {selected: true});
                     return !hasSelectedItems;
                 };
 
@@ -70,7 +75,7 @@
                         controllerAs: 'modalController',
                         resolve: {
                             selectedExpense: function () {
-                                return _.findWhere($scope.expenses, {selected: true});
+                                return _.findWhere($scope.expenseController.expenses, {selected: true});
                             }
                         }
                     }).opened.then(function () {
