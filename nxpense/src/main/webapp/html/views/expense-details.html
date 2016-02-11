@@ -87,12 +87,12 @@
                 <td>{{expense.date}}</td>
                 <td>€{{expense.amount}}</td>
                 <td>{{expense.description}}</td>
-                <td ng-drop="true" ng-drop-success="dropCompleted(expense.id, $data, $event)">
+                <td ng-drop="true" ng-drop-success="expenseController.dropCompleted(expense.id, $data, $event)">
                     <ul class="tags">
                         <li ng-repeat="tag in expense.tags">
-                            <a href="#" style="background-color: {{expenseController.tag.backgroundColor}}; border-right-color: {{expenseController.tag.backgroundColor}}; color: {{expenseController.tag.foregroundColor}}"
+                            <a href="#" style="background-color: {{tag.backgroundColor}}; border-right-color: {{tag.backgroundColor}}; color: {{tag.foregroundColor}}"
                                     ng-click="expenseController.removeTag($event, expense, tag.name)">
-                                <span class="tag-label" title="{{expenseController.tag.name}}">{{expenseController.tag.name}}</span>
+                                <span class="tag-label" title="{{tag.name}}">{{tag.name}}</span>
                                 <span class="tag-remover glyphicon glyphicon-remove-circle" tabindex="0" title="Click to remove tag"/>
                             </a>
                         </li>
