@@ -4,15 +4,13 @@
     angular.module('homeApp').controller('expenseController', ExpenseController);
 
     ExpenseController.$inject = [
-        '$rootScope', '$scope', 'Restangular', 'notificationHelper',
-        'underscore'
+        '$rootScope', '$scope', 'notificationHelper',
+        'underscore', 'expenseService'
     ];
 
-    function ExpenseController($rootScope, $scope, Restangular, notificationHelper,
-                               _) {
+    function ExpenseController($rootScope, $scope, notificationHelper,
+                               _, expenseService) {
         var self = this;
-
-        var expenseDAO = Restangular.one('expense');
 
         this.pageSize = 10;
         this.sortAsc = true;
@@ -37,12 +35,10 @@
         /////////////////////////////////
 
         function dropCompleted(expenseId, $tag) {
-            expenseDAO.one(expenseId.toString()).one('tag').put({
-                id: $tag.id
-            }).then(
-                function (targetExpenseTags) {
+            expenseService.assignTag(expenseId.toString(), $tag.id).then(
+                function (response) {
                     var updatedExpense = _.findWhere(self.expenses, {id: expenseId});
-                    updatedExpense.tags = targetExpenseTags;
+                    updatedExpense.tags = response.data;
                 },
 
                 function () {
@@ -63,29 +59,28 @@
                 properties: [self.sortProp, 'position']
             };
 
-            // load balance info
-            expenseDAO.customGET('balance').then(
-                function (balance) {
-                   self.balance = balance;
+            expenseService.getBalance().then(
+                function getBalanceOK(response) {
+                    self.balance = response.data;
                 },
 
-                function () {
+                function getBalanceKO() {
                     notificationHelper.showOperationFailure('Failed fetching balance!');
                 }
             );
 
             // load expense items
             notificationHelper.showServerInfo('Fetching expenses...');
-            expenseDAO.one('page').get(queryParameters).then(
+            expenseService.getExpensePage(queryParameters).then(
                 function (response) {
                     notificationHelper.hideServerInfo();
-                    self.expenses = response.items;
-                    $rootScope.numberOfExpense = response.numberOfItems;
-                    $rootScope.pageSize = response.pageSize;
-                    self.pageSize = response.pageSize;
-                    $rootScope.page = response.pageNumber;
-                    $rootScope.totalNumberOfExpense = response.totalNumberOfItems;
-                    $rootScope.totalNumberOfPage = response.totalNumberOfPages;
+                    self.expenses = response.data.items;
+                    $rootScope.numberOfExpense = response.data.numberOfItems;
+                    $rootScope.pageSize = response.data.pageSize;
+                    self.pageSize = response.data.pageSize;
+                    $rootScope.page = response.data.pageNumber;
+                    $rootScope.totalNumberOfExpense = response.data.totalNumberOfItems;
+                    $rootScope.totalNumberOfPage = response.data.totalNumberOfPages;
                 },
 
                 function () {
@@ -100,10 +95,10 @@
             $event.preventDefault();
             notificationHelper.showServerInfo('Removing tag...');
 
-            expenseDAO.one(expense.id.toString()).one('tag').customDELETE(tagName).then(
-                function (updatedExpense) {
+            expenseService.removeTag(expense.id, tagName).then(
+                function (response) {
                     notificationHelper.hideServerInfo();
-                    expense.tags = updatedExpense.tags;
+                    expense.tags = response.data.tags;
                 },
 
                 function () {
@@ -124,15 +119,15 @@
         // - undefined --> event initiated by mouse
         // - defined --> event initiated by keyboard
         function toggleSelectAll($event) {
-            if ($event && ( ($event.type === 'keydown' && $event.keyCode === 13) || $event.type === 'click') ) {
-                    self.selectedAll = !self.selectedAll;
+            if ($event && ( ($event.type === 'keydown' && $event.keyCode === 13) || $event.type === 'click')) {
+                self.selectedAll = !self.selectedAll;
 
-                    _.each(self.expenses, function (expense) {
-                        expense.selected = self.selectedAll;
-                    });
+                _.each(self.expenses, function (expense) {
+                    expense.selected = self.selectedAll;
+                });
 
-                    $event.preventDefault();
-                }
+                $event.preventDefault();
+            }
         }
 
         function updateGlobalItemSelection($event) {
