@@ -1,11 +1,11 @@
 (function (angular) {
     'use strict';
 
-    var homeAppModule = angular.module('homeApp', ['ngRoute', 'ui.bootstrap', 'restangular', 'notificationHelperModule', 'ngDraggable']);
+    var homeAppModule = angular.module('homeApp', ['ngRoute', 'ui.bootstrap', 'notificationHelperModule', 'ngDraggable']);
 
     // Run block to initialize attributes to be used across controllers that are not necessarily nested in each other
     // --> cannot benefit from scope hierarchy...
-    homeAppModule.run(function ($rootScope, Restangular, notificationHelper) {
+    homeAppModule.run(function ($rootScope) {
         // Deducing the current application's web context from the path to access the current page
         $rootScope.WEB_CONTEXT = window.location.pathname.split('/')[1];
 
@@ -14,30 +14,9 @@
 
         // Page number selected by default = 1
         $rootScope.page = 1;
-
-        $rootScope.loadTags = function () {
-            notificationHelper.showServerInfo('Fetching tags...');
-            Restangular.all('tag').customGET('user').then(
-                function (tags) {
-                    notificationHelper.hideServerInfo();
-                    $rootScope.existingTags = tags;
-                },
-
-                function () {
-                    notificationHelper.hideServerInfo();
-                    notificationHelper.showOperationFailure('Failed fetching tags! Please retry later...');
-                }
-            );
-        };
-
-        $rootScope.loadTags();
     });
 
-    homeAppModule.config(function (RestangularProvider, $routeProvider) {
-        // Deducing the current application's web context from the path to access the current page + use it as base url in Restangular
-        var webContext = window.location.pathname.split('/')[1];
-        RestangularProvider.setBaseUrl('/' + webContext);
-
+    homeAppModule.config(function ($routeProvider) {
         // Routes configuration
         $routeProvider.when('/expense/details', {
             templateUrl: 'views/expense-details.html',

@@ -3,9 +3,9 @@
 
     angular.module('homeApp').controller('tagController', TagController);
 
-    TagController.$inject = ['$scope', 'notificationHelper', 'underscore', 'TagService'];
+    TagController.$inject = ['$scope', 'notificationHelper', 'underscore', 'TagService', '$rootScope'];
 
-    function TagController($scope, notificationHelper, _, tagService) {
+    function TagController($scope, notificationHelper, _, tagService, $rootScope) {
         var self = this;
 
         var defaultTag = {
@@ -23,7 +23,7 @@
         this.reset = reset;
         this.saveTag = saveTag;
 
-        $scope.loadTags();
+        loadTags();
 
         /////////////////////////////
 
@@ -44,6 +44,21 @@
             }
         }
 
+        function loadTags () {
+            notificationHelper.showServerInfo('Fetching tags...');
+            tagService.getCurrentUserTags().then(
+                function (response) {
+                    notificationHelper.hideServerInfo();
+                    $rootScope.existingTags = response.data;
+                },
+
+                function () {
+                    notificationHelper.hideServerInfo();
+                    notificationHelper.showOperationFailure('Failed fetching tags! Please retry later...');
+                }
+            );
+        }
+
         function remove(tag, $event) {
             if (tag && (_.isUndefined($event.keyCode) || $event.keyCode === 13)) {
                 notificationHelper.showServerInfo('Deleting tag...');
@@ -51,7 +66,7 @@
                 tagService.deleteTag(tag.id).then(
                     function () {
                         notificationHelper.hideServerInfo();
-                        $scope.loadTags();
+                        loadTags();
                     },
 
                     function () {
@@ -99,7 +114,7 @@
             notificationHelper.hideServerInfo();
             notificationHelper.showOperationSuccess('Tag saved.');
             self.reset();
-            $scope.loadTags();
+            loadTags();
         }
     }
 })();
