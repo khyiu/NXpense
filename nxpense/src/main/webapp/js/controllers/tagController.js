@@ -3,9 +3,9 @@
 
     angular.module('homeApp').controller('tagController', TagController);
 
-    TagController.$inject = ['$scope', 'Restangular', 'notificationHelper', 'underscore'];
+    TagController.$inject = ['$scope', 'notificationHelper', 'underscore', 'TagService'];
 
-    function TagController($scope, Restangular, notificationHelper, _) {
+    function TagController($scope, notificationHelper, _, tagService) {
         var self = this;
 
         var defaultTag = {
@@ -14,7 +14,6 @@
             name: null
         };
         var existingTagPreviousState;
-        var tagDAO = Restangular.all('tag');
 
         this.currentTag = angular.copy(defaultTag, {});
         this.mode = 'Create';
@@ -49,7 +48,7 @@
             if (tag && (_.isUndefined($event.keyCode) || $event.keyCode === 13)) {
                 notificationHelper.showServerInfo('Deleting tag...');
 
-                tagDAO.customDELETE(tag.id).then(
+                tagService.deleteTag(tag.id).then(
                     function () {
                         notificationHelper.hideServerInfo();
                         $scope.loadTags();
@@ -75,9 +74,9 @@
 
         function saveTag() {
             if (self.currentTag.id) {
-                tagDAO.one(self.currentTag.id.toString()).customPUT(self.currentTag).then(saveTagOK, saveTagKO);
+                tagService.updateTag(self.currentTag.id, self.currentTag).then(saveTagOK, saveTagKO);
             } else {
-                tagDAO.customPOST(self.currentTag).then(saveTagOK, saveTagKO);
+                tagService.createTag(self.currentTag).then(saveTagOK, saveTagKO);
             }
         }
 

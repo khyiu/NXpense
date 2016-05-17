@@ -53,7 +53,7 @@
                                 ng-click="tagController.editTag(tag, $event)" ng-keydown="tagController.editTag(tag, $event)">
                             <span class="tag-label" title="{{tag.name}}">{{tag.name || '&nbsp;'}}</span>
                             <span class="tag-remover glyphicon glyphicon-remove-circle" tabindex="0" title="Click to delete tag (it will also be removed from all tagged expenses)"
-                                    ng-click="remove(tag, $event)" ng-keydown="remove(tag, $event)"></span>
+                                    ng-click="tagController.remove(tag, $event)" ng-keydown="remove(tag, $event)"></span>
                         </a>
                     </li>
                 </ul>
